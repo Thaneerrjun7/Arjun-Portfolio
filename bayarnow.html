@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BayarNow — Project Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .gallery-page { 
+            padding: 100px var(--container-padding); 
+            max-width: var(--container-max); 
+            margin: 0 auto; 
+            position: relative;
+            z-index: 1;
+        }
+        .back-btn { 
+            display: inline-block; 
+            margin-bottom: 40px; 
+            color: var(--text-secondary); 
+            text-decoration: none; 
+            font-weight: 600;
+            transition: color var(--duration-fast) ease;
+        }
+        .back-btn:hover {
+            color: var(--text-primary);
+        }
+        .gallery-grid { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 60px; 
+            margin-top: 40px;
+        }
+        .gallery-img { 
+            width: 100%; 
+            border-radius: var(--radius-lg); 
+            border: 1px solid var(--border-subtle); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+            background: var(--bg-card);
+        }
+        .img-caption {
+            margin-top: 15px;
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Background -->
+    <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+    <div class="gallery-page animate-on-scroll" data-animation="fade-up">
+        <a href="index.html#projects" class="back-btn">← Back to Portfolio</a>
+        
+        <h1 class="gradient-text" style="font-size: var(--fs-h2); margin-bottom: 10px;">BayarNow Government Portal</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 800px;">
+            Live government bill payment portal serving public users across Malaysia. Designed 300+ pages of UI/UX including Pay Direct guest payments, user registration, license management, and a full component library.
+        </p>
+        
+        <div class="gallery-grid">
+            <div>
+                <img src="assets/images/bayarnow-new-1.png" alt="BayarNow Mobile Registration" class="gallery-img">
+                <p class="img-caption">Mobile - User Registration & Management</p>
+            </div>
+            <div>
+                <img src="assets/images/bayarnow-new-2.png" alt="BayarNow Main Features" class="gallery-img">
+                <p class="img-caption">Main Features & App Interface</p>
+            </div>
+            <div>
+                <img src="assets/images/bayarnow-new-3.png" alt="BayarNow Direct Payment" class="gallery-img">
+                <p class="img-caption">Direct Bill Payment Flow</p>
+            </div>
+            <div>
+                <img src="assets/images/bayarnow-new-4.png" alt="BayarNow User Management" class="gallery-img">
+                <p class="img-caption">User Management Flow</p>
+            </div>
+            <div>
+                <img src="assets/images/bayarnow-new-5.png" alt="BayarNow Desktop Dashboard" class="gallery-img">
+                <p class="img-caption">Desktop Dashboard Overview</p>
+            </div>
+            <div>
+                <img src="assets/images/bayarnow-cslg.png" alt="BayarNow CSLG & License Renewal" class="gallery-img">
+                <p class="img-caption">CS Local Government & License Renewal Flow</p>
+            </div>
+        </div>
+
+        <h2 class="gradient-text" style="font-size: var(--fs-h3); margin-top: 80px; margin-bottom: 10px;">Components Used</h2>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 800px; margin-bottom: 30px;">
+            These UI components were built from scratch and utilized to create high-fidelity, interactive prototypes. This allowed us to effectively demonstrate the application's full functionality and deliver dynamic, animated presentations directly to the board of directors at Century Software.
+        </p>
+        <div class="gallery-grid" style="margin-top: 0;">
+            <div>
+                <img src="assets/images/bayarnow-components-new.png" alt="BayarNow Components" class="gallery-img">
+                <p class="img-caption">Extensive Figma Component Library & Design System</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); color: var(--text-tertiary); font-size: 0.85rem; text-align: center; line-height: 1.6;">
+            <p><strong>Disclaimer:</strong> The UI/UX designs, workflows, and concepts showcased in this gallery were designed and developed during my professional tenure at <strong>Century Software</strong>. All intellectual property, proprietary rights, and copyrights for the BayarNow portal belong exclusively to Century Software (M) Sdn Bhd. These materials are presented here strictly for professional portfolio and demonstration purposes.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

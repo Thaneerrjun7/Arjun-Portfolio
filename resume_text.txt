@@ -1,0 +1,252 @@
+--- PAGE 1 ---
+ 
+Arjun Thanneermalai Shanker  
+Software Engineer / UI/UX Designer / Website developer / Software Developer  
+      Ara Damansara • 47301 Petaling Jaya • arjun70k.g@gmail.com • +60-16-421-9121• Malaysian  
+Summary  
+Final-year Software Engineering student at Sunway University with hands-on production experience designing UI/UX for live Malaysian 
+government portals. Built and deployed AI-integrated applications independently. Microsoft AI certified. Dean's List. Targeting AI-adjacent product 
+or engineering roles in KL, Penang, Singapore 
+ 
+Education 
+ 
+Sunway University                                                                                                                       Bandar Sunway, Selangor, Malaysia  
+                                                                                                                                                                          -      Sept 2023 - Sep 2026 
+BSE- Bachelor’s of Software Engineering(Hons), AI engineering / Software engineering. CGPA : 3.3/4.0                                                                                             
+Graduation Ceremony : February 2027 
+- Awards : Studied under Both Sunway and Lancaster University Education 
+                Dean’s List Award Feb 2025 - Semester GPA 3.67, ranked among top students in programme 
+                Student Ambassador  2024 - Volunteered in Sunway International School to help the kids and teach students 
+                    Student Ambassador 2025 - Helped introduce Campus grounds to new comers of Sunway University 
+Sunway College  
+OSSD/CIMP( Canadian International Matriculation Programme)                                                                       Selangor, Malaysia                                
+Graduated with honors                                                                                                                                     -     July 2022 - July 2023 
+ 
+SMK Saint George , Taiping - High School                                                                                                       Taiping , 34000 Perak 
+SPM - Graduated on 18 OCT 2019 
+- Graduated with honors 
+● Participated in State , National Drama competition, securing top 10 position. 
+● Participated in Multiple Extra curricular activities 
+Experience  
+ 
+Century Software 
+(Malaysia) Sdn Bhd 
+ 
+Software Engineer ( 
+Intern )    
+Petaling Jaya, Selangor 
+17 Jan 2026 - 30th April 2026 
+● Worked on Front-end Flutter Code , Converting Figma to Flutter  
+● Analysed production back-end architecture and database schemas for two live government portals to support front-end integration decisions 
+● Did UI/UX Designs for both Mobile and Web portals Using Figma for two entire Government Projects Single-handedly 
+UI/UX Designer   
+● Designed end-to-end UI/UX flows in Figma for BayarNow, a live government bill payment portal serving public users across Malaysia 
+● Delivered the Pay Direct guest payment feature — a 5-screen flow enabling unauthenticated bill payments, from requirements through to 
+final prototype 
+● Contributed to OSC (One Stop Centre), a government business licensing portal, designing multi-role user flows and screen layouts 
+● Collaborated with a senior product supervisor, with structured stakeholder feedback in an Agile-aligned workflow 
+Freelance 
+Website Developer                                                 Remote 
+Nov 2025-Feb2026 
+● Co-developed the official Malaysian website for Fireball (https://fireball.my/) with another friend for a personal client 
+● a premium Korean automotive accessories and detailing equipment brand, in collaboration with a university peer 
+● Designed the platform by referencing the client's established international websites to maintain global brand consistency and 
+structural integrity. 
+● Engineered a streamlined e-commerce infrastructure that directly integrates with the client’s official Shopee account to securely and 
+efficiently manage payment processing. 
+ 
+Microsoft Azure  
+AI Bootcamp Participant           Remote, Microsoft Certified   
+            April 2025 - Aug 2025 
+- Microsoft AI Train Bootcamp . AI-102 & AI-900 
+● Completed AI Fundamentals certification (AI-102) and participated in AI programming workshops (AI-900) focusing on AI agents and 
+chatbot development 
+● Attended structured classes and examinations over 4 months covering practical AI programming concepts 
+
+
+--- PAGE 2 ---
+ 
+Student Ambassador · Sunway University 
+● Led campus tours for prospective students and represented the university at orientation events. 
+Educational Volunteer · Children's Home 
+● Organised and delivered educational and recreational activities for children as part of a student volunteer group. 
+ Projects 
+ 
+ 
+Capstone Project II — Final Year Software Engineering Project 
+2025 – 2026 
+ 
+● Sunway University · Individual Project 
+● Full-cycle software project spanning requirements, architecture, implementation, and testing across two semesters using 
+Agile methodology and structured design patterns 
+● An AI system that lives in a program inside the computer with the ability to control and access computer settings and 
+applications to help the Elders use their laptops with ease and by just talking to one program that handles all tasks  
+Local AI Assistant — Multi-Provider LLM Integration 
+2025 
+● Personal Project · Python 
+● Built with a multi-provider fallback pattern across Groq, OpenRouter, and Gemini APIs — provider-switching architecture ensures 
+zero-downtime responses under API rate limits 
+● currently working but still under development for better usability and less bugs 
+● V oice-activated AI assistant built on Gemini 2.5 Flash with tool-calling capabilities, multi-provider API fallback architecture, and natural 
+language computer control 
+●  
+ManageIT — Inventory Management App 
+2024-2025 
+● University Course Project · Python, SQL 
+● Inventory tracking application with full CRUD operations and basic reporting functionality built in Python and SQL 
+FireBall.my  · Portfolio Website for client 
+2025-2026 
+Personal Project( freelancer) 
+● Web Projects · HTML, CSS, JavaScript,Antigravity,Node.js 
+● Co-developed FireBall.my from scratch with a classmate handling full-stack responsibilities  
+● separately built a personal portfolio site for project and contact showcasing 
+● connected the website with links to the online shop in Shopee 
+ 
+TECHNICAL SKILLS 
+ 
+ 
+CODING LANGUAGES 
+Python • Java • JavaScript • SQL • HTML • CSS • Node.js  
+DESIGN & TOOLS 
+Figma • Canva • Microsoft tools • Git hub • Kiro AI • CHATGPT • GEMINI • Obsidian • Firebase • Docker • AWS • Flutter • Rest API Intergration • Use 
+of Multiple API  • OpenCV 
+CONCEPTS & PRACTICES 
+UI/UX Design • RESTful APIs • OOP(Object-Oriented-Programming) • System Design • CI/CD • Unit Testing • Agile 
+Awards & Certifications 
+Dean's List — Sunway University (Feb – Apr 2025) 
+Microsoft Certified: AI Fundamentals (AI-900) 
+English Drama — State Competition Winner 
+English Drama — District Competition Winner 
+National English Language Drama Competitor 
+Chinese Calligraphy Competitor 
+Language: 
+ English(Fluent) Proficient · Erican Language Centre; Essay Competition winner , Tamil(Fluent)Native ,  
+     Bahasa Melayu(Fluent) SPM , Chinese(only Basics) learning to be Conversational · Chinese Calligraphy   
+     Competitor 
+Other Skills : 
+Creative • Fast-Thinking  • Critical Thinking  • Team Leadership  • Student Ambassador  • Adaptability  • Time Management • Working Under Pressure 
+• Multitasking  • Resilience • Client-Facing Communication  • Logical Reasoning  • Attention to Detail  • Data Flow Documentation  • System 
+Architecture Planning 
+ 
+
+
+--- PAGE 3 ---
+ 
+ 
+  
+18 May 2026  
+ 
+ 
+TO WHOM IT MAY CONCERN  
+ 
+ 
+RE: Recommendation for Mr. Arjun Thanneermalai A/L Shanker  
+ 
+ 
+This letter serves as a recommendation for Mr. Arjun Thanneermalai A/L Shanker, who successfully 
+completed his three -and-a-half-month internship with Century Software (M) Sdn Bhd.  
+ 
+During his internship, Arjun was assigned to design the UI/UX for our One -Stop Center (OSC) mobile 
+application project using Figma. Throughout the internship period, he consistently demonstrated 
+professionalism, creativity, and a strong sense of responsibi lity in carrying out his tasks.  
+ 
+Arjun was able to work independently with minimal supervision and showed great initiative in 
+understanding the system requirements and producing relevant and practical design solutions. He is a 
+fast learner who adapts quickly to new concepts and challenges . His dedication, commitment, and 
+positive working attitude enabled him to consistently deliver quality designs across various modules 
+and processes of the mobile application.  
+ 
+In addition to his technical and creative abilities, Arjun also displayed good communication skills and 
+professionalism in his interactions with the team. He proved himself to be reliable, hardworking, and 
+eager to learn throughout his internship with us.  
+ 
+We believe Arjun has strong potential and would be a valuable addition to any organization. We would 
+not hesitate to recommend him for future employment opportunities.  
+ 
+ 
+ 
+Yours sincerely,  
+ 
+ 
+Alvin Mah  
+Development - Head  
+Century Software (M) Sdn Bhd  
+ 
+
+
+--- PAGE 4 ---
+CamScanner
+
+
+--- PAGE 5 ---
+CamScanner
+
+
+--- PAGE 6 ---
+CamScanner
+
+
+--- PAGE 7 ---
+CamScanner
+
+
+--- PAGE 8 ---
+CamScanner
+
+
+--- PAGE 9 ---
+CamScanner
+
+
+--- PAGE 10 ---
+CamScanner
+
+
+--- PAGE 11 ---
+CamScanner
+
+
+--- PAGE 12 ---
+CamScanner
+
+
+--- PAGE 13 ---
+CamScanner
+
+
+--- PAGE 14 ---
+CamScanner
+
+
+--- PAGE 15 ---
+CamScanner
+
+
+--- PAGE 16 ---
+CamScanner
+
+
+--- PAGE 17 ---
+CamScanner
+
+
+--- PAGE 18 ---
+CamScanner
+
+
+--- PAGE 19 ---
+CamScanner
+
+
+--- PAGE 20 ---
+CamScanner
+
+
+--- PAGE 21 ---
+CamScanner
+
+
+--- PAGE 22 ---
+CamScanner
+
+

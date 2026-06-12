@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireball.my — Project Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .gallery-page { 
+            padding: 100px var(--container-padding); 
+            max-width: var(--container-max); 
+            margin: 0 auto; 
+            position: relative;
+            z-index: 1;
+        }
+        .back-btn { 
+            display: inline-block; 
+            margin-bottom: 40px; 
+            color: var(--text-secondary); 
+            text-decoration: none; 
+            font-weight: 600;
+            transition: color var(--duration-fast) ease;
+        }
+        .back-btn:hover {
+            color: var(--text-primary);
+        }
+        .gallery-grid { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 60px; 
+            margin-top: 40px;
+        }
+        .gallery-img { 
+            width: 100%; 
+            border-radius: var(--radius-lg); 
+            border: 1px solid var(--border-subtle); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+            background: var(--bg-card);
+        }
+        .img-caption {
+            margin-top: 15px;
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Background -->
+    <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+    <div class="gallery-page animate-on-scroll" data-animation="fade-up">
+        <a href="index.html#projects" class="back-btn">← Back to Portfolio</a>
+        
+        <h1 class="gradient-text" style="font-size: var(--fs-h2); margin-bottom: 10px;">Fireball.my</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 800px;">
+            Official Malaysian e-commerce website for a premium Korean automotive accessories and detailing brand. Designed the frontend interface showcasing products, styling, and Shopee integration.
+        </p>
+        
+        <div class="gallery-grid">
+            <div>
+                <img src="assets/images/fireball-main.png" alt="Fireball Hero Section" class="gallery-img">
+                <p class="img-caption">Landing Page & Hero Section</p>
+            </div>
+            <div>
+                <img src="assets/images/fireball-products.png" alt="Fireball Products" class="gallery-img">
+                <p class="img-caption">Product Categories & Browsing Interface</p>
+            </div>
+            <div>
+                <img src="assets/images/fireball-showcase.png" alt="Fireball Showcase" class="gallery-img">
+                <p class="img-caption">Product Showcase & Social Integration</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

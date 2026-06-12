@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Stop Centre (OSC) — Project Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .gallery-page { 
+            padding: 100px var(--container-padding); 
+            max-width: var(--container-max); 
+            margin: 0 auto; 
+            position: relative;
+            z-index: 1;
+        }
+        .back-btn { 
+            display: inline-block; 
+            margin-bottom: 40px; 
+            color: var(--text-secondary); 
+            text-decoration: none; 
+            font-weight: 600;
+            transition: color var(--duration-fast) ease;
+        }
+        .back-btn:hover {
+            color: var(--text-primary);
+        }
+        .gallery-grid { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 60px; 
+            margin-top: 40px;
+        }
+        .gallery-img { 
+            width: 100%; 
+            border-radius: var(--radius-lg); 
+            border: 1px solid var(--border-subtle); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+            background: var(--bg-card);
+        }
+        .img-caption {
+            margin-top: 15px;
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Background -->
+    <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+    <div class="gallery-page animate-on-scroll" data-animation="fade-up">
+        <a href="index.html#projects" class="back-btn">← Back to Portfolio</a>
+        
+        <h1 class="gradient-text" style="font-size: var(--fs-h2); margin-bottom: 10px;">One Stop Centre (OSC)</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 800px;">
+            Government business licensing portal with multi-role user flows. Designed 200+ pages including ADUAN complaint system, PEMANTAUAN monitoring, user registration & management modules.
+        </p>
+        
+        <div class="gallery-grid">
+            <div>
+                <img src="assets/images/osc-aduan.png" alt="OSC Aduan Web Dashboard" class="gallery-img">
+                <p class="img-caption">ADUAN & Web Dashboard Interface</p>
+            </div>
+            <div>
+                <img src="assets/images/osc-mobile.png" alt="OSC Mobile App" class="gallery-img">
+                <p class="img-caption">Responsive Mobile App Interface</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); color: var(--text-tertiary); font-size: 0.85rem; text-align: center; line-height: 1.6;">
+            <p><strong>Disclaimer:</strong> The UI/UX designs, workflows, and concepts showcased in this gallery were designed and developed during my professional tenure at <strong>Century Software</strong>. All intellectual property, proprietary rights, and copyrights for the One Stop Centre (OSC) portal belong exclusively to Century Software (M) Sdn Bhd. These materials are presented here strictly for professional portfolio and demonstration purposes.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
