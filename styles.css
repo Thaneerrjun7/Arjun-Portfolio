@@ -1,9 +1,9 @@
-/* ============================================================
-   ARJUN SHANKER PORTFOLIO — Apple iPhone 17 Pro Inspired
-   Premium dark theme with scroll-triggered animations
-   ============================================================ */
+/*
+   Welcome to my CSS brain dump. Built with  a lot of caffeine.
+   (It looks like an iPhone 17 Pro because I like apple things lol).
+*/
 
-/* ======================== DESIGN TOKENS ======================== */
+/* --- The Magic Color Palette (Design Tokens) --- */
 :root {
     /* Colors */
     --bg-primary: transparent;
@@ -67,7 +67,7 @@
     --nav-height: 60px;
 }
 
-/* ======================== RESET & BASE ======================== */
+/* --- Resetting the browser's terrible default decisions --- */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
@@ -125,7 +125,7 @@ strong {
     font-weight: 600;
 }
 
-/* ======================== SCROLL PROGRESS BAR ======================== */
+/* --- That little bar that tells you how far down the rabbit hole you are --- */
 .scroll-progress {
     position: fixed;
     top: 0;
@@ -137,7 +137,7 @@ strong {
     transition: width 0.1s linear;
 }
 
-/* ======================== GRADIENT TEXT ======================== */
+/* --- Because solid colors are so 2010 --- */
 .gradient-text {
     background: var(--gradient-text);
     -webkit-background-clip: text;
@@ -145,7 +145,7 @@ strong {
     background-clip: text;
 }
 
-/* ======================== NAVIGATION ======================== */
+/* --- The steering wheel of this website --- */
 .navbar {
     position: fixed;
     top: 0;
@@ -352,7 +352,7 @@ strong {
     color: var(--accent-blue);
 }
 
-/* ======================== SECTIONS BASE ======================== */
+/* --- The bones of the layout --- */
 .section {
     min-height: 100vh;
     padding: var(--section-padding) 0;
@@ -399,7 +399,7 @@ strong {
     color: var(--text-primary);
 }
 
-/* ======================== BUTTONS ======================== */
+/* --- Clicky things --- */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -445,7 +445,7 @@ strong {
     font-size: 1.1rem;
 }
 
-/* ======================== ENTER SITE OVERLAY ======================== */
+/* --- The dramatic entrance (Black hole cinematic universe) --- */
 .enter-overlay {
     position: fixed;
     inset: 0;
@@ -553,7 +553,7 @@ strong {
     50% { transform: translateY(-15px); }
 }
 
-/* ======================== HERO SECTION ======================== */
+/* --- The "Wow" factor. First impressions matter. --- */
 .hero-section {
     height: 100vh;
     min-height: 100vh;
@@ -831,7 +831,7 @@ strong {
     transform: scale(1.1);
 }
 
-/* ======================== VIDEO REPLAY OVERLAY ======================== */
+/* --- The "Play it again, Sam" button --- */
 .hero-video-replay-overlay {
     position: absolute;
     inset: 0;
@@ -889,7 +889,7 @@ strong {
     letter-spacing: 0.02em;
 }
 
-/* ======================== RECOMMENDATIONS SECTION ======================== */
+/* --- People saying nice things about me --- */
 .recommendations-section {
     margin-bottom: 64px;
 }
@@ -947,7 +947,7 @@ strong {
     color: var(--text-muted);
 }
 
-/* ======================== ABOUT SECTION ======================== */
+/* --- About me --- */
 .about-section {
     background: var(--bg-secondary);
 }
@@ -1085,7 +1085,7 @@ strong {
     letter-spacing: 0.05em;
 }
 
-/* ======================== EXPERIENCE SECTION ======================== */
+/* --- Places I've worked and things I've built in the real world --- */
 .experience-section {
     background: var(--bg-primary);
 }
@@ -1225,7 +1225,7 @@ strong {
     font-weight: 500;
 }
 
-/* ======================== PROJECTS SECTION ======================== */
+/* --- My digital playground (Projects) --- */
 .projects-section {
     background: var(--bg-secondary);
 }
@@ -1375,7 +1375,7 @@ strong {
     transform: translateX(4px);
 }
 
-/* ======================== SKILLS SECTION ======================== */
+/* --- The tools in my Batman utility belt --- */
 .skills-section {
     background: var(--bg-primary);
 }
@@ -1442,7 +1442,7 @@ strong {
     transform: translateY(-2px);
 }
 
-/* ======================== EDUCATION SECTION ======================== */
+/* --- Where I spent way too much time studying (Education) --- */
 .education-section {
     background: var(--bg-secondary);
 }
@@ -1548,7 +1548,7 @@ strong {
     color: var(--accent-blue);
 }
 
-/* ======================== CERTIFICATIONS SECTION ======================== */
+/* --- The shiny badges that prove I know what I'm talking about --- */
 .certifications-section {
     background: var(--bg-primary);
 }
@@ -1689,7 +1689,7 @@ strong {
     width: var(--target-width);
 }
 
-/* ======================== GALLERY SECTION ======================== */
+/* --- Pics or it didn't happen (Gallery) --- */
 .gallery-section {
     background: var(--bg-secondary);
 }
@@ -1754,7 +1754,7 @@ strong {
     font-weight: 500;
 }
 
-/* ======================== RESUME SECTION ======================== */
+/* --- The TL;DR of my entire life (Resume) --- */
 .resume-section {
     background: var(--bg-secondary);
 }
@@ -1807,7 +1807,7 @@ strong {
     background: #fff;
 }
 
-/* ======================== CONTACT SECTION ======================== */
+/* --- Slide into my DMs (Contact) --- */
 .contact-section {
     background: var(--bg-primary);
     text-align: center;
@@ -1891,7 +1891,7 @@ strong {
     color: var(--text-muted);
 }
 
-/* ======================== EASTER EGG ======================== */
+/* --- You weren't supposed to find this... --- */
 .easter-egg-hint {
     position: fixed;
     bottom: 20px;
@@ -1960,7 +1960,7 @@ strong {
     margin-top: 16px !important;
 }
 
-/* ======================== SCROLL ANIMATIONS ======================== */
+/* --- Making things swoop in like they're in a Marvel movie --- */
 .animate-on-scroll {
     opacity: 0;
     transition: all var(--duration-xslow) var(--ease-out-expo);
@@ -2018,7 +2018,7 @@ strong {
     transform: translateY(0) scale(1);
 }
 
-/* ======================== RESPONSIVE ======================== */
+/* --- Because people will judge me if this looks bad on an iPhone --- */
 
 /* Tablet */
 @media (max-width: 1024px) {

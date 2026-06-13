@@ -18,7 +18,7 @@ if (navEntries.length > 0 && navEntries[0].type === 'reload') {
 document.addEventListener('DOMContentLoaded', () => {
 
 
-    // ======================== SCROLL PROGRESS BAR ========================
+    // --- Let's track how far down you scroll ---
     const scrollProgress = document.getElementById('scroll-progress');
 
     function updateScrollProgress() {
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', updateScrollProgress, { passive: true });
 
-    // ======================== NAVBAR ========================
+    // --- Making the nav bar smart enough to hide and show ---
     const navbar = document.getElementById('navbar');
     const navToggle = document.getElementById('nav-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', updateActiveNavLink, { passive: true });
 
-    // ======================== TYPING ANIMATION ========================
+    // --- Making the text type itself so I look cool ---
     const roles = [
         'Software Engineer',
         'UI/UX Designer',
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     animatedElements.forEach(el => observer.observe(el));
 
-    // ======================== STATS COUNTER ========================
+    // --- Numbers go brrrrr ---
     const statNumbers = document.querySelectorAll('.stat-number');
 
     const statsObserver = new IntersectionObserver((entries) => {
@@ -545,7 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
         animateParticles();
     }
 
-    // ======================== KONAMI CODE EASTER EGG ========================
+    // --- If you know, you know. ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA ---
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
     let konamiIndex = 0;
 
@@ -615,7 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ======================== SMOOTH SCROLL ========================
+    // --- Butter smooth scrolling ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -632,7 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ======================== HERO INTRO VIDEO ========================
+    // --- Controlling the cinematic masterpiece ---
     const heroVideoPlayer = document.getElementById('hero-video-player');
     const heroVideoProgressBar = document.getElementById('hero-video-progress-bar');
     const heroVideoReplayOverlay = document.getElementById('hero-video-replay-overlay');
@@ -713,7 +713,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ======================== ENTER SITE OVERLAY & BLACK HOLE ========================
+    // --- The black hole math that took me way too long to figure out ---
     const enterOverlay = document.getElementById('enter-overlay');
     const enterBtn = document.getElementById('enter-btn');
     const bhCanvas = document.getElementById('blackhole-canvas');
@@ -881,7 +881,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // ======================== INITIAL STATE ========================
+    // --- Waking up the site ---
     // Mark hero elements as visible immediately
     setTimeout(() => {
         document.querySelectorAll('.hero-section .animate-on-scroll').forEach(el => {
