@@ -75,7 +75,6 @@
 }
 
 html {
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scrollbar-width: thin;
@@ -916,7 +915,7 @@ strong {
     left: 40px;
     width: 48px;
     height: 48px;
-    background: var(--bg-primary);
+    background: #000;
     border: 1px solid rgba(41, 151, 255, 0.4);
     border-radius: 50%;
     display: flex;
@@ -1122,7 +1121,7 @@ strong {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: var(--bg-primary);
+    background: #000;
     border: 3px solid var(--accent-blue);
     z-index: 1;
     transition: all var(--duration-fast) ease;

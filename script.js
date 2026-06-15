@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollProgress.style.width = progress + '%';
     }
 
-    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
 
     // --- Making the nav bar smart enough to hide and show ---
     const navbar = document.getElementById('navbar');
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.addEventListener('scroll', updateNavbar, { passive: true });
+
     updateNavbar();
 
     // Mobile menu toggle
@@ -61,32 +61,46 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close mobile menu on link click
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            navToggle.classList.remove('active');
-            mobileMenu.classList.remove('active');
+            if (navToggle) navToggle.classList.remove('active');
+            if (mobileMenu) mobileMenu.classList.remove('active');
             document.body.style.overflow = '';
         });
     });
 
     // Active nav link on scroll
     const sections = document.querySelectorAll('.section[id]');
+    const navLinkMap = {};
+    const allNavAnchors = document.querySelectorAll('.nav-links a[data-section]');
+    allNavAnchors.forEach(link => { navLinkMap[link.dataset.section] = link; });
 
     function updateActiveNavLink() {
         const scrollY = window.scrollY + 200;
+        let activeId = null;
         sections.forEach(section => {
             const top = section.offsetTop;
             const height = section.offsetHeight;
-            const id = section.getAttribute('id');
-            const link = document.querySelector(`.nav-links a[data-section="${id}"]`);
-            if (link) {
-                if (scrollY >= top && scrollY < top + height) {
-                    document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                }
+            if (scrollY >= top && scrollY < top + height) {
+                activeId = section.getAttribute('id');
             }
         });
+        allNavAnchors.forEach(l => l.classList.remove('active'));
+        if (activeId && navLinkMap[activeId]) {
+            navLinkMap[activeId].classList.add('active');
+        }
     }
 
-    window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+    // Consolidated scroll handler — single rAF-gated listener replaces three separate ones
+    let scrollTicking = false;
+    window.addEventListener('scroll', () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
+            updateScrollProgress();
+            updateNavbar();
+            updateActiveNavLink();
+            scrollTicking = false;
+        });
+    }, { passive: true });
 
     // --- Making the text type itself so I look cool ---
     const roles = [
@@ -325,7 +339,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(resizeCanvas, 150);
+        });
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
@@ -424,23 +442,23 @@ document.addEventListener('DOMContentLoaded', () => {
             particles.push(new Particle());
         }
 
-        function drawConnections() {
-            ctx.shadowBlur = 0; // Reset shadow for lines
-            for (let i = 0; i < particles.length; i++) {
-                if (particles[i].isStatic) continue; // Only connect moving nodes
-
-                for (let j = i + 1; j < particles.length; j++) {
-                    if (particles[j].isStatic) continue;
-
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 160) {
-                        const opacity = (1 - dist / 160) * 0.4; // Brighter lines
+        function drawConnections(nodes) {
+            ctx.shadowBlur = 0;
+            const len = nodes.length;
+            for (let i = 0; i < len; i++) {
+                const pi = nodes[i];
+                for (let j = i + 1; j < len; j++) {
+                    const pj = nodes[j];
+                    const dx = pi.x - pj.x;
+                    const dy = pi.y - pj.y;
+                    if (Math.abs(dx) > 160 || Math.abs(dy) > 160) continue;
+                    const distSq = dx * dx + dy * dy;
+                    if (distSq < 25600) { // 160 * 160
+                        const dist = Math.sqrt(distSq);
+                        const opacity = (1 - dist / 160) * 0.4;
                         ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.moveTo(pi.x, pi.y);
+                        ctx.lineTo(pj.x, pj.y);
                         ctx.strokeStyle = `rgba(41, 151, 255, ${opacity})`;
                         ctx.lineWidth = 1.2;
                         ctx.stroke();
@@ -509,17 +527,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let meteors = [];
         function triggerMeteorShower() {
-            // Spawn 3-6 meteors
             const count = Math.floor(Math.random() * 4) + 3;
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     meteors.push(new Meteor());
-                }, Math.random() * 2000); // Stagger over 2 seconds
+                }, Math.random() * 2000);
             }
         }
 
-        // Trigger meteor shower every 35 seconds
-        setInterval(triggerMeteorShower, 35000);
+        // Visibility-based meteor interval — stops queuing meteors in background tabs
+        let meteorInterval = null;
+        function startMeteorShower() {
+            if (!meteorInterval) meteorInterval = setInterval(triggerMeteorShower, 35000);
+        }
+        function stopMeteorShower() {
+            if (meteorInterval) { clearInterval(meteorInterval); meteorInterval = null; }
+        }
+        document.addEventListener('visibilitychange', () => {
+            document.hidden ? stopMeteorShower() : startMeteorShower();
+        });
+        startMeteorShower();
+
+        // Pre-split so drawConnections only iterates moving nodes (~6x fewer iterations)
+        const movingParticles = particles.filter(p => !p.isStatic);
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -529,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.draw();
             });
 
-            drawConnections();
+            drawConnections(movingParticles);
 
             // Update and draw meteors
             meteors = meteors.filter(m => m.active);
@@ -563,28 +593,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function triggerEasterEgg() {
         const overlay = document.getElementById('easter-egg');
+        if (!overlay || overlay.classList.contains('active')) return; // Prevent re-trigger while active
         overlay.classList.add('active');
 
-        // Create confetti
-        createConfetti();
+        createConfetti(overlay);
 
-        // Close on click
-        overlay.addEventListener('click', () => {
+        function closeEgg() {
             overlay.classList.remove('active');
-        });
+            overlay.querySelectorAll('.confetti-piece').forEach(c => c.remove());
+            overlay.removeEventListener('click', closeEgg);
+        }
 
-        // Auto close after 5s
-        setTimeout(() => {
-            overlay.classList.remove('active');
-        }, 5000);
+        overlay.addEventListener('click', closeEgg, { once: true });
+        setTimeout(closeEgg, 5000);
     }
 
-    function createConfetti() {
+    function createConfetti(overlay) {
         const colors = ['#2997ff', '#bf5af2', '#ff6723', '#30d158', '#ff375f', '#ffd60a'];
-        const overlay = document.getElementById('easter-egg');
+
+        // Inject keyframe style once
+        if (!document.getElementById('confetti-style')) {
+            const style = document.createElement('style');
+            style.id = 'confetti-style';
+            style.textContent = `
+                @keyframes confetti-fall {
+                    0% { transform: translateY(0) rotate(0deg); }
+                    100% { transform: translateY(100vh) rotate(720deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
 
         for (let i = 0; i < 100; i++) {
             const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
             confetti.style.cssText = `
                 position: absolute;
                 width: ${Math.random() * 10 + 5}px;
@@ -597,21 +639,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 opacity: ${Math.random() * 0.8 + 0.2};
             `;
             overlay.appendChild(confetti);
-
-            setTimeout(() => confetti.remove(), 5000);
-        }
-
-        // Add confetti animation
-        if (!document.getElementById('confetti-style')) {
-            const style = document.createElement('style');
-            style.id = 'confetti-style';
-            style.textContent = `
-                @keyframes confetti-fall {
-                    0% { transform: translateY(0) rotate(0deg); }
-                    100% { transform: translateY(100vh) rotate(${Math.random() * 720}deg); }
-                }
-            `;
-            document.head.appendChild(style);
         }
     }
 
@@ -836,6 +863,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isExpanding) {
                 blackHoleRadius += (blackHoleRadius * 0.1) + 2;
                 if (blackHoleRadius > Math.max(bhWidth, bhHeight) * 1.5) {
+                    cancelAnimationFrame(animationId);
+
                     // Screen is black, now trigger fade out
                     enterOverlay.classList.add('hidden');
                     
