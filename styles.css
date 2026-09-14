@@ -2294,3 +2294,76 @@ strong {
         grid-column: span 1;
     }
 }
+
+/* --- For anyone with "Reduce motion" switched on: same site, minus the swooping ---
+   Slides, zooms and loops become short fades or still states. Opacity and color
+   feedback stays, because it helps you follow what changed. */
+@media (prefers-reduced-motion: reduce) {
+
+    /* Entrances fade in place instead of sliding, scaling or zooming */
+    .animate-on-scroll,
+    .animate-on-scroll[data-animation] {
+        transform: none;
+        transition-duration: 0.3s;
+        transition-timing-function: ease-out;
+    }
+
+    /* Looping animations hold still */
+    .enter-title,
+    .scroll-wheel,
+    .status-dot,
+    .project-shine {
+        animation: none;
+    }
+
+    /* The role shows as plain text (see script.js), so the blinking caret goes too */
+    .typed-cursor {
+        display: none;
+    }
+
+    /* Hover lifts and zooms stay put; their color and shadow changes still play */
+    .btn-primary:hover,
+    .btn-ghost:hover,
+    .enter-btn:hover,
+    .hero-video-sound-btn:hover,
+    .hero-video-replay-btn:hover,
+    .recommendation-card:hover,
+    .stat-card:hover,
+    .timeline-card:hover,
+    .project-card:hover .project-image,
+    .project-link:hover,
+    .skill-category:hover,
+    .skill-tag:hover,
+    .edu-card:hover,
+    .award-card:hover,
+    .gallery-item:hover img,
+    .contact-link:hover {
+        transform: none;
+    }
+
+    /* The Enter button's glow fades in instead of growing out of the center */
+    .btn-glow {
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .enter-btn:hover .btn-glow {
+        opacity: 0.7;
+    }
+
+    /* Entering the site is a quick dissolve; script.js skips the black hole zoom */
+    .enter-overlay {
+        transition-duration: 0.3s;
+    }
+
+    /* Language bars fade in at full length instead of growing */
+    .bar-fill {
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
+    }
+
+    .bar-fill.animated {
+        opacity: 1;
+    }
+}

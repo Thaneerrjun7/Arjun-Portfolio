@@ -17,6 +17,13 @@ if (navEntries.length > 0 && navEntries[0].type === 'reload') {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- Respecting the OS "Reduce motion" setting ---
+    // Kept in a flag instead of reading .matches everywhere: the rAF loops check it every frame, and reading
+    // .matches that often can make Chrome skip the 'change' event. This listener is registered first, so
+    // the ones added further down (typing, sky) already see the new value.
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let prefersReducedMotion = reducedMotionQuery.matches;
+    reducedMotionQuery.addEventListener('change', (e) => { prefersReducedMotion = e.matches; });
 
     // --- Let's track how far down you scroll ---
     const scrollProgress = document.getElementById('scroll-progress');
@@ -118,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let charIndex = 0;
     let isDeleting = false;
     let typingSpeed = 80;
+    let typingTimer;
 
     function typeRole() {
         if (!typedElement) return;
@@ -142,10 +150,26 @@ document.addEventListener('DOMContentLoaded', () => {
             typingSpeed = 400; // Pause before next word
         }
 
-        setTimeout(typeRole, typingSpeed);
+        typingTimer = setTimeout(typeRole, typingSpeed);
     }
 
-    typeRole();
+    // Under reduced motion the lead role shows as plain text instead of typing through the list
+    function startTyping() {
+        clearTimeout(typingTimer);
+        roleIndex = 0;
+        charIndex = 0;
+        isDeleting = false;
+        if (prefersReducedMotion) {
+            typedElement.textContent = roles[0];
+        } else {
+            typeRole();
+        }
+    }
+
+    if (typedElement) {
+        startTyping();
+        reducedMotionQuery.addEventListener('change', startTyping);
+    }
 
     // ======================== SCROLL ANIMATIONS (Intersection Observer) ========================
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
@@ -156,11 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
         threshold: 0.1
     };
 
+    // Staggered entrances read as motion too, so under reduced motion everything fades in together
+    const revealDelay = (el) => prefersReducedMotion ? 0 : parseInt(el.dataset.delay) || 0;
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const el = entry.target;
-                const delay = parseInt(el.dataset.delay) || 0;
+                const delay = revealDelay(el);
 
                 setTimeout(() => {
                     el.classList.add('visible');
@@ -191,6 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
     statNumbers.forEach(el => statsObserver.observe(el));
 
     function animateCounter(element, target) {
+        // Under reduced motion, land on the final number instead of counting up to it
+        if (prefersReducedMotion) {
+            element.textContent = target;
+            return;
+        }
+
         const duration = 2000;
         const startTime = performance.now();
 
@@ -235,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileGlass = document.querySelector('.hero-profile-glass');
     if (profileGlass) {
         profileGlass.addEventListener('mousemove', (e) => {
+            if (prefersReducedMotion) return; // No tilt under reduced motion
             const rect = profileGlass.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -283,6 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const inner = card.querySelector('.project-card-inner');
 
         card.addEventListener('mousemove', (e) => {
+            if (prefersReducedMotion) return; // No tilt under reduced motion
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -344,7 +379,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeCanvas, 150);
+            resizeTimeout = setTimeout(() => {
+                resizeCanvas();
+                // Resizing clears the canvas; with no animation loop running, repaint the still sky
+                if (!animationId) drawStillSky();
+            }, 150);
         });
 
         window.addEventListener('mousemove', (e) => {
@@ -540,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Visibility-based meteor interval — stops queuing meteors in background tabs
         let meteorInterval = null;
         function startMeteorShower() {
-            if (!meteorInterval) meteorInterval = setInterval(triggerMeteorShower, 35000);
+            if (!meteorInterval && !prefersReducedMotion) meteorInterval = setInterval(triggerMeteorShower, 35000);
         }
         function stopMeteorShower() {
             if (meteorInterval) { clearInterval(meteorInterval); meteorInterval = null; }
@@ -548,7 +587,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('visibilitychange', () => {
             document.hidden ? stopMeteorShower() : startMeteorShower();
         });
-        startMeteorShower();
 
         // Pre-split so drawConnections only iterates moving nodes (~6x fewer iterations)
         const movingParticles = particles.filter(p => !p.isStatic);
@@ -573,8 +611,29 @@ document.addEventListener('DOMContentLoaded', () => {
             animationId = requestAnimationFrame(animateParticles);
         }
 
+        // Reduced motion gets a still sky: no drift, twinkle or meteors
+        function drawStillSky() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => p.draw());
+            drawConnections(movingParticles);
+        }
+
+        function syncSkyMotion() {
+            if (prefersReducedMotion) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+                stopMeteorShower();
+                meteors = [];
+                drawStillSky();
+            } else if (!animationId) {
+                startMeteorShower();
+                animateParticles();
+            }
+        }
+
         // Start animation globally
-        animateParticles();
+        syncSkyMotion();
+        reducedMotionQuery.addEventListener('change', syncSkyMotion);
     }
 
     // --- If you know, you know. ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA ---
@@ -598,7 +657,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!overlay || overlay.classList.contains('active')) return; // Prevent re-trigger while active
         overlay.classList.add('active');
 
-        createConfetti(overlay);
+        // Confetti rains across the whole screen, so it sits out under reduced motion
+        if (!prefersReducedMotion) createConfetti(overlay);
 
         function closeEgg() {
             overlay.classList.remove('active');
@@ -655,7 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 window.scrollTo({
                     top: targetPosition,
-                    behavior: 'smooth'
+                    behavior: prefersReducedMotion ? 'auto' : 'smooth' // Jump instead of gliding under reduced motion
                 });
             }
         });
@@ -791,7 +851,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.color = `hsla(${200 + Math.random() * 60}, 100%, 80%, ${Math.random() * 0.8 + 0.2})`;
             }
             update() {
-                if (isExpanding) return; // Freeze particles during expansion
+                // Freeze particles during expansion, and hold them still under reduced motion
+                // (the loop keeps drawing, so resizes still repaint the scene)
+                if (isExpanding || prefersReducedMotion) return;
                 this.angle -= this.speed; // spiral direction
                 this.distance -= this.distance * 0.01; // pull inward
                 if (this.distance < blackHoleRadius) {
@@ -865,27 +927,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isExpanding) {
                 blackHoleRadius += (blackHoleRadius * 0.1) + 2;
                 if (blackHoleRadius > Math.max(bhWidth, bhHeight) * 1.5) {
-                    cancelAnimationFrame(animationId);
-
                     // Screen is black, now trigger fade out
-                    enterOverlay.classList.add('hidden');
-                    
-                    // Allow scrolling
-                    document.body.style.overflow = '';
-                    
-                    // Play video with audio
-                    if (heroVideoPlayer) {
-                        heroVideoPlayer.muted = false;
-                        updateSoundIcon();
-                        playHeroVideo();
-                    }
-
-                    // Remove overlay from DOM
-                    setTimeout(() => {
-                        enterOverlay.remove();
-                        window.removeEventListener('resize', resizeBhCanvas);
-                    }, 1500);
-                    
+                    revealSite();
                     return; // End animation loop
                 }
             }
@@ -893,21 +936,49 @@ document.addEventListener('DOMContentLoaded', () => {
             animationId = requestAnimationFrame(animateBlackHole);
         }
 
+        // Fades the overlay out and hands the page over to the site
+        function revealSite() {
+            cancelAnimationFrame(animationId);
+            enterOverlay.classList.add('hidden');
+
+            // Allow scrolling
+            document.body.style.overflow = '';
+
+            // Play video with audio
+            if (heroVideoPlayer) {
+                heroVideoPlayer.muted = false;
+                updateSoundIcon();
+                playHeroVideo();
+            }
+
+            // Remove overlay from DOM
+            setTimeout(() => {
+                enterOverlay.remove();
+                window.removeEventListener('resize', resizeBhCanvas);
+            }, 1500);
+        }
+
         animateBlackHole();
 
         enterBtn.addEventListener('click', () => {
+            // Remember that the user entered the site for this session
+            sessionStorage.setItem('hasEnteredPortfolio', 'true');
+
+            // Reduced motion: skip the black hole zoom and dissolve straight into the site
+            if (prefersReducedMotion) {
+                revealSite();
+                return;
+            }
+
             // Hide the text and button immediately
             const enterContent = document.querySelector('.enter-content');
             if (enterContent) {
                 enterContent.style.transition = 'opacity 0.5s ease';
                 enterContent.style.opacity = '0';
             }
-            
+
             // Trigger the black hole expansion
             isExpanding = true;
-            
-            // Remember that the user entered the site for this session
-            sessionStorage.setItem('hasEnteredPortfolio', 'true');
         });
     }
 
@@ -916,7 +987,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mark hero elements as visible immediately
     setTimeout(() => {
         document.querySelectorAll('.hero-section .animate-on-scroll').forEach(el => {
-            const delay = parseInt(el.dataset.delay) || 0;
+            const delay = revealDelay(el);
             setTimeout(() => el.classList.add('visible'), delay);
         });
     }, 300);
