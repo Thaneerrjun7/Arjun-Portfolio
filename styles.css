@@ -1374,6 +1374,34 @@ strong {
     transform: translateX(4px);
 }
 
+.project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Brief glow when a project is updated live */
+.project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(41, 151, 255, 0.7), inset 0 0 48px rgba(41, 151, 255, 0.18);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.project-card.live-updated::after {
+    animation: live-updated 1.6s ease-out;
+}
+
+@keyframes live-updated {
+    15% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
 /* --- The tools in my Batman utility belt --- */
 .skills-section {
     background: var(--bg-primary);

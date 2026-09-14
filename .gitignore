@@ -1,0 +1,5 @@
+# Firebase admin keys grant full database access and this repo is published publicly
+*adminsdk*.json
+service-account*.json
+
+.claude/
