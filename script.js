@@ -279,9 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ======================== 3D TILT EFFECT (Project Cards) ========================
-    const tiltCards = document.querySelectorAll('.tilt-card');
-
-    tiltCards.forEach(card => {
+    function initTilt(card) {
         const inner = card.querySelector('.project-card-inner');
 
         card.addEventListener('mousemove', (e) => {
@@ -323,7 +321,11 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('mouseenter', () => {
             inner.style.transition = '';
         });
-    });
+    }
+
+    document.querySelectorAll('.tilt-card').forEach(initTilt);
+
+    window.portfolioFX = { observe: (el) => observer.observe(el), tilt: initTilt };
 
     // ======================== PARTICLE CONSTELLATION ========================
     const canvas = document.getElementById('particle-canvas');
