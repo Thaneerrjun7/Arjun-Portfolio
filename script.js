@@ -682,30 +682,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function playHeroVideo() {
+    function playHeroVideo(fromStart = true) {
         if (!heroVideoPlayer) return;
         // Hide replay overlay
         if (heroVideoReplayOverlay) heroVideoReplayOverlay.classList.remove('visible');
-        heroVideoPlayer.currentTime = 0;
+        if (fromStart) heroVideoPlayer.currentTime = 0;
         
         // Attempt to play (browser may block if unmuted)
-        heroVideoPlayer.play().catch(() => {
+        heroVideoPlayer.play().catch((error) => {
+            if (error.name === 'AbortError') return; // Paused (e.g. by scrolling) before playback got going
             // Autoplay with sound blocked by browser policy.
             // Fallback: mute the video and try playing again so the user at least sees the video.
             heroVideoPlayer.muted = true;
             updateSoundIcon();
-            heroVideoPlayer.play().catch(() => {
+            heroVideoPlayer.play().catch((retryError) => {
                 // If even muted autoplay fails (e.g. strict low-power mode), show replay button
-                showReplayOverlay();
+                if (retryError.name !== 'AbortError') showReplayOverlay();
             });
         });
-        updateVideoProgress();
+    }
+
+    // One overlay, two jobs: "Play Intro" after a pause, "Replay Intro" once the video has ended
+    function showVideoOverlay(action) {
+        if (!heroVideoReplayOverlay) return;
+        heroVideoReplayOverlay.querySelector('.replay-label').textContent = `${action} Intro`;
+        if (heroVideoReplayBtn) heroVideoReplayBtn.setAttribute('aria-label', `${action} intro video`);
+        heroVideoReplayOverlay.classList.add('visible');
     }
 
     function showReplayOverlay() {
-        if (heroVideoReplayOverlay) {
-            heroVideoReplayOverlay.classList.add('visible');
-        }
+        showVideoOverlay('Replay');
         if (heroVideoProgressBar) heroVideoProgressBar.style.width = '100%';
         if (videoProgressRAF) cancelAnimationFrame(videoProgressRAF);
     }
@@ -727,10 +733,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Replay button click
+    // Scrolling on without watching pauses the intro. It's measured from the highest point since
+    // playback started, so scrolling back up to watch never pauses it
+    let videoWatchTop = 0;
+
+    function pauseHeroVideoOnScroll() {
+        if (heroVideoPlayer.paused) return;
+        videoWatchTop = Math.min(videoWatchTop, window.scrollY);
+        if (window.scrollY - videoWatchTop > 60) heroVideoPlayer.pause();
+    }
+
+    if (heroVideoPlayer) {
+        window.addEventListener('scroll', pauseHeroVideoOnScroll, { passive: true });
+
+        // Any pause short of the end (scrolling away, the OS, a headset button) brings up the play button
+        heroVideoPlayer.addEventListener('pause', () => {
+            if (!heroVideoPlayer.ended) showVideoOverlay('Play');
+        });
+
+        // However playback starts, clear the overlay and keep the progress bar moving
+        heroVideoPlayer.addEventListener('play', () => {
+            if (heroVideoReplayOverlay) heroVideoReplayOverlay.classList.remove('visible');
+            cancelAnimationFrame(videoProgressRAF);
+            updateVideoProgress();
+        });
+    }
+
+    // Play button: pick up where the intro paused, or start over once it has ended
     if (heroVideoReplayBtn) {
         heroVideoReplayBtn.addEventListener('click', () => {
-            playHeroVideo();
+            videoWatchTop = window.scrollY;
+            playHeroVideo(heroVideoPlayer.ended);
         });
     }
 
@@ -757,6 +790,7 @@ document.addEventListener('DOMContentLoaded', () => {
             heroVideoPlayer.muted = true;
             updateSoundIcon();
             playHeroVideo();
+            pauseHeroVideoOnScroll(); // Arrived already scrolled down (e.g. a #projects link)? Wait for a tap instead
         }
     } else if (enterOverlay && enterBtn && bhCanvas) {
         // Prevent body scrolling while overlay is active
