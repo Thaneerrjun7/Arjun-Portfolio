@@ -806,7 +806,7 @@ strong {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    z-index: 10;
+    z-index: 11; /* Above the play overlay, so sound can be set before resuming */
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -2113,14 +2113,26 @@ strong {
         align-items: center;
     }
 
+    /* The hero text covers the middle of the video here, so the play button tucks in beside the sound button */
+    .hero-video-replay-overlay {
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        padding: 0 72px 19px 0;
+    }
+
     .hero-video-replay-btn {
-        width: 64px;
-        height: 64px;
+        width: 44px;
+        height: 44px;
     }
 
     .hero-video-replay-btn svg {
-        width: 36px;
-        height: 36px;
+        width: 20px;
+        height: 20px;
+        margin-left: 2px;
     }
 }
 
@@ -2166,14 +2178,13 @@ strong {
         background: rgba(0, 0, 0, 0.7);
     }
 
-    .hero-video-replay-btn {
-        width: 56px;
-        height: 56px;
+    .hero-video-replay-overlay {
+        padding: 0 60px 10px 0;
     }
 
-    .hero-video-replay-btn svg {
-        width: 28px;
-        height: 28px;
+    /* Icon only on phones; the button's aria-label still says what it does */
+    .replay-label {
+        display: none;
     }
 
     .hero-video-sound-btn {
