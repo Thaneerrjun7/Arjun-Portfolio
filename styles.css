@@ -207,17 +207,12 @@ strong {
     margin-top: 2px;
 }
 
-/* The pill shares .status-text with the About box; keep its own small type and hold it to two lines inside the 60px bar */
+/* The pill shares .status-text with the About box; keep its own small type */
 .nav-status .status-text {
     font-size: inherit;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
 }
 
-/* Below this the links leave it too little room and it stacks into four lines */
+/* Below this the links leave the pill too little room */
 @media (max-width: 1199px) {
     .nav-status {
         display: none;
