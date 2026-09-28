@@ -1,0 +1,33 @@
+/* ============================================================
+   SCROLL MOTION: the waiting state
+   Elements marked .animate-on-scroll stay hidden until scroll-motion.js
+   grows them into place and adds .visible. All of the motion itself (the
+   springs, the growth, the blur, the cascade) lives in that script.
+   ============================================================ */
+
+/* Waiting to be revealed. Only opacity is touched here, so an element's own transform, filter
+   and corners are untouched and hover effects and tilt work the moment it lands. */
+.animate-on-scroll:not(.visible) {
+    opacity: 0;
+    /* Safety net: if scroll-motion.js never takes over (blocked, offline, errored), fade
+       everything in anyway instead of leaving the page blank. Keep the delay in step with
+       FAILSAFE_MS in scroll-motion.js. */
+    animation: sm-failsafe 0.6s ease-out 2.5s forwards;
+}
+
+/* The script is running and owns the reveal */
+html.sm-live .animate-on-scroll:not(.visible) {
+    animation: none;
+}
+
+@keyframes sm-failsafe {
+    to { opacity: 1; }
+}
+
+/* JavaScript switched off: nothing will reveal anything, so don't hide it */
+@media (scripting: none) {
+    .animate-on-scroll:not(.visible) {
+        opacity: 1;
+        animation: none;
+    }
+}

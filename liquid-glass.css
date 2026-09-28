@@ -1,0 +1,510 @@
+/* ==========================================================================
+   Liquid Glass interaction layer (pairs with liquid-glass.js)
+
+   Every button, link and card reads as a piece of glass: a translucent fill,
+   a light rim, and on hover or press a specular highlight that follows the
+   pointer. The motion (magnify, lean, squish, the nav lens) is spring-driven
+   in JS through the individual `scale` and `translate` properties, so it
+   composes with the scroll reveals and the project-card tilt, which own
+   `transform`. Nothing here sets `transform` on a revealed or tilted element.
+   ========================================================================== */
+
+:root {
+    --lg-focus: rgb(41 151 255 / 0.95);
+}
+
+/* --------------------------------------------------------------------------
+   Hosts: a positioning + stacking context so the sheen can sit between each
+   element's background and its content. Isolation is permanent (not only while
+   animating) so the paint order never flips mid-hover.
+   -------------------------------------------------------------------------- */
+:where(.btn, .nav-toggle, .contact-link, .skill-tag, .tag, .project-tech > span,
+    .project-link, .nav-logo, .skill-category, .timeline-card, .hero-video-replay-btn,
+    a[href]:not(.nav-links a, .mobile-nav-links a)) {
+    position: relative;
+}
+
+.btn, .enter-btn, .hero-video-sound-btn, .hero-video-replay-btn, .nav-toggle,
+.contact-link, .skill-tag, .tag, .project-tech > span, .project-link, .nav-logo,
+.project-card, .gallery-item, .stat-card, .award-card, .skill-category, .edu-card,
+.timeline-card, .recommendation-card,
+:where(a[href]:not(.nav-links a, .mobile-nav-links a)) {
+    isolation: isolate;
+}
+
+/* Compositor layer only while a spring is moving a large card (toggled by JS) */
+.lg-layer {
+    will-change: transform;
+}
+
+/* A chip that grows sits above its neighbours instead of under them */
+.lg-lift {
+    z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   The sheen: one injected <lg-sheen> per host (added on first hover, press or
+   focus). Its background is the specular highlight, ::before the rim that
+   brightens on the side nearest the pointer, ::after the bloom on press.
+   JS writes --lg-x/--lg-y (pointer), --lg-bx/--lg-by (press point) and --lg-r
+   (highlight radius) on the sheen itself, a leaf, so style work stays tiny.
+   -------------------------------------------------------------------------- */
+lg-sheen {
+    --lg-x: 50%;
+    --lg-y: 0%;
+    --lg-bx: 50%;
+    --lg-by: 50%;
+    --lg-r: 120px;
+    --lg-spec: 0.16;
+    --lg-rim: 0.6;
+    --lg-rim-w: 1px;
+    --lg-fill: transparent;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    border-radius: inherit;
+    pointer-events: none;
+    contain: strict;
+    background:
+        radial-gradient(circle var(--lg-r) at var(--lg-x) var(--lg-y),
+            rgb(255 255 255 / var(--lg-spec)), rgb(255 255 255 / 0) 70%),
+        linear-gradient(180deg, rgb(255 255 255 / calc(var(--lg-spec) * 0.35)), rgb(255 255 255 / 0) 55%),
+        var(--lg-fill);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+lg-sheen.is-hover,
+lg-sheen.is-press,
+lg-sheen.is-focus {
+    opacity: 1;
+    transition-duration: 0.16s;
+}
+
+/* Rim: a gradient-filled ring the width of the host's border */
+lg-sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--lg-rim-w);
+    background: radial-gradient(circle calc(var(--lg-r) * 1.5) at var(--lg-x) var(--lg-y),
+        rgb(255 255 255 / var(--lg-rim)) 0%,
+        rgb(255 255 255 / calc(var(--lg-rim) * 0.22)) 55%,
+        rgb(255 255 255 / 0.06) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* Bloom: light spreading out from where the finger or cursor pressed.
+   Fades on release; the size snaps back only once it is invisible. */
+lg-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle calc(var(--lg-r) * 1.25) at var(--lg-bx) var(--lg-by),
+        rgb(255 255 255 / 0.3) 0%, rgb(255 255 255 / 0.1) 42%, rgb(255 255 255 / 0) 72%);
+    opacity: 0;
+    transform: scale(0.35);
+    transform-origin: var(--lg-bx) var(--lg-by);
+    transition: opacity 0.5s ease-out, transform 0s linear 0.55s;
+}
+
+lg-sheen.is-press::after {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.08s ease-out, transform 0.42s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+/* Per-kind strength: brighter on small controls, restrained on big cards */
+lg-sheen[data-k="button"] { --lg-spec: 0.2; --lg-rim: 0.65; }
+lg-sheen[data-k="icon"]   { --lg-spec: 0.24; --lg-rim: 0.7; }
+lg-sheen[data-k="wide"]   { --lg-spec: 0.1; --lg-rim: 0.5; }
+lg-sheen[data-k="chip"]   { --lg-spec: 0.16; --lg-rim: 0.5; }
+lg-sheen[data-k="card"]   { --lg-spec: 0.055; --lg-rim: 0.34; }
+
+/* Photos and project cards are covered edge to edge by their content, so the
+   sheen floats on top of it, kept faint so text underneath stays crisp */
+lg-sheen[data-k="media"]  { z-index: 4; --lg-spec: 0.09; --lg-rim: 0.42; }
+
+/* White label on blue: keep the highlight light enough that the text holds up */
+.btn-primary > lg-sheen { --lg-spec: 0.15; }
+
+/* Enter button: above its blue glow, below its label */
+.enter-btn > lg-sheen { z-index: 1; }
+
+/* Text links: a small glass capsule condenses under the link */
+lg-sheen[data-k="capsule"] {
+    inset: -0.32em -0.75em;
+    border-radius: 999px;
+    --lg-spec: 0.12;
+    --lg-rim: 0.5;
+    --lg-fill: rgb(255 255 255 / 0.06);
+}
+
+.project-link > lg-sheen,
+.timeline-details a > lg-sheen {
+    --lg-fill: rgb(41 151 255 / 0.13);
+}
+
+/* --------------------------------------------------------------------------
+   Materials. Old :hover looks are folded into the rest state so touch screens
+   don't get stuck in them; the hover look lives in the fine-pointer query.
+   -------------------------------------------------------------------------- */
+
+/* Primary: blue-tinted glass, still unmistakably the main action. The tint is
+   background-color (so hover can transition it) under a fixed light gradient.
+   White label contrast is about 4:1, up from 3:1 on the old flat #2997ff. */
+.btn-primary,
+.btn-primary:hover {
+    color: #fff;
+    background-color: rgb(20 132 245 / 0.9);
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.15) 0%, rgb(255 255 255 / 0) 50%, rgb(0 0 0 / 0.08) 100%);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.36),
+        inset 0 -1px 1px rgb(0 0 0 / 0.14),
+        inset 0 0 0 0.5px rgb(255 255 255 / 0.16),
+        0 6px 20px -4px rgb(41 151 255 / 0.4),
+        0 1px 2px rgb(0 0 0 / 0.35);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(12px) saturate(180%);
+    text-shadow: 0 1px 1px rgb(0 24 64 / 0.25);
+}
+
+/* Ghost: clear glass with the blue edge and label it always had */
+.btn-ghost,
+.btn-ghost:hover {
+    color: var(--accent-blue);
+    background-color: rgb(255 255 255 / 0.04);
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.06) 0%, rgb(255 255 255 / 0) 60%);
+    border-color: rgb(41 151 255 / 0.6);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.16),
+        inset 0 0 14px rgb(41 151 255 / 0.07),
+        0 6px 18px -6px rgb(0 0 0 / 0.5);
+    -webkit-backdrop-filter: blur(14px) saturate(170%);
+    backdrop-filter: blur(14px) saturate(170%);
+}
+
+.enter-btn {
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 0 20px rgba(255, 255, 255, 0.03);
+}
+
+.hero-video-sound-btn,
+.hero-video-replay-btn {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2), 0 6px 18px -4px rgb(0 0 0 / 0.45);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(12px) saturate(180%);
+}
+
+/* Contact rows: frosted glass over the star field */
+.contact-link,
+.contact-link:hover {
+    color: var(--text-primary);
+    background-color: rgb(255 255 255 / 0.03);
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.05) 0%, rgb(255 255 255 / 0) 70%);
+    border-color: rgb(255 255 255 / 0.1);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.09), 0 10px 30px -12px rgb(0 0 0 / 0.6);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+}
+
+/* Chips: a hairline of light along the top edge. No backdrop blur: there are
+   dozens of them on screen at once, and they sit on solid cards anyway. */
+.skill-tag,
+.tag,
+.project-tech > span {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07);
+}
+
+.nav-toggle {
+    border-radius: 10px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover {
+        background-color: rgb(38 146 255 / 0.92);
+        box-shadow:
+            inset 0 1px 0 rgb(255 255 255 / 0.45),
+            inset 0 -1px 1px rgb(0 0 0 / 0.14),
+            inset 0 0 0 0.5px rgb(255 255 255 / 0.22),
+            0 10px 30px -6px rgb(41 151 255 / 0.55),
+            0 1px 2px rgb(0 0 0 / 0.35);
+    }
+
+    .btn-ghost:hover {
+        background-color: rgb(41 151 255 / 0.14);
+        border-color: rgb(41 151 255 / 0.95);
+        box-shadow:
+            inset 0 1px 0 rgb(255 255 255 / 0.2),
+            inset 0 0 18px rgb(41 151 255 / 0.12),
+            0 8px 24px -6px rgb(41 151 255 / 0.3);
+    }
+
+    .enter-btn:hover {
+        box-shadow:
+            0 15px 50px rgba(41, 151, 255, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 0 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .contact-link:hover {
+        border-color: var(--border-hover);
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 14px 36px -12px rgb(0 0 0 / 0.7);
+    }
+}
+
+/* Touch screens: a tap shouldn't leave a control stuck in its hover look */
+@media (hover: none) {
+    .hero-video-sound-btn:hover {
+        opacity: 0.7;
+        border-color: rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-video-replay-btn:hover {
+        background: rgba(41, 151, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.25);
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2), 0 6px 18px -4px rgb(0 0 0 / 0.45);
+    }
+
+    .stat-card:hover,
+    .skill-category:hover,
+    .edu-card:hover,
+    .award-card:hover,
+    .timeline-card:hover {
+        border-color: var(--border-subtle);
+        box-shadow: none;
+    }
+
+    .stat-card:hover::before,
+    .award-card:hover::before {
+        opacity: 0;
+    }
+
+    .recommendation-card:hover {
+        border-color: var(--border-subtle);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .skill-tag:hover {
+        background: var(--bg-glass);
+        border-color: var(--border-subtle);
+        color: var(--text-secondary);
+    }
+
+    .project-link:hover {
+        color: var(--accent-blue);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Focus: a clear ring for keyboard users, plus the sheen lit from above
+   -------------------------------------------------------------------------- */
+:is(.btn, .enter-btn, .hero-video-sound-btn, .hero-video-replay-btn, .nav-toggle,
+    .contact-link, .project-link, .nav-logo, .nav-links a, .mobile-nav-links a,
+    a[href], button):focus-visible {
+    outline: 2px solid var(--lg-focus);
+    outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Nav lens: one glass capsule per menu that glides to the hovered item and
+   rests on the active section. JS sizes it once per layout (--lg-lens-w/h) and
+   then moves and stretches it with transform only, correcting border-radius so
+   the ends stay round however far it stretches.
+   -------------------------------------------------------------------------- */
+.lg-lens-host {
+    position: relative;
+    isolation: isolate;
+}
+
+/* The desktop list is only as tall as its text; this makes it as tall as the
+   hover targets below without moving anything */
+.nav-links.lg-lens-host {
+    padding-block: 10px;
+    margin-block: -10px;
+}
+
+.lg-lens-host a {
+    position: relative;
+    z-index: 1;
+}
+
+/* The lens replaces the old underline; the pseudo-element now widens the
+   hover and tap target instead (link text alone is a thin target) */
+.lg-lens-host a::after {
+    display: none;
+}
+
+.lg-lens-host a::before {
+    content: "";
+    position: absolute;
+    inset: -10px calc(-1 * var(--lg-pad-x, 12px));
+}
+
+.lg-lens {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    width: 80px;
+    height: 34px;
+    list-style: none;
+    pointer-events: none;
+    transform-origin: 0 0;
+    border-radius: 999px;
+    background-color: rgb(255 255 255 / 0.07);
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.13) 0%, rgb(255 255 255 / 0) 62%);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.3),
+        inset 0 -1px 0 rgb(255 255 255 / 0.06),
+        inset 0 0 0 1px rgb(255 255 255 / 0.1),
+        0 6px 18px -4px rgb(0 0 0 / 0.45);
+    -webkit-backdrop-filter: blur(6px) saturate(180%);
+    backdrop-filter: blur(6px) saturate(180%);
+    opacity: 0;
+    transition: opacity 0.24s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lg-lens.is-visible {
+    opacity: 1;
+}
+
+.lg-lens.lg-anim {
+    will-change: transform;
+}
+
+/* Resume keeps its blue glow: the lens tints to match when it lands there */
+.lg-lens.is-accent {
+    background-color: rgb(41 151 255 / 0.2);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.3),
+        inset 0 -1px 0 rgb(255 255 255 / 0.06),
+        inset 0 0 0 1px rgb(41 151 255 / 0.4),
+        0 0 18px rgb(41 151 255 / 0.35);
+}
+
+/* Pressed: the glass catches more light (the squish itself is a spring in JS) */
+.lg-lens.is-pressed {
+    background-color: rgb(255 255 255 / 0.14);
+    transition-duration: 0.24s, 0.06s, 0.06s;
+}
+
+.lg-lens.is-accent.is-pressed {
+    background-color: rgb(41 151 255 / 0.32);
+}
+
+.mobile-nav-links .lg-lens {
+    background-color: rgb(255 255 255 / 0.08);
+}
+
+/* Chromium only (JS adds .lg-refract after checking): the desktop lens and the
+   intro's Enter button bend what's behind their edges through an SVG
+   displacement map, like real glass. Everything else keeps the plain blur
+   above. (Not the mobile lens: the menu's own backdrop blur hides anything
+   behind it, so refraction there would be cost with nothing to show.) */
+.lg-refract .nav-links .lg-lens {
+    -webkit-backdrop-filter: url(#lg-refract-lens) blur(1.5px) saturate(180%);
+    backdrop-filter: url(#lg-refract-lens) blur(1.5px) saturate(180%);
+}
+
+.lg-refract .enter-btn {
+    -webkit-backdrop-filter: url(#lg-refract-enter) blur(3px) saturate(160%);
+    backdrop-filter: url(#lg-refract-enter) blur(3px) saturate(160%);
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion: no scaling, leaning, stretching or bounce (JS skips the
+   springs). Feedback stays as light: the highlight appears at once, the press
+   bloom lights up in place and fades.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    lg-sheen.is-hover,
+    lg-sheen.is-press,
+    lg-sheen.is-focus {
+        transition-duration: 0s;
+    }
+
+    lg-sheen::after,
+    lg-sheen.is-press::after {
+        transform: none;
+    }
+
+    lg-sheen::after {
+        transition: opacity 0.3s ease-out;
+    }
+
+    lg-sheen.is-press::after {
+        transition-duration: 0s;
+    }
+
+    .lg-lens {
+        transition: opacity 0.15s linear, background-color 0.15s linear, box-shadow 0.15s linear;
+    }
+}
+
+/* Reduced transparency: frosted glass becomes solid, and the lens stops
+   refracting */
+@media (prefers-reduced-transparency: reduce) {
+    .btn-primary,
+    .btn-primary:hover {
+        background: #0a6fd6;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    .btn-ghost,
+    .btn-ghost:hover {
+        background: #0d1620;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    .contact-link,
+    .contact-link:hover {
+        background: var(--bg-card);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    .lg-lens,
+    .lg-refract .nav-links .lg-lens {
+        background-color: #2c2c2e;
+        background-image: none;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    .lg-lens.is-accent {
+        background-color: #0b4f8f;
+    }
+
+    .lg-refract .enter-btn {
+        -webkit-backdrop-filter: blur(24px) saturate(150%);
+        backdrop-filter: blur(24px) saturate(150%);
+    }
+}
+
+/* More contrast: firmer edges on the glass */
+@media (prefers-contrast: more) {
+    .btn-ghost,
+    .btn-ghost:hover {
+        border-color: var(--accent-blue);
+    }
+
+    .contact-link,
+    .contact-link:hover {
+        border-color: rgb(255 255 255 / 0.4);
+    }
+
+    .lg-lens {
+        box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6);
+    }
+}
