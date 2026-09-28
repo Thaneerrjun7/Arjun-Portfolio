@@ -149,7 +149,7 @@
     // Kinds, most specific first. hover/press are the ceilings; grow/squish (px) scale them down on
     // big elements so a wide card magnifies less than a small pill.
     const KINDS = [
-        { name: 'button', sel: '.btn, .enter-btn', hover: 1.045, grow: 10, press: 0.95, squish: 9, lean: 3.5 },
+        { name: 'button', sel: '.btn, .enter-btn, .nav-status', hover: 1.045, grow: 10, press: 0.95, squish: 9, lean: 3.5 },
         { name: 'icon', sel: '.hero-video-sound-btn, .hero-video-replay-btn, .nav-toggle', hover: 1.08, grow: 6, press: 0.9, squish: 6, lean: 2.5 },
         { name: 'wide', sel: '.contact-link', hover: 1.03, grow: 10, press: 0.97, squish: 10, lean: 3 },
         { name: 'chip', sel: '.skill-tag, .tag, .project-tech > span', hover: 1.08, grow: 7, press: 0.92, squish: 6, lean: 2, lively: true },
