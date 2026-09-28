@@ -114,9 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'Software Engineer',
         'UI/UX Designer',
         'Website Developer',
-        'AI Engineer',
+        'AI Application Builder',
         'Flutter Developer',
-        'Solutions Engineer',
         'Full-Stack Developer'
     ];
 
@@ -171,35 +170,15 @@ document.addEventListener('DOMContentLoaded', () => {
         reducedMotionQuery.addEventListener('change', startTyping);
     }
 
-    // ======================== SCROLL ANIMATIONS (Intersection Observer) ========================
-    const animatedElements = document.querySelectorAll('.animate-on-scroll');
-
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px 0px -80px 0px',
-        threshold: 0.1
+    // ======================== SCROLL ANIMATIONS ========================
+    // The entrances live in scroll-motion.js: it grows every .animate-on-scroll into place on a
+    // spring the first time it scrolls into view, holds the hero until the intro dissolves, and
+    // picks up nodes added later by itself. This is the hand-off for firebase-live.js, with a
+    // plain fallback so nothing stays hidden if that script didn't load.
+    const revealOnScroll = (el) => {
+        if (window.scrollMotion) window.scrollMotion.observe(el);
+        else el.classList.add('visible');
     };
-
-    // Staggered entrances read as motion too, so under reduced motion everything fades in together
-    const revealDelay = (el) => prefersReducedMotion ? 0 : parseInt(el.dataset.delay) || 0;
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const el = entry.target;
-                const delay = revealDelay(el);
-
-                setTimeout(() => {
-                    el.classList.add('visible');
-                }, delay);
-
-                // Don't unobserve — we want one-time trigger
-                observer.unobserve(el);
-            }
-        });
-    }, observerOptions);
-
-    animatedElements.forEach(el => observer.observe(el));
 
     // --- Numbers go brrrrr ---
     const statNumbers = document.querySelectorAll('.stat-number');
@@ -360,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.tilt-card').forEach(initTilt);
 
-    window.portfolioFX = { observe: (el) => observer.observe(el), tilt: initTilt };
+    window.portfolioFX = { observe: revealOnScroll, tilt: initTilt };
 
     // ======================== PARTICLE CONSTELLATION ========================
     const canvas = document.getElementById('particle-canvas');
@@ -1018,12 +997,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Waking up the site ---
-    // Mark hero elements as visible immediately
-    setTimeout(() => {
-        document.querySelectorAll('.hero-section .animate-on-scroll').forEach(el => {
-            const delay = revealDelay(el);
-            setTimeout(() => el.classList.add('visible'), delay);
-        });
-    }, 300);
+    // scroll-motion.js grows the hero in as the intro dissolves (or right away when it was
+    // skipped). If that script never loaded, show everything now rather than leave the page blank.
+    if (!window.scrollMotion) {
+        document.querySelectorAll('.animate-on-scroll').forEach(revealOnScroll);
+    }
 
 });

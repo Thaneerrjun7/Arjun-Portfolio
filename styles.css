@@ -190,6 +190,8 @@ strong {
     display: flex;
     align-items: center;
     gap: 20px;
+    min-width: 0;
+    margin-right: 24px;
 }
 
 .nav-status {
@@ -205,7 +207,18 @@ strong {
     margin-top: 2px;
 }
 
-@media (max-width: 768px) {
+/* The pill shares .status-text with the About box; keep its own small type and hold it to two lines inside the 60px bar */
+.nav-status .status-text {
+    font-size: inherit;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+/* Below this the links leave it too little room and it stacks into four lines */
+@media (max-width: 1199px) {
     .nav-status {
         display: none;
     }
@@ -423,7 +436,6 @@ strong {
 .btn-primary:hover {
     background: #0a84ff;
     color: #fff;
-    transform: scale(1.04);
     box-shadow: 0 8px 30px rgba(41, 151, 255, 0.3);
 }
 
@@ -436,7 +448,6 @@ strong {
 .btn-ghost:hover {
     background: rgba(41, 151, 255, 0.1);
     color: var(--accent-blue);
-    transform: scale(1.04);
 }
 
 .btn-large {
@@ -538,7 +549,6 @@ strong {
 }
 
 .enter-btn:hover {
-    transform: scale(1.05);
     border-color: rgba(255, 255, 255, 0.4);
     box-shadow: 0 15px 50px rgba(41, 151, 255, 0.3), inset 0 0 30px rgba(255, 255, 255, 0.1);
 }
@@ -827,7 +837,6 @@ strong {
     opacity: 1;
     border-color: var(--accent-blue);
     background: rgba(41, 151, 255, 0.2);
-    transform: scale(1.1);
 }
 
 /* --- The "Play it again, Sam" button --- */
@@ -876,7 +885,6 @@ strong {
 .hero-video-replay-btn:hover {
     background: rgba(41, 151, 255, 0.3);
     border-color: var(--accent-blue);
-    transform: scale(1.1);
     box-shadow: 0 0 40px rgba(41, 151, 255, 0.3);
 }
 
@@ -904,7 +912,6 @@ strong {
 }
 
 .recommendation-card:hover {
-    transform: translateY(-8px);
     border-color: rgba(41, 151, 255, 0.4);
     box-shadow: 0 15px 40px rgba(41, 151, 255, 0.1);
 }
@@ -1042,7 +1049,6 @@ strong {
 
 .stat-card:hover {
     border-color: var(--border-hover);
-    transform: translateY(-4px);
 }
 
 .stat-card:hover::before {
@@ -1142,7 +1148,6 @@ strong {
 
 .timeline-card:hover {
     border-color: var(--border-hover);
-    transform: translateX(8px);
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -1371,7 +1376,6 @@ strong {
 
 .project-link:hover {
     color: var(--accent-purple);
-    transform: translateX(4px);
 }
 
 .project-links {
@@ -1423,7 +1427,6 @@ strong {
 
 .skill-category:hover {
     border-color: var(--border-hover);
-    transform: translateY(-4px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -1466,7 +1469,6 @@ strong {
     background: rgba(41, 151, 255, 0.1);
     border-color: rgba(41, 151, 255, 0.3);
     color: var(--accent-blue);
-    transform: translateY(-2px);
 }
 
 /* --- Where I spent way too much time studying (Education) --- */
@@ -1492,7 +1494,6 @@ strong {
 
 .edu-card:hover {
     border-color: var(--border-hover);
-    transform: translateY(-4px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -1612,7 +1613,6 @@ strong {
 
 .award-card:hover {
     border-color: var(--border-hover);
-    transform: translateY(-8px);
     box-shadow: 0 16px 50px rgba(0, 0, 0, 0.3);
 }
 
@@ -1889,7 +1889,6 @@ strong {
 
 .contact-link:hover {
     border-color: var(--border-hover);
-    transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
     color: var(--text-primary);
 }
@@ -1919,10 +1918,11 @@ strong {
 }
 
 /* --- You weren't supposed to find this... --- */
+/* Bottom left: on the right it covers the hero video's sound button */
 .easter-egg-hint {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     padding: 8px 16px;
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -1937,6 +1937,13 @@ strong {
 
 .easter-egg-hint:hover {
     opacity: 1;
+}
+
+/* The Konami code needs a keyboard, and on a phone the hint just covers content */
+@media (hover: none), (max-width: 768px) {
+    .easter-egg-hint {
+        display: none;
+    }
 }
 
 .easter-egg-overlay {
@@ -1987,63 +1994,9 @@ strong {
     margin-top: 16px !important;
 }
 
-/* --- Making things swoop in like they're in a Marvel movie --- */
-.animate-on-scroll {
-    opacity: 0;
-    transition: all var(--duration-xslow) var(--ease-out-expo);
-}
-
-.animate-on-scroll.visible {
-    opacity: 1;
-}
-
-/* Fade Up */
-.animate-on-scroll[data-animation="fade-up"] {
-    transform: translateY(60px);
-}
-.animate-on-scroll[data-animation="fade-up"].visible {
-    transform: translateY(0);
-}
-
-/* Scale Up */
-.animate-on-scroll[data-animation="scale-up"] {
-    transform: scale(0.85);
-}
-.animate-on-scroll[data-animation="scale-up"].visible {
-    transform: scale(1);
-}
-
-/* Zoom In */
-.animate-on-scroll[data-animation="zoom-in"] {
-    transform: scale(0.6);
-}
-.animate-on-scroll[data-animation="zoom-in"].visible {
-    transform: scale(1);
-}
-
-/* Slide Left */
-.animate-on-scroll[data-animation="slide-left"] {
-    transform: translateX(-80px);
-}
-.animate-on-scroll[data-animation="slide-left"].visible {
-    transform: translateX(0);
-}
-
-/* Slide Right */
-.animate-on-scroll[data-animation="slide-right"] {
-    transform: translateX(80px);
-}
-.animate-on-scroll[data-animation="slide-right"].visible {
-    transform: translateX(0);
-}
-
-/* Float In */
-.animate-on-scroll[data-animation="float-in"] {
-    transform: translateY(40px) scale(0.9);
-}
-.animate-on-scroll[data-animation="float-in"].visible {
-    transform: translateY(0) scale(1);
-}
+/* --- Things growing into place as you scroll ---
+   Everything marked .animate-on-scroll grows in like a drop of glass the first time it
+   scrolls into view. The waiting state is in scroll-motion.css, the springs in scroll-motion.js. */
 
 /* --- Because people will judge me if this looks bad on an iPhone --- */
 
@@ -2311,13 +2264,7 @@ strong {
    feedback stays, because it helps you follow what changed. */
 @media (prefers-reduced-motion: reduce) {
 
-    /* Entrances fade in place instead of sliding, scaling or zooming */
-    .animate-on-scroll,
-    .animate-on-scroll[data-animation] {
-        transform: none;
-        transition-duration: 0.3s;
-        transition-timing-function: ease-out;
-    }
+    /* Entrances become a quick fade in place, with no growth, blur or stagger (scroll-motion.js) */
 
     /* Looping animations hold still */
     .enter-title,
@@ -2332,23 +2279,10 @@ strong {
         display: none;
     }
 
-    /* Hover lifts and zooms stay put; their color and shadow changes still play */
-    .btn-primary:hover,
-    .btn-ghost:hover,
-    .enter-btn:hover,
-    .hero-video-sound-btn:hover,
-    .hero-video-replay-btn:hover,
-    .recommendation-card:hover,
-    .stat-card:hover,
-    .timeline-card:hover,
+    /* Photo zooms stay put; their color and shadow changes still play. (Buttons and cards
+       magnify and lean through liquid-glass.js, which skips that under reduced motion.) */
     .project-card:hover .project-image,
-    .project-link:hover,
-    .skill-category:hover,
-    .skill-tag:hover,
-    .edu-card:hover,
-    .award-card:hover,
-    .gallery-item:hover img,
-    .contact-link:hover {
+    .gallery-item:hover img {
         transform: none;
     }
 
