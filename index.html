@@ -16,13 +16,14 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#000000" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23000' stroke='%23d7263d' stroke-width='4'/%3E%3Ctext x='32' y='41' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%23f5f5f7' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
-    <script>document.documentElement.classList.add('js');</script>
+    <script>document.documentElement.classList.add('js'); try { if (sessionStorage.getItem('retro') === '1') document.documentElement.classList.add('retro'); } catch (e) {}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="site.css" />
+    <link rel="stylesheet" href="retro.css" />
 </head>
 
 <body>
@@ -51,6 +52,7 @@
                 <li><a href="#experience" data-section="experience"><span class="decode">Experience</span></a></li>
                 <li><a href="#skills" data-section="skills"><span class="decode">Skills</span></a></li>
                 <li><a href="#education" data-section="education"><span class="decode">Education</span></a></li>
+                <li><a href="#gallery" data-section="gallery"><span class="decode">Gallery</span></a></li>
                 <li><a href="assets/CV_Arjun.pdf" target="_blank" rel="noopener" class="nav-resume-glow"><span class="decode">Resume</span></a></li>
                 <li><a href="#contact" data-section="contact"><span class="decode">Contact</span></a></li>
             </ul>
@@ -65,6 +67,7 @@
             <li><a href="#experience"><span class="decode">Experience</span></a></li>
             <li><a href="#skills"><span class="decode">Skills</span></a></li>
             <li><a href="#education"><span class="decode">Education</span></a></li>
+            <li><a href="#gallery"><span class="decode">Gallery</span></a></li>
             <li><a href="assets/CV_Arjun.pdf" target="_blank" rel="noopener" class="nav-resume-glow"><span class="decode">Resume</span></a></li>
             <li><a href="#contact"><span class="decode">Contact</span></a></li>
         </ul>
@@ -297,8 +300,6 @@
                         finished SivaSafe as my A-graded capstone, and started AJ, a voice assistant that runs on my
                         own laptop. Microsoft Certified: Azure AI Fundamentals (AI-900), with AI-102 exam-prep training
                         completed. Two-time Dean's List.</p>
-                    <p>Off the clock you will find me in a cinema. I have always wanted a setup like Tony Stark's
-                        J.A.R.V.I.S., which explains most of my side projects.</p>
                 </div>
 
                 <div class="reveal" style="--d:120ms">
@@ -317,14 +318,6 @@
                         <div><dt>Languages</dt><dd>Tamil (native), English and Malay (fluent), Mandarin (basic, learning)</dd></div>
                     </dl>
                 </div>
-            </div>
-
-            <div class="strip reveal" tabindex="0" aria-label="Photos from my time at Sunway">
-                <figure><img src="assets/images/grad-stage.jpeg" alt="Graduation ceremony at Sunway College" loading="lazy" /><figcaption>Sunway College Graduation</figcaption></figure>
-                <figure><img src="assets/images/event-campus-tour.jpeg" alt="Campus Tour - Student Ambassador" loading="lazy" /><figcaption>Campus Tour · Student Ambassador</figcaption></figure>
-                <figure><img src="assets/images/grad-friends.jpeg" alt="Graduation with friends" loading="lazy" /><figcaption>Graduation Day with Friends</figcaption></figure>
-                <figure><img src="assets/images/event-career-fair.jpeg" alt="Sunway University Career Fair" loading="lazy" /><figcaption>Sunway University Career Fair</figcaption></figure>
-                <figure><img src="assets/images/event-stem.jpeg" alt="STEM Event at University" loading="lazy" /><figcaption>STEM Event · University</figcaption></figure>
             </div>
         </section>
 
@@ -514,6 +507,14 @@
                         <li>LangChain for LLM Application Development<span>DeepLearning.AI · 2026</span></li>
                         <li>Dean's List, Sunway University<span>Feb - Apr 2025 (GPA 3.67) · May - Aug 2026 (GPA 3.63)</span></li>
                     </ul>
+                    <h3>Awards</h3>
+                    <ul>
+                        <li>Essay Competition Winner<span>Erican Language Centre · English</span></li>
+                        <li>English Drama, State Champion (Johan), Perak<span>2018</span></li>
+                        <li>English Drama, District Champion (Johan), Larut Matang dan Selama<span>2018</span></li>
+                        <li>National English Language Drama Competition, competed at national level<span>2018</span></li>
+                        <li>Chinese Calligraphy Competition, participant<span>SMK St. George, 2019</span></li>
+                    </ul>
                     <a href="assets/Certificates.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-glass">My certificates and other documents (PDF)</a>
                 </div>
             </div>
@@ -523,6 +524,26 @@
                     initiative... He is a fast learner who adapts quickly to new concepts and challenges."</blockquote>
                 <figcaption><strong>Alvin Mah</strong> · Development Head, Century Software</figcaption>
             </figure>
+        </section>
+
+        <!-- Gallery -->
+        <section id="gallery" class="section">
+            <p class="eyebrow reveal"><span>Beyond the code</span></p>
+            <h2 class="title"><span class="decode">Gallery</span></h2>
+            <p class="lede gallery-intro reveal">
+                When I'm off the clock, you can definitely find me in the cinemas. I'm a huge movie lover who enjoys
+                diving into tech culture and cinematic experiences. I also spend my free time building personal AI
+                projects, driven by a lifelong dream to build a tech setup just like Tony Stark's J.A.R.V.I.S. Here are
+                some of my extracurricular activities that I did during my time in Sunway University while I was
+                finishing my Bachelor's Degree.
+            </p>
+            <div class="gallery-grid">
+                <figure class="gallery-large reveal"><img src="assets/images/grad-stage.jpeg" alt="Graduation ceremony at Sunway College" loading="lazy" /><figcaption>Sunway College Graduation</figcaption></figure>
+                <figure class="reveal"><img src="assets/images/event-campus-tour.jpeg" alt="Campus Tour - Student Ambassador" loading="lazy" /><figcaption>Campus Tour · Student Ambassador</figcaption></figure>
+                <figure class="reveal"><img src="assets/images/grad-friends.jpeg" alt="Graduation with friends" loading="lazy" /><figcaption>Graduation Day with Friends</figcaption></figure>
+                <figure class="reveal"><img src="assets/images/event-career-fair.jpeg" alt="Sunway University Career Fair" loading="lazy" /><figcaption>Sunway University Career Fair</figcaption></figure>
+                <figure class="reveal"><img src="assets/images/event-stem.jpeg" alt="STEM Event at University" loading="lazy" /><figcaption>STEM Event · University</figcaption></figure>
+            </div>
         </section>
 
         <!-- Contact -->

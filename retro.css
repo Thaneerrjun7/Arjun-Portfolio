@@ -1,0 +1,166 @@
+/*
+   Retro mode: the whole site as a late-80s green phosphor terminal.
+   Switched on by typing 2002 or pressing the RETRO button (site.js adds .retro to <html>).
+   Everything here is scoped to html.retro, so the normal site never sees it.
+*/
+
+html.retro {
+    --bg: #030503;
+    --ink: #a9e34b;
+    --ink-2: #93cc3e;
+    --ink-3: #6f9f30;
+    --accent: #c9ff5e;
+    --accent-hi: #d9ff86;
+    --accent-deep: #3d5a14;
+    --accent-soft: rgba(169, 227, 75, 0.1);
+    --glow: 0 0 8px rgba(169, 227, 75, 0.7);
+    --line: rgba(169, 227, 75, 0.38);
+    --glass: transparent;
+    --glass-2: transparent;
+    --glass-line: rgba(169, 227, 75, 0.55);
+    --font: 'VT323', 'Courier New', Courier, monospace;
+    --mono: 'VT323', 'Courier New', Courier, monospace;
+    --tamil: 'VT323', 'Courier New', Courier, monospace;
+    scrollbar-color: #6f9f30 #030503;
+}
+
+html.retro body {
+    background: #030503;
+    font-size: 1.3rem;
+    line-height: 1.3;
+    text-shadow: 0 0 5px rgba(169, 227, 75, 0.6), 0 0 14px rgba(169, 227, 75, 0.25);
+}
+
+html.retro *, html.retro *::before, html.retro *::after {
+    font-family: var(--font) !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.03em !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+html.retro .sky, html.retro .nebula { display: none; }
+
+/* the tube: scanlines, a faint pixel grid, dark corners and a slow flicker */
+html.retro body::before {
+    content: ''; position: fixed; inset: 0; z-index: 10000; pointer-events: none;
+    background:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0 1px, transparent 1px 3px),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.12) 0 1px, transparent 1px 3px);
+}
+html.retro body::after {
+    content: ''; position: fixed; inset: 0; z-index: 10001; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+    animation: retro-flicker 5s steps(1) infinite;
+}
+@keyframes retro-flicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.86; } 49% { opacity: 1; } 82% { opacity: 0.92; } 84% { opacity: 1; } }
+
+html.retro ::selection { background: #a9e34b; color: #030503; text-shadow: none; }
+html.retro strong, html.retro a:hover { color: var(--accent); }
+
+/* pictures come through the same green tube */
+html.retro img, html.retro video {
+    filter: grayscale(1) contrast(1.25) brightness(0.85) sepia(1) hue-rotate(48deg) saturate(3.2);
+}
+
+/* headings read like commands */
+html.retro h1, html.retro h2, html.retro h3, html.retro .hero-name, html.retro .eyebrow,
+html.retro .project-badge, html.retro .nav-links a, html.retro .mobile-nav-links a { text-transform: uppercase; }
+html.retro h2.title::before, html.retro .contact h2::before, html.retro .page h2::before, html.retro .page h1::before {
+    content: 'C:\\>'; margin-right: 0.35em; color: var(--ink-3);
+}
+html.retro .hero-title { font-size: clamp(2.6rem, 7vw, 5.6rem); line-height: 0.95; }
+html.retro h2.title, html.retro .page h1 { font-size: clamp(2rem, 5vw, 3.4rem); }
+html.retro .contact h2 { font-size: clamp(2.4rem, 8vw, 5rem); }
+html.retro .project-title { font-size: clamp(1.7rem, 3.4vw, 2.6rem); }
+html.retro .hero-line { height: 0; border-top: 2px dashed var(--ink); background: none; }
+html.retro .hero-row-plus .plus, html.retro .logo-dot { color: var(--accent); text-shadow: inherit; }
+html.retro .eyebrow::before { height: 0; border-top: 1px dashed var(--ink); background: none; }
+html.retro .project-info::before { content: '[' counter(proj, decimal-leading-zero) ']'; border-bottom: 1px dashed var(--line); }
+
+/* header: a plain status line across the top */
+html.retro .navbar, html.retro .navbar.scrolled {
+    top: 0; left: 0; right: 0; max-width: none;
+    background: #030503; border: 0; border-bottom: 1px solid var(--line);
+}
+html.retro .nav-status { background: none; border: 1px solid var(--line); color: var(--ink); }
+html.retro .status-dot { background: var(--ink); animation: retro-blink 1s steps(1) infinite; }
+@keyframes retro-blink { 50% { opacity: 0; } }
+html.retro .nav-links a, html.retro .nav-links a.nav-resume-glow, html.retro .mobile-nav-links a.nav-resume-glow { color: var(--ink); text-shadow: inherit; font-size: 1.15rem; }
+html.retro .lg-lens { background: rgba(169, 227, 75, 0.22); border: 1px solid var(--ink); background-image: none; }
+html.retro .nav-toggle span { background: var(--ink); }
+html.retro .mobile-menu { background: #030503; }
+html.retro .scroll-progress { background: var(--ink); }
+
+/* buttons become [ BRACKETED ] */
+html.retro .btn, html.retro .project-link, html.retro .intro-btn, html.retro .retro-btn {
+    background: transparent; color: var(--ink); border: 1px solid var(--ink);
+    text-transform: uppercase; padding: 8px 14px; font-size: 1.15rem; transform: none !important;
+}
+html.retro .btn::before, html.retro .project-link::before { content: '['; margin-right: 0.4em; }
+html.retro .btn::after, html.retro .project-link::after { content: ']'; margin-left: 0.4em; }
+html.retro .btn-primary, html.retro .project-link:first-child, html.retro .btn:hover, html.retro .project-link:hover,
+html.retro .intro-btn:hover, html.retro .retro-btn:hover {
+    background: var(--ink); color: #030503; text-shadow: none;
+}
+html.retro .btn svg { display: none; }
+html.retro .intro-btn i { background: var(--ink); }
+html.retro .intro-btn:hover i { background: #030503; }
+html.retro .intro-btn i svg { fill: #030503; }
+html.retro .intro-btn:hover i svg { fill: var(--ink); }
+
+/* boxes: thin green rules instead of glass */
+html.retro .glass, html.retro .project-image-wrapper, html.retro .callout, html.retro pre.code,
+html.retro .fig img, html.retro .fig video, html.retro .gallery-grid figure, html.retro .intro-dialog {
+    background: #030503; border: 1px solid var(--line);
+}
+html.retro .project-image-gradient { background: #030503; }
+html.retro .project-card:hover .project-image-wrapper { transform: none; border-color: var(--ink); }
+html.retro .disk { background: #030503; border: 1px solid var(--ink); padding: 5px; }
+html.retro .disk::after { display: none; }
+html.retro .tags span, html.retro .project-tech span { background: none; border: 1px solid var(--line); color: var(--ink-2); font-size: 1rem; padding: 1px 8px; }
+html.retro .tags span::before, html.retro .project-tech span::before { content: '*'; margin-right: 0.3em; }
+html.retro .quote { border-left: 1px dashed var(--ink); }
+html.retro .callout { border-style: dashed; }
+html.retro .gallery-grid figcaption { background: #030503; border-top: 1px solid var(--line); padding: 6px 10px; }
+html.retro .xp-list li::before, html.retro .edu-item li::before, html.retro .page ul.dash li::before { content: '>'; width: auto; height: auto; background: none; top: 0; }
+html.retro .scroll-cue { border: 1px solid var(--ink); }
+html.retro .scroll-cue span { background: var(--ink); }
+
+/* small type that was set in rem for the modern look */
+html.retro .project-desc, html.retro .xp-list li, html.retro .skill-row p, html.retro .about-copy p, html.retro .status-text,
+html.retro .edu-item p, html.retro .edu-item li, html.retro .certs li, html.retro .page p, html.retro .page li, html.retro .facts div { font-size: 1.25rem; }
+html.retro .eyebrow, html.retro .project-badge, html.retro .xp-meta, html.retro .facts dt, html.retro .status-title, html.retro .certs h3,
+html.retro .certs li span, html.retro .edu-item .when, html.retro .contact-links span:first-child, html.retro .footer, html.retro .project-tagline { font-size: 1.05rem; }
+
+/* typing: green letters and a green block */
+html.retro .decode .g { color: var(--ink); font-size: 1em; text-shadow: inherit; }
+html.retro .decode .cur { background: var(--ink); height: 0.7em; }
+
+/* charts */
+html.retro .bar i { background: var(--ink-3); }
+html.retro tr.pick .bar i { background: var(--accent); }
+html.retro .bar i.p95, html.retro tr.pick .bar i.p95 { background: transparent; border-color: var(--ink-3); }
+
+/* ---------- the boot screen shown when retro mode switches on ---------- */
+.boot {
+    position: fixed; inset: 0; z-index: 10002; overflow: hidden; cursor: pointer;
+    background: #030503; color: #a9e34b;
+    padding: clamp(20px, 7vh, 70px) clamp(14px, 8vw, 120px);
+    font-family: 'VT323', 'Courier New', Courier, monospace;
+    font-size: clamp(12px, 3.5vw, 26px); line-height: 1.18; white-space: pre;
+    text-shadow: 0 0 5px rgba(169, 227, 75, 0.7), 0 0 16px rgba(169, 227, 75, 0.3);
+}
+.boot::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0 1px, transparent 1px 3px),
+        radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.6) 100%);
+}
+.boot .cur { display: inline-block; width: 0.55em; height: 0.85em; background: #a9e34b; vertical-align: -0.08em; animation: retro-blink 0.7s steps(1) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+    html.retro body::after { animation: none; }
+}
