@@ -11,6 +11,9 @@
     <meta property="og:description"
         content="Software Engineering graduate who builds LLM applications in Python, and who built the Flutter front end and designed 500+ screens for two live Malaysian government portals." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://thaneerrjun7.github.io/Arjun-Portfolio/" />
+    <meta property="og:image" content="https://thaneerrjun7.github.io/Arjun-Portfolio/assets/images/og-cover.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#000000" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23000' stroke='%23d7263d' stroke-width='4'/%3E%3Ctext x='32' y='41' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%23f5f5f7' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
     <script>document.documentElement.classList.add('js');</script>
@@ -27,51 +30,44 @@
     <div class="nebula" aria-hidden="true"></div>
     <a class="skip" href="#main">Skip to content</a>
 
-    <!-- Left rail on wide screens, top bar on phones -->
-    <header class="rail">
-        <a class="monogram" href="#top" aria-label="Arjun Shanker, back to top">AS</a>
-        <nav class="rail-nav" aria-label="Sections">
-            <a href="#contact" data-redecode><span class="decode" data-ta="தொடர்பு">Contact</span></a>
-            <a href="#skills" data-redecode><span class="decode" data-ta="திறன்கள்">Skills</span></a>
-            <a href="#experience" data-redecode><span class="decode" data-ta="அனுபவம்">Experience</span></a>
-            <a href="#about" data-redecode><span class="decode" data-ta="அறிமுகம்">About</span></a>
-            <a href="#projects" data-redecode><span class="decode" data-ta="திட்டங்கள்">Projects</span></a>
-        </nav>
-        <div class="rail-social">
-            <a href="https://github.com/Thaneerrjun7" target="_blank" rel="noopener" aria-label="GitHub">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
-            </a>
-            <a href="https://www.linkedin.com/in/arjun-shanker-ba25b3227" target="_blank" rel="noopener" aria-label="LinkedIn">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
-            </a>
-            <a href="#contact" aria-label="Contact">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 7 9-7"/></svg>
-            </a>
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-content">
+            <div class="nav-brand-group">
+                <a href="#top" class="nav-logo">A<span class="logo-dot">.</span>S</a>
+                <a href="#contact" class="nav-status" aria-label="Open to work. Get in touch">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Open to work · Let's talk</span>
+                </a>
+            </div>
+            <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul id="nav-links" class="nav-links">
+                <li><a href="#projects" data-section="projects"><span class="decode">Projects</span></a></li>
+                <li><a href="#about" data-section="about"><span class="decode">About</span></a></li>
+                <li><a href="#experience" data-section="experience"><span class="decode">Experience</span></a></li>
+                <li><a href="#skills" data-section="skills"><span class="decode">Skills</span></a></li>
+                <li><a href="#education" data-section="education"><span class="decode">Education</span></a></li>
+                <li><a href="assets/CV_Arjun.pdf" target="_blank" rel="noopener" class="nav-resume-glow"><span class="decode">Resume</span></a></li>
+                <li><a href="#contact" data-section="contact"><span class="decode">Contact</span></a></li>
+            </ul>
         </div>
-        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
-            <span></span><span></span>
-        </button>
-    </header>
+    </nav>
 
-    <a href="#contact" class="nav-status" aria-label="Open to work. Get in touch">
-        <span class="status-dot"></span>
-        <span class="status-text">Open to work · Let's talk</span>
-    </a>
-
-    <div id="menu" class="menu">
-        <ul>
-            <li><a href="#projects">Projects <span class="ta" lang="ta">திட்டங்கள்</span></a></li>
-            <li><a href="#about">About <span class="ta" lang="ta">அறிமுகம்</span></a></li>
-            <li><a href="#experience">Experience <span class="ta" lang="ta">அனுபவம்</span></a></li>
-            <li><a href="#skills">Skills <span class="ta" lang="ta">திறன்கள்</span></a></li>
-            <li><a href="#education">Education <span class="ta" lang="ta">கல்வி</span></a></li>
-            <li><a href="#contact">Contact <span class="ta" lang="ta">தொடர்பு</span></a></li>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu">
+        <ul class="mobile-nav-links">
+            <li><a href="#projects"><span class="decode">Projects</span></a></li>
+            <li><a href="#about"><span class="decode">About</span></a></li>
+            <li><a href="#experience"><span class="decode">Experience</span></a></li>
+            <li><a href="#skills"><span class="decode">Skills</span></a></li>
+            <li><a href="#education"><span class="decode">Education</span></a></li>
+            <li><a href="assets/CV_Arjun.pdf" target="_blank" rel="noopener" class="nav-resume-glow"><span class="decode">Resume</span></a></li>
+            <li><a href="#contact"><span class="decode">Contact</span></a></li>
         </ul>
-        <div class="menu-foot">
-            <a href="assets/CV_Arjun.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
-            <a href="https://github.com/Thaneerrjun7" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://www.linkedin.com/in/arjun-shanker-ba25b3227" target="_blank" rel="noopener">LinkedIn</a>
-        </div>
     </div>
 
     <main id="main">
@@ -79,14 +75,13 @@
         <!-- Hero -->
         <section id="top" class="hero">
             <div class="hero-text">
-                <p class="hero-name"><span class="decode" data-ta="அர்ஜுன் சங்கர்">Arjun Shanker</span></p>
+                <p class="hero-name"><span class="decode">Arjun Shanker</span></p>
                 <h1 class="hero-title">
                     <span class="sr-only">Software Engineer working in AI and machine learning, Python, UI/UX design, and testing and CI/CD</span>
                     <span class="hero-row" aria-hidden="true"><span class="hero-word" style="--d:120ms">Software</span></span>
                     <span class="hero-row" aria-hidden="true"><span class="hero-word" style="--d:240ms">Engineer</span><span class="hero-line"></span></span>
                     <span class="hero-row hero-row-plus" aria-hidden="true"><span class="plus">+</span><span
-                            class="decode" data-rotate='["AI and ML","Python","UI/UX Design","Testing and CI/CD"]'
-                            data-tamil='["செயற்கை நுண்ணறிவு","பைதான்","வடிவமைப்பு","சோதனை"]'>AI and ML</span></span>
+                            class="decode" data-rotate='["AI and ML","Python","UI/UX Design","Testing and CI/CD"]'>AI and ML</span></span>
                 </h1>
                 <p class="hero-lede reveal" style="--d:500ms">
                     I build AI into real software: Python back ends, LLM features with guardrails, and interfaces
@@ -104,7 +99,6 @@
             </div>
 
             <div class="hero-photo reveal" style="--d:300ms">
-                <span class="hero-tamil" aria-hidden="true">அர்ஜுன்</span>
                 <div class="disk">
                     <img src="assets/images/profile-640.jpg" alt="Arjun Shanker" width="640" height="640" />
                 </div>
@@ -119,15 +113,15 @@
 
         <!-- Projects -->
         <section id="projects" class="section">
-            <p class="eyebrow reveal"><span class="ta" lang="ta">திட்டங்கள்</span><span>Selected work</span></p>
-            <h2 class="title"><span class="decode" data-ta="திட்டங்கள்">Projects</span></h2>
+            <p class="eyebrow reveal"><span>Selected work</span></p>
+            <h2 class="title"><span class="decode">Projects</span></h2>
 
             <div class="projects-grid">
                 <!-- Project 1: AJ -->
                 <div class="project-card reveal">
                     <div class="project-card-inner">
                         <div class="project-image-wrapper">
-                            <img src="assets/images/aj-cover.png" alt="Three screens of the AJ assistant window: speaking, running the weather tool, and a finished reply" class="project-image" />
+                            <img src="assets/images/aj-cover.png" alt="Three screens of the AJ assistant window: speaking, running the weather tool, and a finished reply" class="project-image" loading="lazy" decoding="async" />
                         </div>
                         <div class="project-info">
                             <div class="project-badge">Personal project · 2026 · In progress</div>
@@ -154,7 +148,7 @@
                 <div class="project-card reveal">
                     <div class="project-card-inner">
                         <div class="project-image-wrapper">
-                            <img src="assets/images/sivasafe-home.png" alt="SivaSafe home screen with the SIVA orb, quick actions and activity log" class="project-image" />
+                            <img src="assets/images/sivasafe-home.png" alt="SivaSafe home screen with the SIVA orb, quick actions and activity log" class="project-image" loading="lazy" decoding="async" />
                         </div>
                         <div class="project-info">
                             <div class="project-badge">Final Year Capstone · Graded A</div>
@@ -216,7 +210,7 @@
                 <div class="project-card reveal">
                     <div class="project-card-inner">
                         <div class="project-image-wrapper">
-                            <img src="assets/images/bayarnow-web.png" alt="BayarNow Government Portal" class="project-image" />
+                            <img src="assets/images/bayarnow-web.png" alt="BayarNow Government Portal" class="project-image" loading="lazy" decoding="async" />
                         </div>
                         <div class="project-info">
                             <div class="project-badge">Government · Live Production</div>
@@ -240,7 +234,7 @@
                 <div class="project-card reveal">
                     <div class="project-card-inner">
                         <div class="project-image-wrapper">
-                            <img src="assets/images/osc-aduan.png" alt="OSC Government Portal" class="project-image" />
+                            <img src="assets/images/osc-aduan.png" alt="OSC Government Portal" class="project-image" loading="lazy" decoding="async" />
                         </div>
                         <div class="project-info">
                             <div class="project-badge">Government · Live Production</div>
@@ -263,7 +257,7 @@
                 <div class="project-card reveal">
                     <div class="project-card-inner">
                         <div class="project-image-wrapper">
-                            <img src="assets/images/fireball-main.png" alt="Fireball Official Website" class="project-image" />
+                            <img src="assets/images/fireball-main.png" alt="Fireball Official Website" class="project-image" loading="lazy" decoding="async" />
                         </div>
                         <div class="project-info">
                             <div class="project-badge">Freelance · Client Work</div>
@@ -288,8 +282,8 @@
 
         <!-- About -->
         <section id="about" class="section">
-            <p class="eyebrow reveal"><span class="ta" lang="ta">வணக்கம்</span><span>About me</span></p>
-            <h2 class="title"><span class="decode" data-ta="வணக்கம்">Hi, I'm Arjun.</span></h2>
+            <p class="eyebrow reveal"><span>About me</span></p>
+            <h2 class="title"><span class="decode">Hi, I'm Arjun.</span></h2>
 
             <div class="about-grid">
                 <div class="about-copy reveal">
@@ -336,8 +330,8 @@
 
         <!-- Experience -->
         <section id="experience" class="section">
-            <p class="eyebrow reveal"><span class="ta" lang="ta">அனுபவம்</span><span>Where I have worked</span></p>
-            <h2 class="title"><span class="decode" data-ta="அனுபவம்">Experience</span></h2>
+            <p class="eyebrow reveal"><span>Where I have worked</span></p>
+            <h2 class="title"><span class="decode">Experience</span></h2>
 
             <div class="xp">
                 <!-- Experience 1: Century Software -->
@@ -431,8 +425,8 @@
 
         <!-- Skills -->
         <section id="skills" class="section">
-            <p class="eyebrow reveal"><span class="ta" lang="ta">திறன்கள்</span><span>What I work with</span></p>
-            <h2 class="title"><span class="decode" data-ta="திறன்கள்">Skills</span></h2>
+            <p class="eyebrow reveal"><span>What I work with</span></p>
+            <h2 class="title"><span class="decode">Skills</span></h2>
 
             <div class="skills">
                 <div class="skill-row reveal">
@@ -476,8 +470,8 @@
 
         <!-- Education and certificates -->
         <section id="education" class="section">
-            <p class="eyebrow reveal"><span class="ta" lang="ta">கல்வி</span><span>Study and certificates</span></p>
-            <h2 class="title"><span class="decode" data-ta="கல்வி">Education</span></h2>
+            <p class="eyebrow reveal"><span>Study and certificates</span></p>
+            <h2 class="title"><span class="decode">Education</span></h2>
 
             <div class="edu-grid">
                 <div>
@@ -533,8 +527,8 @@
 
         <!-- Contact -->
         <section id="contact" class="section contact">
-            <p class="eyebrow reveal"><span class="ta" lang="ta">தொடர்பு</span><span>Contact</span></p>
-            <h2><span class="decode" data-ta="பேசலாம்">Let's talk.</span></h2>
+            <p class="eyebrow reveal"><span>Contact</span></p>
+            <h2><span class="decode">Let's talk.</span></h2>
             <p class="lede reveal">
                 Open to full-time graduate Software Engineer and AI engineering roles, available immediately.
                 Currently targeting roles in Kuala Lumpur, Selangor and Penang, and open to relocating.
@@ -559,7 +553,7 @@
 
     <footer class="footer">
         <p>Designed and built by Arjun Shanker · © 2026</p>
-        <p>Layout inspired by <a href="https://hamishw.com" target="_blank" rel="noopener">Hamish Williams</a></p>
+        <p>Decode text effect inspired by <a href="https://hamishw.com" target="_blank" rel="noopener">Hamish Williams</a></p>
     </footer>
 
     <!-- The intro video only plays when someone asks for it -->
