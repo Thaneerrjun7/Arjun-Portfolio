@@ -4,269 +4,349 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Arjun Shanker | Software Engineer, Python and LLM Applications</title>
+    <title>Arjun Shanker | Software Engineer, Python, AI and Machine Learning</title>
     <meta name="description"
         content="Portfolio of Arjun Thanneermalai Shanker, Software Engineering graduate (dual degree, Lancaster University and Sunway University). Python, LLM applications and machine learning. Microsoft Certified: Azure AI Fundamentals. Two-time Dean's List. Based in Malaysia." />
-    <meta property="og:title" content="Arjun Shanker | Software Engineer, Python and LLM Applications" />
+    <meta property="og:title" content="Arjun Shanker | Software Engineer, Python, AI and Machine Learning" />
     <meta property="og:description"
         content="Software Engineering graduate who builds LLM applications in Python, and who built the Flutter front end and designed 500+ screens for two live Malaysian government portals." />
     <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23000' stroke='%23d7263d' stroke-width='4'/%3E%3Ctext x='32' y='41' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%23f5f5f7' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
+    <script>document.documentElement.classList.add('js');</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="scroll-motion.css" />
-    <link rel="stylesheet" href="glass-theme.css" />
-    <link rel="stylesheet" href="liquid-glass.css" />
+    <link rel="stylesheet" href="site.css" />
 </head>
 
 <body>
+    <canvas id="sky" class="sky" aria-hidden="true"></canvas>
+    <div class="nebula" aria-hidden="true"></div>
+    <a class="skip" href="#main">Skip to content</a>
 
-    <!-- The cinematic entrance. Prepare to be amazed. -->
-    <div id="enter-overlay" class="enter-overlay">
-        <!-- Black hole background canvas -->
-        <canvas id="blackhole-canvas" class="blackhole-canvas"></canvas>
-        <div class="interstellar-bg"></div>
-        <div class="enter-content">
-            <h1 class="enter-title">Arjun's Portfolio</h1>
-            <button id="enter-btn" class="enter-btn">
-                <span>Press to Enter</span>
-                <div class="btn-glow"></div>
-            </button>
+    <!-- Left rail on wide screens, top bar on phones -->
+    <header class="rail">
+        <a class="monogram" href="#top" aria-label="Arjun Shanker, back to top">AS</a>
+        <nav class="rail-nav" aria-label="Sections">
+            <a href="#contact" data-redecode><span class="decode" data-ta="தொடர்பு">Contact</span></a>
+            <a href="#skills" data-redecode><span class="decode" data-ta="திறன்கள்">Skills</span></a>
+            <a href="#experience" data-redecode><span class="decode" data-ta="அனுபவம்">Experience</span></a>
+            <a href="#about" data-redecode><span class="decode" data-ta="அறிமுகம்">About</span></a>
+            <a href="#projects" data-redecode><span class="decode" data-ta="திட்டங்கள்">Projects</span></a>
+        </nav>
+        <div class="rail-social">
+            <a href="https://github.com/Thaneerrjun7" target="_blank" rel="noopener" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/arjun-shanker-ba25b3227" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+            </a>
+            <a href="#contact" aria-label="Contact">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 7 9-7"/></svg>
+            </a>
         </div>
-    </div>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+            <span></span><span></span>
+        </button>
+    </header>
 
-    <!-- Scroll Progress Bar -->
-    <div id="scroll-progress" class="scroll-progress"></div>
+    <a href="#contact" class="nav-status" aria-label="Open to work. Get in touch">
+        <span class="status-dot"></span>
+        <span class="status-text">Open to work · Let's talk</span>
+    </a>
 
-    <!-- Navigation -->
-    <nav id="navbar" class="navbar">
-        <div class="nav-content">
-            <div class="nav-brand-group">
-                <a href="#hero" class="nav-logo">A<span class="logo-dot">.</span>S</a>
-                <a href="#contact" class="nav-status" aria-label="Open to work. Get in touch">
-                    <span class="status-dot"></span>
-                    <span class="status-text">Open to work · Let's talk</span>
-                </a>
-            </div>
-            <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul id="nav-links" class="nav-links">
-                <li><a href="#about" data-section="about">About</a></li>
-                <li><a href="#experience" data-section="experience">Experience</a></li>
-                <li><a href="#projects" data-section="projects">Projects</a></li>
-                <li><a href="#skills" data-section="skills">Skills</a></li>
-                <li><a href="#education" data-section="education">Education</a></li>
-                <li><a href="#certifications" data-section="certifications">Certificates</a></li>
-                <li><a href="#gallery" data-section="gallery">Gallery</a></li>
-                <li><a href="#resume" data-section="resume" class="nav-resume-glow">Resume</a></li>
-                <li><a href="#contact" data-section="contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="mobile-menu">
-        <ul class="mobile-nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#education">Education</a></li>
-            <li><a href="#certifications">Certificates</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#resume" class="nav-resume-glow">Resume</a></li>
-            <li><a href="#contact">Contact</a></li>
+    <div id="menu" class="menu">
+        <ul>
+            <li><a href="#projects">Projects <span class="ta" lang="ta">திட்டங்கள்</span></a></li>
+            <li><a href="#about">About <span class="ta" lang="ta">அறிமுகம்</span></a></li>
+            <li><a href="#experience">Experience <span class="ta" lang="ta">அனுபவம்</span></a></li>
+            <li><a href="#skills">Skills <span class="ta" lang="ta">திறன்கள்</span></a></li>
+            <li><a href="#education">Education <span class="ta" lang="ta">கல்வி</span></a></li>
+            <li><a href="#contact">Contact <span class="ta" lang="ta">தொடர்பு</span></a></li>
         </ul>
+        <div class="menu-foot">
+            <a href="assets/CV_Arjun.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+            <a href="https://github.com/Thaneerrjun7" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://www.linkedin.com/in/arjun-shanker-ba25b3227" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
     </div>
 
-    <!-- The pretty particles floating around -->
-    <canvas id="particle-canvas" class="particle-canvas"></canvas>
+    <main id="main">
 
-    <!-- First thing you see: The Hero Section. No pressure. -->
-    <section id="hero" class="section hero-section">
-        <div class="hero-split">
-            <!-- LEFT SIDE: Profile info -->
-            <div class="hero-left">
-                <div class="hero-profile-wrapper animate-on-scroll" data-animation="zoom-in">
-                    <div class="hero-profile-glass">
-                        <img src="assets/images/profile.jpg" alt="Arjun Shanker" class="hero-profile-img" />
-                        <div class="glass-shine"></div>
-                        <div class="glass-shine-moving"></div>
-                    </div>
-                </div>
-                <h1 class="hero-name animate-on-scroll" data-animation="fade-up">
-                    Arjun Shanker
+        <!-- Hero -->
+        <section id="top" class="hero">
+            <div class="hero-text">
+                <p class="hero-name"><span class="decode" data-ta="அர்ஜுன் சங்கர்">Arjun Shanker</span></p>
+                <h1 class="hero-title">
+                    <span class="sr-only">Software Engineer working in AI and machine learning, Python, UI/UX design, and testing and CI/CD</span>
+                    <span class="hero-row" aria-hidden="true"><span class="hero-word" style="--d:120ms">Software</span></span>
+                    <span class="hero-row" aria-hidden="true"><span class="hero-word" style="--d:240ms">Engineer</span><span class="hero-line"></span></span>
+                    <span class="hero-row hero-row-plus" aria-hidden="true"><span class="plus">+</span><span
+                            class="decode" data-rotate='["AI and ML","Python","UI/UX Design","Testing and CI/CD"]'
+                            data-tamil='["செயற்கை நுண்ணறிவு","பைதான்","வடிவமைப்பு","சோதனை"]'>AI and ML</span></span>
                 </h1>
-                <div class="hero-subtitle animate-on-scroll" data-animation="fade-up" data-delay="200">
-                    <span id="typed-role" class="typed-role"></span>
-                    <span class="typed-cursor">|</span>
-                </div>
-                <p class="hero-tagline animate-on-scroll" data-animation="fade-up" data-delay="400">
-                    Software Engineering Graduate | Python, LLM Applications and Machine Learning | Open to Graduate
-                    Software Engineer and AI Engineering Roles
+                <p class="hero-lede reveal" style="--d:500ms">
+                    I build AI into real software: Python back ends, LLM features with guardrails, and interfaces
+                    people can use without a manual. Graduate of Lancaster and Sunway, open to graduate Software
+                    Engineer and AI engineering roles.
                 </p>
-                <div class="hero-cta animate-on-scroll" data-animation="fade-up" data-delay="600">
-                    <a href="#projects" class="btn btn-primary">View My Work</a>
-                    <a href="#contact" class="btn btn-ghost">Get In Touch</a>
-                </div>
-                <div class="scroll-indicator animate-on-scroll" data-animation="fade-up" data-delay="800">
-                    <div class="scroll-mouse">
-                        <div class="scroll-wheel"></div>
-                    </div>
-                    <span>Scroll to explore</span>
+                <div class="hero-cta reveal" style="--d:650ms">
+                    <a href="#projects" class="btn btn-primary">See my work</a>
+                    <a href="assets/CV_Arjun.pdf" target="_blank" rel="noopener" class="btn btn-glass">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                        Resume (PDF)
+                    </a>
+                    <a href="#contact" class="btn btn-glass">Get in touch</a>
                 </div>
             </div>
 
-            <!-- RIGHT SIDE: Full-bleed video -->
-            <div class="hero-right animate-on-scroll" data-animation="scale-up" data-delay="300">
-                <div class="hero-video-fade"></div>
-                <video id="hero-video-player" class="hero-video-player" playsinline preload="auto">
-                    <source src="assets/videos/ai-intro.mp4" type="video/mp4" />
-                </video>
-                <div id="hero-video-progress" class="hero-video-progress">
-                    <div id="hero-video-progress-bar" class="hero-video-progress-bar"></div>
+            <div class="hero-photo reveal" style="--d:300ms">
+                <span class="hero-tamil" aria-hidden="true">அர்ஜுன்</span>
+                <div class="disk">
+                    <img src="assets/images/profile-640.jpg" alt="Arjun Shanker" width="640" height="640" />
                 </div>
-                <!-- Sound toggle -->
-                <button id="hero-video-sound" class="hero-video-sound-btn" aria-label="Mute video">
-                    <svg id="sound-icon-off" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        style="display:none;">
-                        <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"></polygon>
-                        <line x1="23" y1="9" x2="17" y2="15"></line>
-                        <line x1="17" y1="9" x2="23" y2="15"></line>
-                    </svg>
-                    <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"></polygon>
-                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                    </svg>
+                <button class="intro-btn" type="button" data-open-intro>
+                    <i><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></i>
+                    Play my 12 second intro
                 </button>
-                <!-- Replay overlay -->
-                <div id="hero-video-replay-overlay" class="hero-video-replay-overlay">
-                    <button id="hero-video-replay" class="hero-video-replay-btn" aria-label="Replay intro video">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="5,3 19,12 5,21"></polygon>
-                        </svg>
-                    </button>
-                    <span class="replay-label">Replay Intro</span>
+            </div>
+
+            <a class="scroll-cue" href="#projects" aria-label="Scroll to projects"><span></span></a>
+        </section>
+
+        <!-- Projects -->
+        <section id="projects" class="section">
+            <p class="eyebrow reveal"><span class="ta" lang="ta">திட்டங்கள்</span><span>Selected work</span></p>
+            <h2 class="title"><span class="decode" data-ta="திட்டங்கள்">Projects</span></h2>
+
+            <div class="projects-grid">
+                <!-- Project 1: AJ -->
+                <div class="project-card reveal">
+                    <div class="project-card-inner">
+                        <div class="project-image-wrapper">
+                            <img src="assets/images/aj-cover.png" alt="Three screens of the AJ assistant window: speaking, running the weather tool, and a finished reply" class="project-image" />
+                        </div>
+                        <div class="project-info">
+                            <div class="project-badge">Personal project · 2026 · In progress</div>
+                            <h3 class="project-title">AJ - Personal AI Assistant</h3>
+                            <p class="project-desc">A voice assistant that runs on my own Windows laptop. I designed a
+                                local streaming voice pipeline (voice activity detection, speech-to-text, a quantised
+                                Qwen3-4B on llama.cpp, text-to-speech) that fits a 6 GB laptop GPU and in benchmarks
+                                starts speaking 0.83 to 1.37 s after I stop talking. I chose the models by benchmarking
+                                5 local LLM setups on latency and tool-call accuracy (Qwen3-4B: 91.7%, 55 of 60 runs
+                                over 20 scripted commands), and cut GPU stalls on a down-clocked laptop GPU from about
+                                300 ms to 30 ms.</p>
+                            <div class="project-tech">
+                                <span>Python</span><span>llama.cpp</span><span>Qwen3-4B</span><span>ONNX Runtime</span><span>SQLite</span><span>PyQt6</span>
+                            </div>
+                            <div class="project-stat">Runs locally · 6 GB laptop GPU · 5 setups benchmarked</div>
+                            <div class="project-links">
+                                <a href="aj.html" class="project-link">Screenshots and benchmarks →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: SivaSafe (capstone) -->
+                <div class="project-card reveal">
+                    <div class="project-card-inner">
+                        <div class="project-image-wrapper">
+                            <img src="assets/images/sivasafe-home.png" alt="SivaSafe home screen with the SIVA orb, quick actions and activity log" class="project-image" />
+                        </div>
+                        <div class="project-info">
+                            <div class="project-badge">Final Year Capstone · Graded A</div>
+                            <h3 class="project-title">SivaSafe</h3>
+                            <p class="project-desc">Voice-controlled desktop assistant for elderly users, built solo
+                                over two semesters in Python. I designed it around one Gemini session that holds the
+                                spoken conversation and calls tools in 19 capability areas, choosing one agent over the
+                                proposal's multi-agent design to keep it cheaper and faster. Sign-in uses face
+                                recognition (OpenCV YuNet and SFace) with a cosine-similarity match whose threshold I
+                                raised from 0.363 to 0.65, a two-blink liveness check, and a spoken password
+                                transcribed offline by a Whisper model.</p>
+                            <div class="project-tech">
+                                <span>Python</span><span>PyQt6</span><span>OpenCV</span><span>Gemini</span><span>Whisper</span>
+                            </div>
+                            <div class="project-stat">Solo · Two semesters · Graded A</div>
+                            <div class="project-links">
+                                <a href="sivasafe.html" class="project-link">Screenshots and walkthrough →</a>
+                                <a href="case-sivasafe.html" class="project-link">Case study →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: KIRA+ -->
+                <div class="project-card reveal">
+                    <div class="project-card-inner">
+                        <div class="project-image-wrapper project-image-gradient">
+                            <div class="project-wordmark">KIRA+</div>
+                            <div class="project-tagline">Kira dulu. Baru commit.</div>
+                        </div>
+                        <div class="project-info">
+                            <div class="project-badge">MAIC Nexus Challenge 2026 · In progress</div>
+                            <h3 class="project-title">KIRA+</h3>
+                            <p class="project-desc">AI financial health platform for Buy Now, Pay Later and consumer
+                                credit, built by a distributed team of five. My role is AI/ML developer: I built the
+                                LLM layer (a provider client with a 4-second timeout and a template fallback, and an
+                                output guard that rejects any reply quoting a figure the engine did not compute,
+                                written after I saw the model hallucinate a ringgit amount), the 0-100 scoring and
+                                six-rule early-warning engines, and a RandomForest trained on 12,000 synthetic profiles
+                                (ROC-AUC 0.923 held out, 0.921 in 5-fold cross-validation, against a
+                                logistic-regression baseline at 0.844). I worked test-first (56 unit and integration
+                                tests), then fixed two defects that only showed up in a browser. I also worked across
+                                the rest of the stack with our full-stack developer: together we built the Next.js
+                                front end, the FastAPI back end and its APIs, the database schema, the Docker image and
+                                the GitHub Actions CI/CD pipeline, and I provisioned the server it deploys to.</p>
+                            <div class="project-tech">
+                                <span>Python</span><span>FastAPI</span><span>scikit-learn</span><span>SQLite</span><span>Next.js</span><span>Docker</span><span>pytest</span><span>GitHub Actions</span>
+                            </div>
+                            <div class="project-stat">Team of 5 · AI/ML developer · 56 tests · ROC-AUC 0.923</div>
+                            <div class="project-links">
+                                <a href="case-kiraplus.html" class="project-link">Case study →</a>
+                                <a href="https://github.com/Thaneerrjun7/KIRAPLUS" target="_blank" rel="noopener" class="project-link">Team Repo ↗</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: BayarNow -->
+                <div class="project-card reveal">
+                    <div class="project-card-inner">
+                        <div class="project-image-wrapper">
+                            <img src="assets/images/bayarnow-web.png" alt="BayarNow Government Portal" class="project-image" />
+                        </div>
+                        <div class="project-info">
+                            <div class="project-badge">Government · Live Production</div>
+                            <h3 class="project-title">BayarNow</h3>
+                            <p class="project-desc">Live government bill payment portal serving public users across
+                                Malaysia. Designed 300+ pages of UI/UX including Pay Direct guest payments, user
+                                registration, license management, and full component library.</p>
+                            <div class="project-tech">
+                                <span>Figma</span><span>UI/UX</span><span>Components</span><span>Flutter</span>
+                            </div>
+                            <div class="project-stat">300+ pages · Components · Mobile + Web</div>
+                            <div class="project-links">
+                                <a href="bayarnow.html" class="project-link">View Gallery →</a>
+                                <a href="case-bayarnow.html" class="project-link">Case study →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5: OSC -->
+                <div class="project-card reveal">
+                    <div class="project-card-inner">
+                        <div class="project-image-wrapper">
+                            <img src="assets/images/osc-aduan.png" alt="OSC Government Portal" class="project-image" />
+                        </div>
+                        <div class="project-info">
+                            <div class="project-badge">Government · Live Production</div>
+                            <h3 class="project-title">One Stop Centre (OSC)</h3>
+                            <p class="project-desc">Government business licensing portal with multi-role user flows.
+                                Designed 200+ pages including ADUAN complaint system, PEMANTAUAN monitoring, user
+                                registration &amp; management modules.</p>
+                            <div class="project-tech">
+                                <span>Figma</span><span>UI/UX</span><span>Mobile App</span><span>Multi-role</span>
+                            </div>
+                            <div class="project-stat">200+ pages · ADUAN · PEMANTAUAN · Licensing</div>
+                            <div class="project-links">
+                                <a href="osc.html" class="project-link">View Gallery →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6: FireBall.my -->
+                <div class="project-card reveal">
+                    <div class="project-card-inner">
+                        <div class="project-image-wrapper">
+                            <img src="assets/images/fireball-main.png" alt="Fireball Official Website" class="project-image" />
+                        </div>
+                        <div class="project-info">
+                            <div class="project-badge">Freelance · Client Work</div>
+                            <h3 class="project-title">FireBall.my</h3>
+                            <p class="project-desc">Official Malaysian website for a premium Korean automotive
+                                accessories and detailing brand, co-built with a university peer. I wrote its Node.js
+                                product page routes and linked each product to its item page on the client's Shopee
+                                store, where checkout happens. As the client's only contact, I took every post-launch
+                                issue through to a fix.</p>
+                            <div class="project-tech">
+                                <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Node.js</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://fireball.my/" target="_blank" rel="noopener" class="project-link">Visit Site ↗</a>
+                                <a href="fireball.html" class="project-link">View Gallery →</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- A little bit about yours truly -->
-    <section id="about" class="section about-section">
-        <div class="section-container">
-            <div class="section-label animate-on-scroll" data-animation="fade-up">
-                <span class="label-line"></span>
-                <span>About Me</span>
-            </div>
+        <!-- About -->
+        <section id="about" class="section">
+            <p class="eyebrow reveal"><span class="ta" lang="ta">வணக்கம்</span><span>About me</span></p>
+            <h2 class="title"><span class="decode" data-ta="வணக்கம்">Hi, I'm Arjun.</span></h2>
+
             <div class="about-grid">
-                <div class="about-text">
-                    <h2 class="section-headline animate-on-scroll" data-animation="fade-up">
-                        You ask.<br />
-                        <span class="gradient-text">And I shall deliver.</span>
-                    </h2>
-                    <p class="about-description animate-on-scroll" data-animation="fade-up" data-delay="200">
-                        Software Engineering graduate (dual degree, Lancaster University and Sunway University, studies
-                        completed September 2026). During my internship at Century Software I built the Flutter front end
-                        of two live Malaysian government portals and, as my team's only UI/UX designer, designed
-                        <strong>500+ screens</strong> for BayarNow and One Stop Centre (OSC).
-                    </p>
-                    <p class="about-description animate-on-scroll" data-animation="fade-up" data-delay="300">
-                        I build AI into real software: the LLM layer and a trained machine learning classifier for
-                        KIRA+, and SivaSafe, my A-graded capstone. Microsoft Certified: Azure AI Fundamentals (AI-900),
-                        with AI-102 exam-prep training completed. Two-time Dean's List.
-                    </p>
+                <div class="about-copy reveal">
+                    <p>I'm a Software Engineering graduate from the Lancaster University and Sunway University dual
+                        degree (studies completed September 2026). I like software that people can use without a
+                        manual, and lately most of what I build has a language model somewhere inside it.</p>
+                    <p>During my internship at Century Software I built the Flutter front end of two live Malaysian
+                        government portals and, as my team's only UI/UX designer, designed
+                        <strong>500+ screens</strong> for BayarNow and One Stop Centre (OSC).</p>
+                    <p>Since then I have built the LLM layer and a trained machine learning classifier for KIRA+,
+                        finished SivaSafe as my A-graded capstone, and started AJ, a voice assistant that runs on my
+                        own laptop. Microsoft Certified: Azure AI Fundamentals (AI-900), with AI-102 exam-prep training
+                        completed. Two-time Dean's List.</p>
+                    <p>Off the clock you will find me in a cinema. I have always wanted a setup like Tony Stark's
+                        J.A.R.V.I.S., which explains most of my side projects.</p>
+                </div>
 
-                    <div class="status-box animate-on-scroll" data-animation="fade-up" data-delay="350">
-                        <h4 class="status-title">Current Status & Availability</h4>
+                <div class="reveal" style="--d:120ms">
+                    <div class="status-box glass">
+                        <h3 class="status-title">Current Status &amp; Availability</h3>
                         <p class="status-text">
                             Software Engineering graduate, dual degree from <strong>Lancaster University and Sunway University</strong>, studies completed <strong>September 2026</strong>. Available immediately for full-time graduate roles in Kuala Lumpur, Selangor and Penang, and open to relocating.
-                            <br/><br/>
+                            <br /><br />
                             I am looking for graduate Software Engineer and AI engineering roles where I can build AI into real software: Python back ends, LLM features with output guardrails, machine learning, testing and CI/CD.
                         </p>
                     </div>
-                    <div class="about-details animate-on-scroll" data-animation="fade-up" data-delay="400">
-                        <div class="detail-item">
-                            <span class="detail-icon">📍</span>
-                            <span>Based in Malaysia · Open to Relocation & Travel</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-icon">🎓</span>
-                            <span>Lancaster and Sunway Universities, Software Engineering (Hons), Dual Degree</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-icon">🏆</span>
-                            <span>Dean's List x2 · CGPA 3.26/4.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-stats animate-on-scroll" data-animation="scale-up" data-delay="300">
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="500">0</span><span class="stat-suffix">+</span>
-                        <span class="stat-label">UI/UX Pages Designed</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="2">0</span>
-                        <span class="stat-label">Live Govt Portals</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="4">0</span><span class="stat-suffix">+</span>
-                        <span class="stat-label">Projects Built</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="2">0</span>
-                        <span class="stat-label">Dean's List Awards</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="4">0</span>
-                        <span class="stat-label">Languages Spoken</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="4">0</span>
-                        <span class="stat-label">Month Internship</span>
-                    </div>
+                    <dl class="facts">
+                        <div><dt>Based in</dt><dd>Malaysia, open to relocation and travel</dd></div>
+                        <div><dt>Degree</dt><dd>Software Engineering (Hons), dual degree, Lancaster and Sunway</dd></div>
+                        <div><dt>Results</dt><dd>CGPA 3.26/4.00, Dean's List x2</dd></div>
+                        <div><dt>Languages</dt><dd>Tamil (native), English and Malay (fluent), Mandarin (basic, learning)</dd></div>
+                    </dl>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Proof that people actually pay me to do this -->
-    <section id="experience" class="section experience-section">
-        <div class="section-container">
-            <div class="section-label animate-on-scroll" data-animation="fade-up">
-                <span class="label-line"></span>
-                <span>Experience</span>
+            <div class="strip reveal" tabindex="0" aria-label="Photos from my time at Sunway">
+                <figure><img src="assets/images/grad-stage.jpeg" alt="Graduation ceremony at Sunway College" loading="lazy" /><figcaption>Sunway College Graduation</figcaption></figure>
+                <figure><img src="assets/images/event-campus-tour.jpeg" alt="Campus Tour - Student Ambassador" loading="lazy" /><figcaption>Campus Tour · Student Ambassador</figcaption></figure>
+                <figure><img src="assets/images/grad-friends.jpeg" alt="Graduation with friends" loading="lazy" /><figcaption>Graduation Day with Friends</figcaption></figure>
+                <figure><img src="assets/images/event-career-fair.jpeg" alt="Sunway University Career Fair" loading="lazy" /><figcaption>Sunway University Career Fair</figcaption></figure>
+                <figure><img src="assets/images/event-stem.jpeg" alt="STEM Event at University" loading="lazy" /><figcaption>STEM Event · University</figcaption></figure>
             </div>
-            <h2 class="section-headline animate-on-scroll" data-animation="fade-up">
-                Real-world impact.<br />
-                <span class="gradient-text">Production-proven.</span>
-            </h2>
+        </section>
 
-            <div class="experience-timeline">
+        <!-- Experience -->
+        <section id="experience" class="section">
+            <p class="eyebrow reveal"><span class="ta" lang="ta">அனுபவம்</span><span>Where I have worked</span></p>
+            <h2 class="title"><span class="decode" data-ta="அனுபவம்">Experience</span></h2>
+
+            <div class="xp">
                 <!-- Experience 1: Century Software -->
-                <div class="timeline-item animate-on-scroll" data-animation="slide-left">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">Software Engineer Intern</h3>
-                                <p class="timeline-company">Century Software (Malaysia) Sdn Bhd</p>
-                            </div>
-                            <div class="timeline-meta">
-                                <span class="timeline-date">Jan 2026 – Apr 2026</span>
-                                <span class="timeline-location">Petaling Jaya, Selangor</span>
-                            </div>
-                        </div>
-                        <ul class="timeline-details">
+                <article class="xp-item reveal">
+                    <div class="xp-meta"><b>Jan 2026 - Apr 2026</b><span>Petaling Jaya, Selangor</span></div>
+                    <div>
+                        <h3 class="xp-role">Software Engineer Intern</h3>
+                        <p class="xp-company">Century Software (Malaysia) Sdn Bhd</p>
+                        <ul class="xp-list">
                             <li>Designed end-to-end UI/UX flows in Figma for <strong>BayarNow</strong>, a live
                                 government bill payment portal serving public users across Malaysia, with <strong>300+
                                     pages</strong> of designs</li>
@@ -286,66 +366,38 @@
                             <li>Collaborated with senior product supervisor using <strong>Agile</strong> methodology
                             </li>
                         </ul>
-                        <div class="timeline-tags">
-                            <span class="tag">Figma</span>
-                            <span class="tag">Flutter</span>
-                            <span class="tag">UI/UX</span>
-                            <span class="tag">Agile</span>
-                            <span class="tag">Government</span>
-                        </div>
+                        <div class="tags"><span>Figma</span><span>Flutter</span><span>UI/UX</span><span>Agile</span><span>Government</span></div>
                     </div>
-                </div>
+                </article>
 
                 <!-- Experience 2: Freelance -->
-                <div class="timeline-item animate-on-scroll" data-animation="slide-right">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">Freelance Website Developer</h3>
-                                <p class="timeline-company">FireBall.my — Korean Automotive Accessories Brand</p>
-                            </div>
-                            <div class="timeline-meta">
-                                <span class="timeline-date">Nov 2025 – Feb 2026</span>
-                                <span class="timeline-location">Remote</span>
-                            </div>
-                        </div>
-                        <ul class="timeline-details">
+                <article class="xp-item reveal">
+                    <div class="xp-meta"><b>Nov 2025 - Feb 2026</b><span>Remote</span></div>
+                    <div>
+                        <h3 class="xp-role">Freelance Website Developer</h3>
+                        <p class="xp-company">FireBall.my, Korean Automotive Accessories Brand</p>
+                        <ul class="xp-list">
                             <li>Co-developed the official Malaysian website for <strong>Fireball</strong> (<a
-                                    href="https://fireball.my/" target="_blank" rel="noopener">fireball.my</a>) — a
+                                    href="https://fireball.my/" target="_blank" rel="noopener">fireball.my</a>), a
                                 premium Korean automotive detailing brand</li>
                             <li>Designed the platform by referencing the client's international websites to maintain
                                 <strong>global brand consistency</strong></li>
-                            <li>Linked each product to its item page on the client's <strong>Shopee</strong> store,
-                                where checkout happens</li>
+                            <li>Wrote its Node.js product page routes and linked each product to its item page on the
+                                client's <strong>Shopee</strong> store, where checkout happens</li>
                             <li>Handled all client communication, and took every post-launch issue (display bugs, the
                                 site not loading, problems on the client's Shopee side) through to a fix</li>
                         </ul>
-                        <div class="timeline-tags">
-                            <span class="tag">HTML</span>
-                            <span class="tag">CSS</span>
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">Node.js</span>
-                            <span class="tag">E-Commerce</span>
-                        </div>
+                        <div class="tags"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Node.js</span><span>E-Commerce</span></div>
                     </div>
-                </div>
+                </article>
 
                 <!-- Experience 3: Microsoft -->
-                <div class="timeline-item animate-on-scroll" data-animation="slide-left">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">AI Bootcamp Participant</h3>
-                                <p class="timeline-company">Microsoft Azure AI Bootcamp and AI-102 Exam-Prep Training</p>
-                            </div>
-                            <div class="timeline-meta">
-                                <span class="timeline-date">Apr 2025 – Aug 2025</span>
-                                <span class="timeline-location">Remote</span>
-                            </div>
-                        </div>
-                        <ul class="timeline-details">
+                <article class="xp-item reveal">
+                    <div class="xp-meta"><b>Apr 2025 - Aug 2025</b><span>Remote</span></div>
+                    <div>
+                        <h3 class="xp-role">AI Bootcamp Participant</h3>
+                        <p class="xp-company">Microsoft Azure AI Bootcamp and AI-102 Exam-Prep Training</p>
+                        <ul class="xp-list">
                             <li>Completed four months of Microsoft <strong>AI-102</strong> (Azure AI Engineer Associate)
                                 exam-prep training, with labs deploying an Azure OpenAI model, retrieval-augmented
                                 generation on Azure AI Search, and an Azure AI service in a Docker container. Passed
@@ -355,755 +407,170 @@
                             <li>Attended structured classes over 4 months covering practical AI programming concepts
                             </li>
                         </ul>
-                        <div class="timeline-tags">
-                            <span class="tag">Azure AI</span>
-                            <span class="tag">AI-102 Exam Prep</span>
-                            <span class="tag">AI-900</span>
-                            <span class="tag">AI Agents</span>
-                            <span class="tag">Chatbots</span>
-                        </div>
+                        <div class="tags"><span>Azure AI</span><span>AI-102 Exam Prep</span><span>AI-900</span><span>AI Agents</span><span>Chatbots</span></div>
                     </div>
-                </div>
+                </article>
 
                 <!-- Experience 4: Student Ambassador -->
-                <div class="timeline-item animate-on-scroll" data-animation="slide-right">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">Student Ambassador</h3>
-                                <p class="timeline-company">Sunway University</p>
-                            </div>
-                            <div class="timeline-meta">
-                                <span class="timeline-date">2024 – 2025</span>
-                                <span class="timeline-location">Bandar Sunway</span>
-                            </div>
-                        </div>
-                        <ul class="timeline-details">
+                <article class="xp-item reveal">
+                    <div class="xp-meta"><b>2024 - 2025</b><span>Bandar Sunway</span></div>
+                    <div>
+                        <h3 class="xp-role">Student Ambassador</h3>
+                        <p class="xp-company">Sunway University</p>
+                        <ul class="xp-list">
                             <li>Led campus tours for prospective students and represented the university at orientation
                                 events</li>
                             <li>Volunteered at Sunway International School to help and teach students</li>
                             <li>Organised educational and recreational activities for children at a Children's Home</li>
                         </ul>
-                        <div class="timeline-tags">
-                            <span class="tag">Leadership</span>
-                            <span class="tag">Volunteering</span>
-                            <span class="tag">Communication</span>
-                        </div>
+                        <div class="tags"><span>Leadership</span><span>Volunteering</span><span>Communication</span></div>
                     </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section id="skills" class="section">
+            <p class="eyebrow reveal"><span class="ta" lang="ta">திறன்கள்</span><span>What I work with</span></p>
+            <h2 class="title"><span class="decode" data-ta="திறன்கள்">Skills</span></h2>
+
+            <div class="skills">
+                <div class="skill-row reveal">
+                    <h3>Programming</h3>
+                    <p>Python 3.14, JavaScript, TypeScript, Dart (Flutter), SQL, PowerShell (Windows automation), HTML,
+                        CSS. <em>From coursework: Java, C/C++, C#, MATLAB, Bash, Oracle, MySQL, PostgreSQL, SQL Server,
+                            Kubernetes, CUDA, TensorFlow.</em></p>
+                </div>
+                <div class="skill-row reveal">
+                    <h3>Generative AI and LLMs</h3>
+                    <p>LLM APIs (Gemini, Groq, OpenRouter), prompt engineering, output guardrails, tool-calling agents,
+                        local LLMs on llama.cpp, model benchmarking, MCP (connected Apify, Notion, Google Drive),
+                        LangChain (DeepLearning.AI)</p>
+                </div>
+                <div class="skill-row reveal">
+                    <h3>Machine Learning</h3>
+                    <p>scikit-learn (RandomForest, logistic regression), model evaluation (ROC-AUC), pandas, NumPy,
+                        OpenCV</p>
+                </div>
+                <div class="skill-row reveal">
+                    <h3>Back End, Front End and Data</h3>
+                    <p>FastAPI, REST APIs, Node.js, npm, React.js, Flutter, SQLite, Cloud Firestore (NoSQL)</p>
+                </div>
+                <div class="skill-row reveal">
+                    <h3>Design</h3>
+                    <p>Figma, UI/UX design, wireframing, prototyping, design systems, component libraries, responsive
+                        design</p>
+                </div>
+                <div class="skill-row reveal">
+                    <h3>DevOps and Tools</h3>
+                    <p>Git, GitHub Actions CI/CD, Docker (Dockerfile, CI image builds), a DigitalOcean Linux server over
+                        SSH</p>
+                </div>
+                <div class="skill-row reveal">
+                    <h3>Testing and Practice</h3>
+                    <p>pytest, unit tests, integration tests, regression tests, test-driven development, debugging,
+                        code review, Agile (Scrum), technical documentation</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Look at these cool things I built -->
-    <section id="projects" class="section projects-section">
-        <div class="section-container">
-            <div class="section-label animate-on-scroll" data-animation="fade-up">
-                <span class="label-line"></span>
-                <span>Projects</span>
-            </div>
-            <h2 class="section-headline animate-on-scroll" data-animation="fade-up">
-                Built from scratch.<br />
-                <span class="gradient-text">Designed to ship.</span>
-            </h2>
+        <!-- Education and certificates -->
+        <section id="education" class="section">
+            <p class="eyebrow reveal"><span class="ta" lang="ta">கல்வி</span><span>Study and certificates</span></p>
+            <h2 class="title"><span class="decode" data-ta="கல்வி">Education</span></h2>
 
-            <div class="projects-grid">
-                <!-- Project 1: KIRA+ -->
-                <div class="project-card tilt-card animate-on-scroll" data-animation="scale-up">
-                    <div class="project-card-inner">
-                        <div class="project-shine"></div>
-                        <div class="project-image-wrapper project-image-gradient">
-                            <div class="project-icon">📊</div>
-                        </div>
-                        <div class="project-info">
-                            <div class="project-badge">MAIC Nexus Challenge 2026 · In progress</div>
-                            <h3 class="project-title">KIRA+</h3>
-                            <p class="project-desc">AI financial health platform for Buy Now, Pay Later and consumer
-                                credit, built by a team of five. As its AI/ML developer I built the LLM layer of its AI
-                                financial assistant (system prompt, a provider-switching client, and an output guard
-                                that rejects any figure the engine did not compute), the 0-100 scoring engine, and a
-                                RandomForest classifier trained on 12,000 synthetic profiles (ROC-AUC 0.923 held out).
-                                Built the Docker image and GitHub Actions CI/CD pipeline with a teammate.</p>
-                            <div class="project-tech">
-                                <span>Python</span><span>FastAPI</span><span>scikit-learn</span><span>SQLite</span><span>pytest</span><span>GitHub Actions</span>
-                            </div>
-                            <div class="project-stat">Team of 5 · 56 tests · ROC-AUC 0.923</div>
-                            <a href="https://github.com/Thaneerrjun7/KIRAPLUS" target="_blank" rel="noopener"
-                                class="project-link" style="margin-top: 15px; display: inline-block;">Team Repo ↗</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 2: SivaSafe (capstone) -->
-                <div class="project-card tilt-card animate-on-scroll" data-animation="scale-up" data-delay="150">
-                    <div class="project-card-inner">
-                        <div class="project-shine"></div>
-                        <div class="project-image-wrapper project-image-gradient">
-                            <div class="project-icon">🤖</div>
-                        </div>
-                        <div class="project-info">
-                            <div class="project-badge">Final Year Capstone · Graded A</div>
-                            <h3 class="project-title">SivaSafe</h3>
-                            <p class="project-desc">Voice-controlled desktop assistant for elderly users, built solo
-                                over two semesters in Python. One Gemini session holds the spoken conversation and calls
-                                tools in 19 capability areas. Sign-in uses face recognition (OpenCV YuNet and SFace), a
-                                spoken password transcribed offline by a Whisper model, and PBKDF2-hashed recovery
-                                codes.</p>
-                            <div class="project-tech">
-                                <span>Python</span><span>PyQt6</span><span>OpenCV</span><span>Gemini</span><span>Whisper</span>
-                            </div>
-                            <div class="project-stat">Solo · Two semesters · Graded A</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 3: BayarNow -->
-                <div class="project-card tilt-card animate-on-scroll" data-animation="scale-up" data-delay="300">
-                    <div class="project-card-inner">
-                        <div class="project-shine"></div>
-                        <div class="project-image-wrapper">
-                            <img src="assets/images/bayarnow-web.png" alt="BayarNow Government Portal"
-                                class="project-image" />
-                        </div>
-                        <div class="project-info">
-                            <div class="project-badge">Government · Live Production</div>
-                            <h3 class="project-title">BayarNow</h3>
-                            <p class="project-desc">Live government bill payment portal serving public users across
-                                Malaysia. Designed 300+ pages of UI/UX including Pay Direct guest payments, user
-                                registration, license management, and full component library.</p>
-                            <div class="project-tech">
-                                <span>Figma</span><span>UI/UX</span><span>Components</span><span>Flutter</span>
-                            </div>
-                            <div class="project-stat">300+ pages · Components · Mobile + Web</div>
-                            <a href="bayarnow.html" class="project-link"
-                                style="margin-top: 15px; display: inline-block;">View Gallery →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 4: OSC -->
-                <div class="project-card tilt-card animate-on-scroll" data-animation="scale-up" data-delay="0">
-                    <div class="project-card-inner">
-                        <div class="project-shine"></div>
-                        <div class="project-image-wrapper">
-                            <img src="assets/images/osc-aduan.png" alt="OSC Government Portal" class="project-image" />
-                        </div>
-                        <div class="project-info">
-                            <div class="project-badge">Government · Live Production</div>
-                            <h3 class="project-title">One Stop Centre (OSC)</h3>
-                            <p class="project-desc">Government business licensing portal with multi-role user flows.
-                                Designed 200+ pages including ADUAN complaint system, PEMANTAUAN monitoring, user
-                                registration & management modules.</p>
-                            <div class="project-tech">
-                                <span>Figma</span><span>UI/UX</span><span>Mobile App</span><span>Multi-role</span>
-                            </div>
-                            <div class="project-stat">200+ pages · ADUAN · PEMANTAUAN · Licensing</div>
-                            <a href="osc.html" class="project-link"
-                                style="margin-top: 15px; display: inline-block;">View Gallery →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 5: FireBall.my -->
-                <div class="project-card tilt-card animate-on-scroll" data-animation="scale-up" data-delay="150">
-                    <div class="project-card-inner">
-                        <div class="project-shine"></div>
-                        <div class="project-image-wrapper">
-                            <img src="assets/images/fireball-main.png" alt="Fireball Official Website"
-                                class="project-image" />
-                        </div>
-                        <div class="project-info">
-                            <div class="project-badge">Freelance · Client Work</div>
-                            <h3 class="project-title">FireBall.my</h3>
-                            <p class="project-desc">Official Malaysian website for a premium Korean automotive
-                                accessories and detailing brand, co-built with a university peer. Each product links to
-                                its item page on the client's Shopee store, where checkout happens. I handled all client
-                                communication and took every post-launch issue through to a fix.</p>
-                            <div class="project-tech">
-                                <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Node.js</span>
-                            </div>
-                            <div style="display: flex; gap: 15px; margin-top: 15px;">
-                                <a href="https://fireball.my/" target="_blank" rel="noopener" class="project-link"
-                                    style="margin-top: 0;">Visit Site ↗</a>
-                                <a href="fireball.html" class="project-link" style="margin-top: 0;">View Gallery →</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 6: Local AI Assistant -->
-                <div class="project-card tilt-card animate-on-scroll" data-animation="scale-up" data-delay="300">
-                    <div class="project-card-inner">
-                        <div class="project-shine"></div>
-                        <div class="project-image-wrapper project-image-gradient">
-                            <div class="project-icon">🧠</div>
-                        </div>
-                        <div class="project-info">
-                            <div class="project-badge">Personal Project · 2025</div>
-                            <h3 class="project-title">Local AI Assistant</h3>
-                            <p class="project-desc">Voice-driven AI agent on Gemini 2.5 Flash that controls the computer
-                                in natural language. I defined the tools the model may call and wrote the code behind
-                                each, and it chains calls, feeding each result back until the request is done, with
-                                fallback across Gemini, Groq and OpenRouter when one provider hits its rate limit.</p>
-                            <div class="project-tech">
-                                <span>Python</span><span>Groq</span><span>OpenRouter</span><span>Gemini</span><span>Voice</span>
-                            </div>
-                            <div class="project-stat">Tool calling · Agent loop · Multi-provider fallback</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 7: ManageIT -->
-                <div class="project-card tilt-card animate-on-scroll" data-animation="scale-up">
-                    <div class="project-card-inner">
-                        <div class="project-shine"></div>
-                        <div class="project-image-wrapper project-image-gradient">
-                            <div class="project-icon">📦</div>
-                        </div>
-                        <div class="project-info">
-                            <div class="project-badge">University Project</div>
-                            <h3 class="project-title">ManageIT</h3>
-                            <p class="project-desc">Inventory management application with full CRUD operations and
-                                reporting, built with Python and a SQL database as a university course project.</p>
-                            <div class="project-tech">
-                                <span>Python</span><span>SQL</span><span>CRUD</span><span>Reporting</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- My tech superpowers -->
-    <section id="skills" class="section skills-section">
-        <div class="section-container">
-            <div class="section-label animate-on-scroll" data-animation="fade-up">
-                <span class="label-line"></span>
-                <span>Skills</span>
-            </div>
-            <h2 class="section-headline animate-on-scroll" data-animation="fade-up">
-                Full-stack capabilities.<br />
-                <span class="gradient-text">Ever-expanding toolkit.</span>
-            </h2>
-
-            <div class="skills-grid">
-                <!-- Languages -->
-                <div class="skill-category animate-on-scroll" data-animation="fade-up">
-                    <div class="skill-category-header">
-                        <span class="skill-icon">⌨️</span>
-                        <h3>Languages</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Python 3.14</span>
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">SQL</span>
-                        <span class="skill-tag">HTML5</span>
-                        <span class="skill-tag">CSS3</span>
-                        <span class="skill-tag">Dart</span>
-                        <span class="skill-tag">TypeScript</span>
-                        <span class="skill-tag">C</span>
-                        <span class="skill-tag">C++</span>
-                        <span class="skill-tag">PowerShell</span>
-                        <span class="skill-tag">Bash</span>
-                        <span class="skill-tag">Node.js</span>
-                    </div>
-                </div>
-
-                <!-- Frameworks -->
-                <div class="skill-category animate-on-scroll" data-animation="fade-up" data-delay="100">
-                    <div class="skill-category-header">
-                        <span class="skill-icon">🏗️</span>
-                        <h3>Frameworks & Libraries</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Flutter</span>
-                        <span class="skill-tag">React</span>
-                        <span class="skill-tag">FastAPI</span>
-                        <span class="skill-tag">SQLite</span>
-                    </div>
-                </div>
-
-                <!-- AI & Data -->
-                <div class="skill-category animate-on-scroll" data-animation="fade-up" data-delay="200">
-                    <div class="skill-category-header">
-                        <span class="skill-icon">🤖</span>
-                        <h3>AI & Machine Learning</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Gemini API</span>
-                        <span class="skill-tag">OpenRouter</span>
-                        <span class="skill-tag">Groq API</span>
-                        <span class="skill-tag">OpenCV</span>
-                        <span class="skill-tag">LLM APIs (Gemini, OpenAI, Anthropic, Groq, OpenRouter)</span>
-                        <span class="skill-tag">Prompt Engineering</span>
-                        <span class="skill-tag">LLM Integration</span>
-                        <span class="skill-tag">AI Agents</span>
-                        <span class="skill-tag">Tool-calling AI agents</span>
-                        <span class="skill-tag">Output guardrails</span>
-                        <span class="skill-tag">scikit-learn</span>
-                        <span class="skill-tag">pandas</span>
-                        <span class="skill-tag">NumPy</span>
-                        <span class="skill-tag">Hugging Face</span>
-                        <span class="skill-tag">LangChain (DeepLearning.AI)</span>
-                    </div>
-                </div>
-
-                <!-- Design -->
-                <div class="skill-category animate-on-scroll" data-animation="fade-up" data-delay="300">
-                    <div class="skill-category-header">
-                        <span class="skill-icon">🎨</span>
-                        <h3>Design & Prototyping</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Figma</span>
-                        <span class="skill-tag">Canva</span>
-                        <span class="skill-tag">UI/UX Design</span>
-                        <span class="skill-tag">Wireframing</span>
-                        <span class="skill-tag">Prototyping</span>
-                        <span class="skill-tag">Design Systems</span>
-                        <span class="skill-tag">User-centred design</span>
-                        <span class="skill-tag">Component Libraries</span>
-                        <span class="skill-tag">Responsive Design</span>
-                    </div>
-                </div>
-
-                <!-- DevOps & Cloud -->
-                <div class="skill-category animate-on-scroll" data-animation="fade-up" data-delay="400">
-                    <div class="skill-category-header">
-                        <span class="skill-icon">☁️</span>
-                        <h3>DevOps & Cloud</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Docker (CI builds)</span>
-                        <span class="skill-tag">Firebase</span>
-                        <span class="skill-tag">Cloud Firestore</span>
-                        <span class="skill-tag">Git / GitHub</span>
-                        <span class="skill-tag">CI/CD</span>
-                        <span class="skill-tag">GitHub Actions CI/CD</span>
-                        <span class="skill-tag">pytest</span>
-                        <span class="skill-tag">DigitalOcean</span>
-                        <span class="skill-tag">REST APIs</span>
-                        <span class="skill-tag">Azure</span>
-                    </div>
-                </div>
-
-                <!-- Concepts -->
-                <div class="skill-category animate-on-scroll" data-animation="fade-up" data-delay="500">
-                    <div class="skill-category-header">
-                        <span class="skill-icon">💡</span>
-                        <h3>Concepts & Practices</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">OOP</span>
-                        <span class="skill-tag">System Design</span>
-                        <span class="skill-tag">Agile / Scrum</span>
-                        <span class="skill-tag">Unit Testing</span>
-                        <span class="skill-tag">Test-driven development</span>
-                        <span class="skill-tag">Data Structures</span>
-                        <span class="skill-tag">Algorithms</span>
-                        <span class="skill-tag">SDLC</span>
-                        <span class="skill-tag">MVC Pattern</span>
-                        <span class="skill-tag">Database Design</span>
-                        <span class="skill-tag">ERD Modeling</span>
-                        <span class="skill-tag">API Integration</span>
-                    </div>
-                </div>
-
-                <!-- Soft Skills -->
-                <div class="skill-category animate-on-scroll" data-animation="fade-up" data-delay="600">
-                    <div class="skill-category-header">
-                        <span class="skill-icon">🧠</span>
-                        <h3>Soft Skills & Qualities</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Creative</span>
-                        <span class="skill-tag">Fast-Thinking</span>
-                        <span class="skill-tag">Critical Thinking</span>
-                        <span class="skill-tag">Adaptability</span>
-                        <span class="skill-tag">Time Management</span>
-                        <span class="skill-tag">Working Under Pressure</span>
-                        <span class="skill-tag">Client-Facing Communication</span>
-                        <span class="skill-tag">Logical Reasoning</span>
-                        <span class="skill-tag">Attention to Detail</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Where I got my brain wrinkles -->
-    <section id="education" class="section education-section">
-        <div class="section-container">
-            <div class="section-label animate-on-scroll" data-animation="fade-up">
-                <span class="label-line"></span>
-                <span>Education</span>
-            </div>
-            <h2 class="section-headline animate-on-scroll" data-animation="fade-up">
-                Strong foundations.<br />
-                <span class="gradient-text">Continuous growth.</span>
-            </h2>
-
-            <div class="education-cards">
-                <div class="edu-card animate-on-scroll" data-animation="slide-left">
-                    <div class="edu-card-accent"></div>
-                    <div class="edu-header">
+            <div class="edu-grid">
+                <div>
+                    <div class="edu-item reveal">
+                        <p class="when">Sep 2023 - Sep 2026 · Bandar Sunway, Selangor</p>
                         <h3>Lancaster University and Sunway University</h3>
-                        <span class="edu-date">Sep 2023 - Sep 2026</span>
+                        <p>Bachelor of Software Engineering (Hons), Dual Degree (Twinning Program) · CGPA: 3.26 / 4.00</p>
+                        <ul>
+                            <li>Dual degree: separate degree certificates from <strong>Lancaster University</strong> and
+                                <strong>Sunway University</strong></li>
+                            <li><strong>Dean's List Award</strong>: Feb - Apr 2025 (GPA 3.67) and May - Aug 2026 (GPA
+                                3.63)</li>
+                            <li>Final Year Capstone (<strong>SivaSafe</strong>) graded A; Software Architecture and
+                                Design Patterns A+; Software Processes A+</li>
+                            <li>Student Ambassador 2024 &amp; 2025</li>
+                        </ul>
                     </div>
-                    <p class="edu-degree">Bachelor of Software Engineering (Hons), Dual Degree (Twinning Program)</p>
-                    <div class="edu-details">
-                        <span class="edu-gpa">CGPA: 3.26 / 4.00</span>
-                        <span class="edu-location">Bandar Sunway, Selangor</span>
-                    </div>
-                    <ul class="edu-highlights">
-                        <li>Dual degree: separate degree certificates from <strong>Lancaster University</strong> and
-                            <strong>Sunway University</strong></li>
-                        <li><strong>Dean's List Award</strong>: Feb - Apr 2025 (GPA 3.67) and May - Aug 2026 (GPA
-                            3.63)</li>
-                        <li>Final Year Capstone (<strong>SivaSafe</strong>) graded A; Software Architecture and
-                            Design Patterns A+; Software Processes A+</li>
-                        <li>Student Ambassador 2024 & 2025</li>
-                    </ul>
-                </div>
-
-                <div class="edu-card animate-on-scroll" data-animation="slide-right" data-delay="200">
-                    <div class="edu-card-accent"></div>
-                    <div class="edu-header">
+                    <div class="edu-item reveal">
+                        <p class="when">Jul 2022 - Jul 2023 · Selangor, Malaysia</p>
                         <h3>Sunway College</h3>
-                        <span class="edu-date">Jul 2022 – Jul 2023</span>
+                        <p>Ontario Secondary School Diploma (OSSD), Canadian International Matriculation Programme
+                            (CIMP)</p>
                     </div>
-                    <p class="edu-degree">Ontario Secondary School Diploma (OSSD)</p>
-                    <p class="edu-specialization">Canadian International Matriculation Programme (CIMP)</p>
-                    <div class="edu-details">
-                        <span class="edu-gpa">CIMP Alumni</span>
-                        <span class="edu-location">Selangor, Malaysia</span>
-                    </div>
-                </div>
-
-                <div class="edu-card animate-on-scroll" data-animation="slide-left" data-delay="400">
-                    <div class="edu-card-accent"></div>
-                    <div class="edu-header">
+                    <div class="edu-item reveal">
+                        <p class="when">2019 · Taiping, 34000 Perak</p>
                         <h3>SMK Saint George, Taiping</h3>
-                        <span class="edu-date">2019</span>
+                        <p>Sijil Pelajaran Malaysia (SPM)</p>
+                        <ul>
+                            <li>English Language Drama 2018: district and Perak state champion, competed at national
+                                level</li>
+                        </ul>
                     </div>
-                    <p class="edu-degree">Sijil Pelajaran Malaysia (SPM)</p>
-                    <div class="edu-details">
-                        <span class="edu-location">Taiping, 34000 Perak</span>
-                    </div>
-                    <ul class="edu-highlights">
-                        <li>English Language Drama 2018: district and Perak state champion, competed at national level</li>
-                        <li>Multiple extracurricular activities</li>
+                </div>
+
+                <div class="certs glass reveal" style="--d:120ms">
+                    <h3>Certificates and awards</h3>
+                    <ul>
+                        <li>Microsoft Certified: Azure AI Fundamentals (AI-900)<span>July 2025</span></li>
+                        <li>Microsoft AI-102 Exam-Prep Training (Azure AI Engineer Associate)<span>Apr - Aug 2025 · training, not the certification</span></li>
+                        <li>LangChain for LLM Application Development<span>DeepLearning.AI · 2026</span></li>
+                        <li>Dean's List, Sunway University<span>Feb - Apr 2025 (GPA 3.67) · May - Aug 2026 (GPA 3.63)</span></li>
                     </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Shiny badges of honor -->
-    <section id="certifications" class="section certifications-section">
-        <div class="section-container">
-            <div class="section-label animate-on-scroll" data-animation="fade-up">
-                <span class="label-line"></span>
-                <span>Certifications & Awards</span>
-            </div>
-            <h2 class="section-headline animate-on-scroll" data-animation="fade-up">
-                Recognized excellence.<br />
-                <span class="gradient-text">Validated expertise.</span>
-            </h2>
-
-            <div class="awards-grid">
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="0">
-                    <div class="award-icon">📘</div>
-                    <h3>Microsoft AI-102</h3>
-                    <p>Exam-Prep Training (Azure AI Engineer Associate)</p>
-                    <span class="award-year">Apr - Aug 2025</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="100">
-                    <div class="award-icon">🏅</div>
-                    <h3>Microsoft AI-900</h3>
-                    <p>Azure AI Fundamentals</p>
-                    <span class="award-year">July 2025</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="200">
-                    <div class="award-icon">📜</div>
-                    <h3>LangChain for LLM Application Development</h3>
-                    <p>DeepLearning.AI</p>
-                    <span class="award-year">2026</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="300">
-                    <div class="award-icon">🎓</div>
-                    <h3>Dean's List</h3>
-                    <p>Sunway University · GPA 3.67</p>
-                    <span class="award-year">Feb - Apr 2025</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="400">
-                    <div class="award-icon">🎓</div>
-                    <h3>Dean's List</h3>
-                    <p>Sunway University · GPA 3.63</p>
-                    <span class="award-year">May - Aug 2026</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="500">
-                    <div class="award-icon">🎭</div>
-                    <h3>English Drama</h3>
-                    <p>State Champion (Johan), Perak</p>
-                    <span class="award-year">2018</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="600">
-                    <div class="award-icon">🎭</div>
-                    <h3>English Drama</h3>
-                    <p>District Champion (Johan), Larut Matang dan Selama</p>
-                    <span class="award-year">2018</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="700">
-                    <div class="award-icon">🏆</div>
-                    <h3>National Drama</h3>
-                    <p>Competed at National English Language Drama Competition</p>
-                    <span class="award-year">2018</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="800">
-                    <div class="award-icon">✍️</div>
-                    <h3>Essay Competition</h3>
-                    <p>Erican Language Centre Winner</p>
-                    <span class="award-year">English</span>
-                </div>
-                <div class="award-card animate-on-scroll" data-animation="float-in" data-delay="900">
-                    <div class="award-icon">🖌️</div>
-                    <h3>Chinese Calligraphy</h3>
-                    <p>Competition Participant</p>
-                    <span class="award-year">SMK St. George, 2019</span>
+                    <a href="assets/Certificates.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-glass">My certificates and other documents (PDF)</a>
                 </div>
             </div>
 
-            <!-- Certifications CTA -->
-            <div class="certifications-cta animate-on-scroll" data-animation="fade-up" style="margin-top: 40px; text-align: center;">
-                <a href="assets/Certificates.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-large">
-                    My Certifications and other documents
-                </a>
-            </div>
+            <figure class="quote reveal">
+                <blockquote>"Arjun was able to work independently with minimal supervision and showed great
+                    initiative... He is a fast learner who adapts quickly to new concepts and challenges."</blockquote>
+                <figcaption><strong>Alvin Mah</strong> · Development Head, Century Software</figcaption>
+            </figure>
+        </section>
 
-            <!-- Recommendations -->
-            <div class="recommendations-section animate-on-scroll" data-animation="fade-up" data-delay="200">
-                <h3 class="languages-title">Recommendation</h3>
-                <div class="recommendation-card">
-                    <div class="quote-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                        </svg>
-                    </div>
-                    <blockquote class="recommendation-quote">
-                        "Arjun was able to work independently with minimal supervision and showed great initiative... He is a fast learner who adapts quickly to new concepts and challenges."
-                    </blockquote>
-                    <div class="recommendation-author">
-                        <strong>Alvin Mah</strong><br />
-                        <span class="text-muted">Development Head, Century Software</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Languages Spoken -->
-            <div class="languages-section animate-on-scroll" data-animation="fade-up" data-delay="400">
-                <h3 class="languages-title">Languages Spoken</h3>
-                <div class="language-bars">
-                    <div class="language-bar">
-                        <div class="language-info">
-                            <span>English</span>
-                            <span>Fluent · Proficient</span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill" data-width="95"></div>
-                        </div>
-                    </div>
-                    <div class="language-bar">
-                        <div class="language-info">
-                            <span>Tamil</span>
-                            <span>Native · Fluent</span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill" data-width="95"></div>
-                        </div>
-                    </div>
-                    <div class="language-bar">
-                        <div class="language-info">
-                            <span>Malay</span>
-                            <span>Fluent · SPM</span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill" data-width="90"></div>
-                        </div>
-                    </div>
-                    <div class="language-bar">
-                        <div class="language-info">
-                            <span>Chinese (Mandarin)</span>
-                            <span>Basic · Currently studying</span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill" data-width="25"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Proof I have a life outside of code -->
-    <section id="gallery" class="section gallery-section">
-        <div class="section-container">
-            <div class="section-label animate-on-scroll" data-animation="fade-up">
-                <span class="label-line"></span>
-                <span>Gallery</span>
-            </div>
-            <h2 class="section-headline animate-on-scroll" data-animation="fade-up">
-                Beyond the code.<br />
-                <span class="gradient-text">Moments that matter.</span>
-            </h2>
-            
-            <p class="gallery-intro animate-on-scroll" data-animation="fade-up" data-delay="100">
-                When I'm off the clock, you can definitely find me in the cinemas—I'm a huge movie lover who enjoys diving into tech culture and cinematic experiences. I also spend my free time building personal AI projects, driven by a lifelong dream to build a tech setup just like Tony Stark's J.A.R.V.I.S. Here are some of my extracurricular activities that I did during my time in Sunway University while I was finishing my Bachelor's Degree.
+        <!-- Contact -->
+        <section id="contact" class="section contact">
+            <p class="eyebrow reveal"><span class="ta" lang="ta">தொடர்பு</span><span>Contact</span></p>
+            <h2><span class="decode" data-ta="பேசலாம்">Let's talk.</span></h2>
+            <p class="lede reveal">
+                Open to full-time graduate Software Engineer and AI engineering roles, available immediately.
+                Currently targeting roles in Kuala Lumpur, Selangor and Penang, and open to relocating.
             </p>
 
-            <div class="gallery-grid">
-                <div class="gallery-item gallery-large animate-on-scroll" data-animation="scale-up">
-                    <img src="assets/images/grad-stage.jpeg" alt="Graduation ceremony at Sunway College" />
-                    <div class="gallery-overlay">
-                        <span>Sunway College Graduation</span>
-                    </div>
-                </div>
-                <div class="gallery-item animate-on-scroll" data-animation="scale-up" data-delay="100">
-                    <img src="assets/images/event-campus-tour.jpeg" alt="Campus Tour - Student Ambassador" />
-                    <div class="gallery-overlay">
-                        <span>Campus Tour · Student Ambassador</span>
-                    </div>
-                </div>
-                <div class="gallery-item animate-on-scroll" data-animation="scale-up" data-delay="200">
-                    <img src="assets/images/grad-friends.jpeg" alt="Graduation with friends" />
-                    <div class="gallery-overlay">
-                        <span>Graduation Day with Friends</span>
-                    </div>
-                </div>
-                <div class="gallery-item animate-on-scroll" data-animation="scale-up" data-delay="300">
-                    <img src="assets/images/event-career-fair.jpeg" alt="Sunway University Career Fair" />
-                    <div class="gallery-overlay">
-                        <span>Sunway University Career Fair</span>
-                    </div>
-                </div>
-                <div class="gallery-item animate-on-scroll" data-animation="scale-up" data-delay="400">
-                    <img src="assets/images/event-stem.jpeg" alt="STEM Event at University" />
-                    <div class="gallery-overlay">
-                        <span>STEM Event · University</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- The official paperwork (Resume) -->
-    <section id="resume" class="section resume-section">
-        <div class="section-container">
-            <div class="resume-header animate-on-scroll" data-animation="fade-up">
-                <div class="section-label">
-                    <span class="label-line"></span>
-                    <span>Resume</span>
-                </div>
-                <div class="resume-title-row">
-                    <h2 class="section-headline">
-                        My Professional<br />
-                        <span class="gradient-text">Background.</span>
-                    </h2>
-                    <a href="assets/CV_Arjun.pdf" download="Arjun_Shanker_Resume.pdf"
-                        class="btn btn-primary btn-download" aria-label="Download Resume">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                        Download PDF
-                    </a>
-                </div>
+            <div class="contact-links reveal">
+                <a href="https://mail.google.com/mail/?view=cm&to=arjun70k.g@gmail.com&su=Hello%20Arjun%20-%20From%20Your%20Portfolio&body=Hi%20Arjun%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect!%0A%0A"
+                    target="_blank" rel="noopener" id="contact-email"><span>Email</span><span>arjun70k.g@gmail.com</span></a>
+                <a href="https://wa.me/60164219121" target="_blank" rel="noopener noreferrer" id="contact-phone"><span>WhatsApp or call</span><span>+60164219121</span></a>
+                <a href="https://www.linkedin.com/in/arjun-shanker-ba25b3227" target="_blank" rel="noopener"><span>LinkedIn</span><span>arjun-shanker-ba25b3227</span></a>
+                <a href="https://github.com/Thaneerrjun7" target="_blank" rel="noopener"><span>GitHub</span><span>Thaneerrjun7</span></a>
             </div>
 
-            <div class="resume-preview-container animate-on-scroll" data-animation="scale-up" data-delay="200">
-                <div class="resume-preview-glass">
-                    <iframe src="assets/CV_Arjun.pdf#toolbar=0" class="resume-iframe"
-                        title="Resume Preview"></iframe>
-                </div>
+            <div class="hero-cta reveal">
+                <a href="https://mail.google.com/mail/?view=cm&to=arjun70k.g@gmail.com&su=Hello%20Arjun%20-%20From%20Your%20Portfolio&body=Hi%20Arjun%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect!%0A%0A"
+                    target="_blank" rel="noopener" class="btn btn-primary">Send me an email</a>
+                <a href="assets/CV_Arjun.pdf" target="_blank" rel="noopener" class="btn btn-glass" id="resume">Open my resume (PDF)</a>
+                <a href="assets/CV_Arjun.pdf" download="Arjun_Shanker_Resume.pdf" class="btn btn-glass">Download it</a>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Call me, beep me, if you wanna reach me -->
-    <section id="contact" class="section contact-section">
-        <div class="section-container">
-            <div class="contact-content">
-                <h2 class="contact-headline animate-on-scroll" data-animation="fade-up">
-                    Engineering outcomes and better solutions.<br />
-                    <span class="gradient-text">Not just code.</span>
-                </h2>
-                <p class="contact-subtitle animate-on-scroll" data-animation="fade-up" data-delay="100">
-                    Open to full-time graduate Software Engineer and AI engineering roles, available immediately.
-                    <br />Currently targeting roles in Kuala Lumpur, Selangor and Penang, and open to relocating.
-                </p>
+    <footer class="footer">
+        <p>Designed and built by Arjun Shanker · © 2026</p>
+        <p>Layout inspired by <a href="https://hamishw.com" target="_blank" rel="noopener">Hamish Williams</a></p>
+    </footer>
 
-                <div class="contact-links animate-on-scroll" data-animation="fade-up" data-delay="100">
-                    <a href="https://mail.google.com/mail/?view=cm&to=arjun70k.g@gmail.com&su=Hello%20Arjun%20%E2%80%94%20From%20Your%20Portfolio&body=Hi%20Arjun%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect!%0A%0A"
-                        target="_blank" rel="noopener" class="contact-link" id="contact-email"
-                        onclick="window.open(this.href, 'GmailCompose', 'width=800,height=600,left=200,top=200'); return false;">
-                        <span class="contact-link-icon">✉️</span>
-                        <span class="contact-link-text">arjun70k.g@gmail.com</span>
-                    </a>
-                    <a href="https://wa.me/60164219121" target="_blank" rel="noopener noreferrer" class="contact-link"
-                        id="contact-phone">
-                        <span class="contact-link-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
-                                fill="currentColor">
-                                <path
-                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.06-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                            </svg>
-                        </span>
-                        <span class="contact-link-text">Contact me through WhatsApp or call me using +60164219121</span>
-                    </a>
-                    <div class="contact-link" id="contact-location">
-                        <span class="contact-link-icon">📍</span>
-                        <span class="contact-link-text">Based in Malaysia · Open to Relocation & Travel</span>
-                    </div>
-                </div>
+    <!-- The intro video only plays when someone asks for it -->
+    <dialog id="intro-dialog" class="intro-dialog" aria-label="Intro video">
+        <form method="dialog"><button class="close" aria-label="Close video">✕</button></form>
+        <video controls playsinline preload="none">
+            <source src="assets/videos/ai-intro.mp4" type="video/mp4" />
+        </video>
+    </dialog>
 
-                <div class="contact-cta animate-on-scroll" data-animation="fade-up" data-delay="100">
-                    <a href="https://mail.google.com/mail/?view=cm&to=arjun70k.g@gmail.com&su=Hello%20Arjun%20%E2%80%94%20From%20Your%20Portfolio&body=Hi%20Arjun%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect!%0A%0A"
-                        target="_blank" rel="noopener" class="btn btn-primary btn-large"
-                        onclick="window.open(this.href, 'GmailCompose', 'width=800,height=600,left=200,top=200'); return false;">Send
-                        Me an Email</a>
-                    <a href="assets/Arjun_Shanker_Full_Resume.pdf" target="_blank" rel="noopener noreferrer"
-                        class="btn btn-ghost btn-large" style="margin-left: 16px;">View My Full Resume (PDF)</a>
-                </div>
-            </div>
-        </div>
-
-        <footer class="footer">
-            <p>Designed & Built by Arjun Shanker · © 2026</p>
-        </footer>
-    </section>
-
-    <!-- Konami Code Easter Egg Overlay -->
-    <div id="easter-egg" class="easter-egg-overlay">
-        <div class="easter-egg-content">
-            <h2>🎉 You found the Easter Egg!</h2>
-            <p>Try pressing: ↑ ↑ ↓ ↓ ← → ← → B A</p>
-            <p class="easter-egg-msg">Thanks for exploring! You've got great attention to detail 😄</p>
-        </div>
-    </div>
-
-    <!-- Easter Egg Hint -->
-    <div class="easter-egg-hint animate-on-scroll" data-animation="fade-up">
-        <span>🎮 Psst... try the Konami Code: ↑↑↓↓←→←→BA</span>
-    </div>
-
-    <script src="script.js"></script>
-    <script src="scroll-motion.js"></script>
-    <script src="liquid-glass.js"></script>
+    <script src="site.js"></script>
     <script type="module" async src="firebase-live.js"></script>
 </body>
 

@@ -35,11 +35,10 @@ function safeUrl(url) {
 const normalize = (text) => text.replace(/\s+/g, ' ').trim();
 
 function createCard(id) {
-  const card = el('div', 'project-card tilt-card animate-on-scroll');
-  card.dataset.animation = 'scale-up';
+  const card = el('div', 'project-card');
   card.dataset.id = id;
   const inner = el('div', 'project-card-inner');
-  inner.append(el('div', 'project-shine'), el('div', 'project-image-wrapper'), el('div', 'project-info'));
+  inner.append(el('div', 'project-image-wrapper'), el('div', 'project-info'));
   card.append(inner);
   return card;
 }
@@ -54,7 +53,10 @@ function fillCard(card, project) {
     img.alt = project.image.alt ?? project.title ?? '';
     media.replaceChildren(img);
   } else {
-    media.replaceChildren(el('div', 'project-icon', project.icon ?? '✨'));
+    // No screenshot yet: show the project's name as a wordmark, with its tagline if it has one
+    const tile = [el('div', 'project-wordmark', project.title ?? '')];
+    if (project.tagline) tile.push(el('div', 'project-tagline', project.tagline));
+    media.replaceChildren(...tile);
   }
 
   const info = [];
@@ -105,7 +107,7 @@ function adoptBuiltInCards(docs) {
 }
 
 function renderProjects(snapshot) {
-  if (snapshot.empty) return;
+  if (snapshot.empty || !grid) return;
   if (cards.size === 0) adoptBuiltInCards(snapshot.docs);
 
   const fresh = [];
@@ -133,12 +135,7 @@ function renderProjects(snapshot) {
   });
 
   for (const card of fresh) {
-    if (window.portfolioFX) {
-      window.portfolioFX.tilt(card);
-      window.portfolioFX.observe(card);
-    } else {
-      card.classList.add('visible');
-    }
+    window.siteFX?.observe(card);
   }
 }
 
@@ -195,6 +192,8 @@ const domReady = new Promise((resolve) => {
 const onError = (error) => console.warn('Live content unavailable, keeping the built-in content:', error);
 
 domReady.then(() => {
+  // index.html?static shows the built-in content only, for checking the fallback
+  if (new URLSearchParams(location.search).has('static')) return;
   onSnapshot(collection(db, 'projects'), renderProjects, onError);
   onSnapshot(doc(db, 'site', 'status'), renderStatus, onError);
 });
