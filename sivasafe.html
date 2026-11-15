@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>SivaSafe | Arjun Shanker</title>
+    <meta name="description" content="SivaSafe, a voice-controlled desktop assistant with facial authentication for elderly users: screenshots and a walkthrough of the interface." />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23000' stroke='%23d7263d' stroke-width='4'/%3E%3Ctext x='32' y='41' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%23f5f5f7' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="site.css" />
+</head>
+
+<body>
+    <canvas id="sky" class="sky" aria-hidden="true"></canvas>
+    <div class="nebula" aria-hidden="true"></div>
+
+    <main class="page">
+        <div class="page-top">
+            <a href="index.html#projects" class="back">← Back to projects</a>
+            <a class="monogram" href="index.html" aria-label="Arjun Shanker, home">AS</a>
+        </div>
+
+        <p class="eyebrow"><span class="ta" lang="ta">பாதுகாப்பு</span><span>Final Year Capstone · Graded A</span></p>
+        <h1><span class="decode" data-ta="பாதுகாப்பு">SivaSafe</span></h1>
+        <p class="lede">A voice-controlled desktop assistant with facial authentication, built for elderly users who find
+            a keyboard and mouse hard going. I built it solo over two semesters in Python.</p>
+        <div class="meta tags"><span>Python</span><span>PyQt6</span><span>OpenCV</span><span>Gemini</span><span>Whisper</span></div>
+
+        <h2>Walkthrough</h2>
+        <p>A short walk through the interface: the orb's states, the side drawer, health, reminders, tasks, the scam
+            check and settings. Recorded from the real app window with sample data. There is no voice in this clip.</p>
+        <figure class="fig reveal">
+            <video controls muted playsinline preload="none" poster="assets/images/sivasafe-poster.jpg">
+                <source src="assets/videos/sivasafe-walkthrough.webm" type="video/webm" />
+                Your browser cannot play this clip. The screenshots below show the same screens.
+            </video>
+            <figcaption>28 seconds, silent</figcaption>
+        </figure>
+
+        <h2>Screens</h2>
+        <div class="figs">
+            <figure class="fig reveal">
+                <img src="assets/images/sivasafe-home.png" alt="SivaSafe home screen" loading="lazy" />
+                <figcaption>Home: the SIVA orb, one-tap actions and the activity log</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/sivasafe-home-listening.png" alt="SivaSafe home screen in the Listening state" loading="lazy" />
+                <figcaption>Listening. The words under the orb always say what it is doing</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/sivasafe-safety.png" alt="SivaSafe Safety Check flagging a sample scam message" loading="lazy" />
+                <figcaption>Safety Check: a sample scam message, flagged, with the reasons in plain words</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/sivasafe-health.png" alt="SivaSafe Health Status page with a sample medication" loading="lazy" />
+                <figcaption>Health Status with a sample medication</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/sivasafe-settings.png" alt="SivaSafe settings page with the text size slider" loading="lazy" />
+                <figcaption>Text size: every label in the app scales, across five sizes</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/sivasafe-chat.png" alt="SivaSafe chat history grouped by day" loading="lazy" />
+                <figcaption>Chat history, grouped by day</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/sivasafe-tour.png" alt="SivaSafe first-run walkthrough" loading="lazy" />
+                <figcaption>The first-run walkthrough that introduces each control</figcaption>
+            </figure>
+        </div>
+
+        <div class="next">
+            <a href="case-sivasafe.html" class="btn btn-primary">Read the case study →</a>
+            <a href="aj.html" class="btn btn-glass">AJ, the assistant I am building now →</a>
+            <a href="index.html#projects" class="btn btn-glass">All projects</a>
+        </div>
+    </main>
+
+    <script src="site.js"></script>
+</body>
+
+</html>

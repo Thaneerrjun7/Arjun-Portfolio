@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>KIRA+ case study | Arjun Shanker</title>
+    <meta name="description" content="Case study: how a hallucinated ringgit amount led to the output guard in KIRA+, an AI financial health platform." />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23000' stroke='%23d7263d' stroke-width='4'/%3E%3Ctext x='32' y='41' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%23f5f5f7' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="site.css" />
+</head>
+
+<body>
+    <canvas id="sky" class="sky" aria-hidden="true"></canvas>
+    <div class="nebula" aria-hidden="true"></div>
+
+    <main class="page">
+        <div class="page-top">
+            <a href="index.html#projects" class="back">← Back to projects</a>
+            <a class="monogram" href="index.html" aria-label="Arjun Shanker, home">AS</a>
+        </div>
+
+        <p class="eyebrow"><span class="ta" lang="ta">கணக்கு</span><span>Case study · KIRA+</span></p>
+        <h1><span class="decode" data-ta="கணக்கு">The model made up a number</span></h1>
+        <p class="lede">KIRA+ is an AI financial health platform for Buy Now, Pay Later and consumer credit, built by a
+            distributed team of five for the MAIC Nexus Challenge 2026. <em>Kira</em> means "to calculate" in Malay. My
+            role is AI/ML developer.</p>
+        <div class="meta tags"><span>Team of 5</span><span>AI/ML developer</span><span>2026, in progress</span><span>Python, FastAPI, scikit-learn, SQLite</span></div>
+
+        <h2>The rule we built around</h2>
+        <div class="callout"><p>Rules decide. The model predicts. The language model explains.</p></div>
+        <p>The scoring engine is deterministic and auditable: a 0-100 score across six weighted factors, plus a
+            six-rule early-warning engine where each rule names the exact figure that triggered it. A RandomForest
+            predicts financial stress. The language model's only job is to explain, in plain words, figures the engine
+            has already computed. It never computes and it never advises.</p>
+
+        <h2>What went wrong</h2>
+        <p>In my own testing, the language model quoted a ringgit amount that the engine had never computed. It read
+            well and it was wrong. In an app about people's money, one invented figure is enough to lose their trust.</p>
+
+        <h2>What I built</h2>
+        <pre class="code">engine computes the figures
+        |
+language model writes 3 to 5 sentences about them
+        |
+<b>output guard</b>: is every number in the reply one the engine produced?
+               is there any banned advice phrase?
+        |                              |
+      pass: show the reply           fail: show the deterministic template instead</pre>
+        <ul class="dash">
+            <li>An output guard that rejects any reply quoting a figure the engine did not compute, or giving financial
+                advice. A rejected reply falls back to a deterministic explanation template, so the user always sees
+                something true.</li>
+            <li>A provider client that speaks an OpenAI-compatible chat completions API (Groq by default, switchable by
+                configuration), with a 4-second timeout and the same template fallback, so a slow model never blocks
+                the page.</li>
+            <li>The system prompt, with absolute rules: never compute, never advise, keep to 3 to 5 sentences.</li>
+        </ul>
+
+        <h2>The model behind the prediction</h2>
+        <div class="numbers">
+            <div class="glass"><b>0.923</b><span>ROC-AUC, RandomForest on held-out data</span></div>
+            <div class="glass"><b>0.921</b><span>ROC-AUC in 5-fold cross-validation</span></div>
+            <div class="glass"><b>0.844</b><span>ROC-AUC, logistic-regression baseline</span></div>
+        </div>
+        <p>Trained on 12,000 synthetic profiles, and compared against a logistic-regression baseline so the score has
+            something to stand next to.</p>
+
+        <h2>Two defects the tests missed</h2>
+        <p>I worked test-first: 56 unit and integration tests for my services. Then I ran the whole app in a browser
+            and walked the demo path, and found two defects the suites had not caught:</p>
+        <ul class="dash">
+            <li>Starting the server plainly never created the SQLite schema, so the first "Save profile" returned a 500
+                error. The schema is now created on startup.</li>
+            <li>The explanation code only read an older payload shape than the dashboard was sending, so a swallowed
+                error showed "explanation unavailable" on every load.</li>
+        </ul>
+        <p>The test fixtures had hidden both. I fixed them and added regression tests.</p>
+
+        <h2>The rest of the stack</h2>
+        <p>I also worked across the rest of the stack with our full-stack developer: together we built the Next.js
+            front end, the FastAPI back end and its APIs, the database schema, the Docker image and the GitHub Actions
+            CI/CD pipeline, and I provisioned the server it deploys to. Screens of the app will go up here soon.</p>
+
+        <div class="next">
+            <a href="https://github.com/Thaneerrjun7/KIRAPLUS" target="_blank" rel="noopener" class="btn btn-primary">Team repo ↗</a>
+            <a href="case-bayarnow.html" class="btn btn-glass">Next case study: BayarNow →</a>
+            <a href="index.html#projects" class="btn btn-glass">All projects</a>
+        </div>
+    </main>
+
+    <script src="site.js"></script>
+</body>
+
+</html>

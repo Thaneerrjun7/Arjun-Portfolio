@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>AJ - Personal AI Assistant | Arjun Shanker</title>
+    <meta name="description" content="AJ, a voice assistant that runs locally on a 6 GB laptop GPU: screenshots of the app and the benchmarks behind the model choice." />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23000' stroke='%23d7263d' stroke-width='4'/%3E%3Ctext x='32' y='41' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%23f5f5f7' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="site.css" />
+</head>
+
+<body>
+    <canvas id="sky" class="sky" aria-hidden="true"></canvas>
+    <div class="nebula" aria-hidden="true"></div>
+
+    <main class="page">
+        <div class="page-top">
+            <a href="index.html#projects" class="back">← Back to projects</a>
+            <a class="monogram" href="index.html" aria-label="Arjun Shanker, home">AS</a>
+        </div>
+
+        <p class="eyebrow"><span class="ta" lang="ta">உதவியாளர்</span><span>Personal project · 2026 · In progress</span></p>
+        <h1><span class="decode" data-ta="உதவியாளர்">AJ, my personal AI assistant</span></h1>
+        <p class="lede">AJ is a voice assistant that runs on my own Windows laptop. I talk and it answers out loud. It is
+            local first: the main loop of hearing, thinking and speaking runs on the laptop itself, on a 6 GB GPU.</p>
+        <div class="meta tags"><span>Python</span><span>llama.cpp</span><span>Qwen3-4B</span><span>ONNX Runtime</span><span>SQLite</span><span>PyQt6</span></div>
+
+        <div class="numbers">
+            <div class="glass"><b>0.83 to 1.37 s</b><span>from the end of my sentence to its first sound, in benchmarks</span></div>
+            <div class="glass"><b>91.7%</b><span>tool-call accuracy for Qwen3-4B, 55 of 60 runs over 20 scripted commands</span></div>
+            <div class="glass"><b>300 to 30 ms</b><span>GPU stalls on a down-clocked laptop GPU, before and after</span></div>
+        </div>
+
+        <h2>The app</h2>
+        <p>These are captures of the real window, taken while it was running on my laptop. I typed the questions for
+            these shots; the small line under each reply is the app's own latency readout for that turn.</p>
+        <div class="shots">
+            <figure class="fig reveal">
+                <img src="assets/images/aj-loading.png" alt="AJ window while the model loads" loading="lazy" />
+                <figcaption>Starting up</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/aj-speaking.png" alt="AJ window in the Speaking state with the orb lit" loading="lazy" />
+                <figcaption>Speaking, the orb moves with its voice</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/aj-tool.png" alt="AJ window showing Working, weather" loading="lazy" />
+                <figcaption>Calling the weather tool mid-turn</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/aj-weather.png" alt="AJ window with the weather answer" loading="lazy" />
+                <figcaption>The answer, with its latency underneath</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/aj-battery.png" alt="AJ window answering a battery question" loading="lazy" />
+                <figcaption>A laptop question, answered in under a tenth of a second</figcaption>
+            </figure>
+            <figure class="fig reveal">
+                <img src="assets/images/aj-local.png" alt="AJ window with a two sentence reply" loading="lazy" />
+                <figcaption>A normal conversation turn</figcaption>
+            </figure>
+        </div>
+
+        <h2>What I did</h2>
+        <ul class="dash">
+            <li>Designed a local streaming voice pipeline (voice activity detection, speech-to-text, a quantised
+                Qwen3-4B on llama.cpp, text-to-speech) where every stage overlaps the next, so it fits a 6 GB laptop
+                GPU and starts speaking before the model has finished writing.</li>
+            <li>Chose the models from measurements: 5 local LLM setups benchmarked on first-sentence latency,
+                tool-call accuracy and memory-extraction recall, then a blind A/B listening test to settle the pick.</li>
+            <li>Designed its memory after I saw SivaSafe delete stored facts to stay under its memory limit: AJ keeps
+                every fact in SQLite and gives each prompt only about 600 tokens of core facts plus up to 5 full-text
+                matches.</li>
+            <li>Designed the laptop-control layer as 47 permission-gated tools (safe, confirm or blocked), with each
+                call's arguments checked against a schema, run under a timeout and written to an audit log.</li>
+            <li>Cut the LLM server's RAM from 2.8 GB to 0.75 GB through llama.cpp settings, and GPU stalls from about
+                300 ms to 30 ms with one-token wake-up requests sent while I am still talking.</li>
+        </ul>
+        <div class="callout"><p><strong>How it was built:</strong> with AI-assisted development. I designed the system, chose the
+            models from benchmark data and blind listening tests, and directed and tested every change. An AI coding
+            assistant wrote much of the code under my direction.</p></div>
+
+        <h2>Benchmarks</h2>
+        <p>Measured on an RTX 4050 Laptop GPU (6 GB), a Ryzen 7 7840HS and 16 GB of RAM, under Windows 11. Red is the
+            setup I chose.</p>
+
+        <div class="chart glass reveal">
+            <table>
+                <caption>Time to the first sentence, cached prompt</caption>
+                <tbody>
+                    <tr class="pick"><th scope="row">Qwen3-4B (GPU), chosen</th><td><div class="bar"><i style="--v:6.1"></i><i class="p95" style="--w:4.6"></i><span>137 / 241 ms</span></div></td></tr>
+                    <tr><th scope="row">Hermes-3 3B (GPU)</th><td><div class="bar"><i style="--v:9.3"></i><i class="p95" style="--w:6.6"></i><span>211 / 361 ms</span></div></td></tr>
+                    <tr><th scope="row">Gemma 4 E4B (GPU)</th><td><div class="bar"><i style="--v:11.1"></i><i class="p95" style="--w:5.5"></i><span>251 / 376 ms</span></div></td></tr>
+                    <tr><th scope="row">Qwen3-1.7B (CPU)</th><td><div class="bar"><i style="--v:24.1"></i><i class="p95" style="--w:28.0"></i><span>546 / 1180 ms</span></div></td></tr>
+                    <tr><th scope="row">Qwen3-4B (CPU)</th><td><div class="bar"><i style="--v:43.8"></i><i class="p95" style="--w:28.2"></i><span>991 / 1629 ms</span></div></td></tr>
+                </tbody>
+            </table>
+            <p class="key">Solid bar: median. Outline: 95th percentile. Shorter is better.</p>
+        </div>
+
+        <div class="chart glass reveal">
+            <table>
+                <caption>Laptop commands called correctly</caption>
+                <tbody>
+                    <tr class="pick"><th scope="row">Qwen3-4B (GPU), chosen</th><td><div class="bar"><i style="--v:66.0"></i><span>91.7%</span></div></td></tr>
+                    <tr><th scope="row">Gemma 4 E4B (GPU)</th><td><div class="bar"><i style="--v:66.0"></i><span>91.7%</span></div></td></tr>
+                    <tr><th scope="row">Qwen3-4B (CPU)</th><td><div class="bar"><i style="--v:66.0"></i><span>91.7%</span></div></td></tr>
+                    <tr><th scope="row">Qwen3-1.7B (CPU)</th><td><div class="bar"><i style="--v:15.6"></i><span>21.7%</span></div></td></tr>
+                    <tr><th scope="row">Hermes-3 3B (GPU)</th><td><div class="bar"><i style="--v:14.4"></i><span>20%</span></div></td></tr>
+                </tbody>
+            </table>
+            <p class="key">20 scripted laptop commands, 3 seeded runs each. Longer is better. Three setups tied here, so latency, recall and the listening test decided it.</p>
+        </div>
+
+        <div class="chart glass reveal">
+            <table>
+                <caption>Memory-extraction recall under a JSON grammar</caption>
+                <tbody>
+                    <tr class="pick"><th scope="row">Qwen3-4B (GPU), chosen</th><td><div class="bar"><i style="--v:56.2"></i><span>78%</span></div></td></tr>
+                    <tr><th scope="row">Hermes-3 3B (GPU)</th><td><div class="bar"><i style="--v:56.2"></i><span>78%</span></div></td></tr>
+                    <tr><th scope="row">Qwen3-4B (CPU)</th><td><div class="bar"><i style="--v:54.7"></i><span>76%</span></div></td></tr>
+                    <tr><th scope="row">Qwen3-1.7B (CPU)</th><td><div class="bar"><i style="--v:36.7"></i><span>51%</span></div></td></tr>
+                    <tr><th scope="row">Gemma 4 E4B (GPU)</th><td><div class="bar"><i style="--v:33.8"></i><span>47%</span></div></td></tr>
+                </tbody>
+            </table>
+            <p class="key">Share of facts in a conversation that the model pulled out correctly. Longer is better.</p>
+        </div>
+
+        <div class="chart glass reveal">
+            <table>
+                <caption>Hard-reasoning set, 12 tasks with checkable answers</caption>
+                <tbody>
+                    <tr class="pick"><th scope="row">MiniCPM5-2B, thinking mode</th><td><div class="bar"><i style="--v:72"></i><span>12 of 12 · median 4.0 s</span></div></td></tr>
+                    <tr><th scope="row">Qwen3-4B</th><td><div class="bar"><i style="--v:60"></i><span>10 of 12 · median 2.7 s</span></div></td></tr>
+                </tbody>
+            </table>
+            <p class="key">Why AJ hands hard questions to a second, on-demand reasoning model.</p>
+        </div>
+
+        <div class="next">
+            <a href="sivasafe.html" class="btn btn-glass">SivaSafe, the assistant before this one →</a>
+            <a href="index.html#projects" class="btn btn-glass">All projects</a>
+        </div>
+    </main>
+
+    <script src="site.js"></script>
+</body>
+
+</html>
