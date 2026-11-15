@@ -13,26 +13,47 @@
     const lessMotion = () => reduced;
 
     /* ---------------- Tamil decode text ----------------
-       Text arrives as a run of random Tamil letters and settles into English from left to right,
-       quickly enough that nobody reads the Tamil. No real Tamil words are stored anywhere:
-       the letters are picked at random on every tick. */
-    const DECODE_MS = 1000;   // how long one piece of text takes to settle
-    const TICK_MS = 45;       // how often the unsettled letters change
+       Two beats, like an old terminal: random Tamil letters type out behind a block cursor,
+       then settle into English from left to right. No real Tamil words are stored anywhere:
+       the letters are picked at random, so there is nothing to read (or to get wrong). */
+    const TIMING = {
+        typePerChar: 60, typeMin: 480, typeMax: 1200,      // beat 1: the Tamil types out
+        hold: 560,                                         // the cursor blinks over the finished line
+        blink: 140,                                        // half a blink, in ms
+        settlePerChar: 50, settleMin: 550, settleMax: 1200, // beat 2: it settles into English
+        tick: 33,                                          // frame time
+        flicker: 2,                                        // unsettled letters change every n ticks
+    };
     const GLYPHS = [...'அஆஇஈஉஊஎஏஐஒஓகஙசஞடணதநபமயரலவழளறன'];
     const pick = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-    const noise = (chars, from = 0) => chars.slice(from).map((c) => (c === ' ' ? ' ' : pick())).join('');
+    const scramble = (chars) => chars.map((c) => (c === ' ' ? ' ' : pick()));
+    const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
     const timers = new WeakMap();
 
-    function paint(out, chars, settled) {
+    // What is on screen mid-animation: settled English, then Tamil letters, then the cursor
+    function paint(out, english, tamil, cursor = true) {
         const frag = document.createDocumentFragment();
-        if (settled > 0) frag.append(chars.slice(0, settled).join(''));
-        if (settled < chars.length) {
+        if (english) frag.append(english);
+        if (tamil) {
             const g = document.createElement('span');
             g.className = 'g';
-            g.textContent = noise(chars, settled);
+            g.textContent = tamil;
             frag.append(g);
         }
+        if (cursor !== null) {
+            const c = document.createElement('span');
+            c.className = cursor ? 'cur' : 'cur off';
+            frag.append(c);
+        }
         out.replaceChildren(frag);
+    }
+
+    // Before its turn the text is there but unseen, so it already takes up the room it will need
+    function wait(out, text) {
+        const ghost = document.createElement('span');
+        ghost.className = 'ghost';
+        ghost.textContent = text;
+        out.replaceChildren(ghost);
     }
 
     function setup(el) {
@@ -48,10 +69,10 @@
         out.setAttribute('aria-hidden', 'true');
         el.replaceChildren(hidden, out);
         if (lessMotion()) out.textContent = text;
-        else paint(out, [...text], 0);
+        else wait(out, text);
     }
 
-    function decode(el, to, duration = DECODE_MS) {
+    function decode(el, to) {
         setup(el);
         const out = el.lastElementChild;
         const text = to ?? el.dataset.text;
@@ -60,18 +81,34 @@
         clearInterval(timers.get(el));
         if (lessMotion()) { out.textContent = text; return; }
         const chars = [...text];
+        const n = chars.length;
+        const typeMs = clamp(n * TIMING.typePerChar, TIMING.typeMin, TIMING.typeMax);
+        const settleMs = clamp(n * TIMING.settlePerChar, TIMING.settleMin, TIMING.settleMax);
+        let tamil = scramble(chars);
+        let tick = 0;
         const started = performance.now();
-        paint(out, chars, 0);
+        paint(out, '', '');
         const id = setInterval(() => {
-            const p = Math.min(1, (performance.now() - started) / duration);
-            const settled = Math.floor(Math.pow(p, 0.85) * (chars.length + 1));  // a touch quicker at the start, no lingering last letter
-            if (p >= 1 || settled >= chars.length) {
-                out.textContent = text;
-                clearInterval(id);
-                return;
+            const t = performance.now() - started;
+            if (t < typeMs) {                                   // typing
+                paint(out, '', tamil.slice(0, Math.ceil((t / typeMs) * n)).join(''));
+            } else if (t < typeMs + TIMING.hold) {              // holding, cursor blinking
+                paint(out, '', tamil.join(''), Math.floor((t - typeMs) / TIMING.blink) % 2 === 1);
+            } else {                                            // settling
+                const settled = Math.floor(((t - typeMs - TIMING.hold) / settleMs) * (n + 1));
+                if (settled >= n) {
+                    // done: the cursor blinks a few more times at the end of the line, then leaves
+                    clearInterval(id);
+                    const cur = document.createElement('span');
+                    cur.className = 'cur blink';
+                    cur.addEventListener('animationend', () => cur.remove());
+                    out.replaceChildren(text, cur);
+                    return;
+                }
+                if (tick++ % TIMING.flicker === 0) tamil = scramble(chars);
+                paint(out, chars.slice(0, settled).join(''), tamil.slice(settled).join(''));
             }
-            paint(out, chars, settled);
-        }, TICK_MS);
+        }, TIMING.tick);
         timers.set(el, id);
     }
 
@@ -95,12 +132,9 @@
     navWords.forEach(setup);
     const startNav = () => navWords.forEach((el, i) => {
         if (lessMotion()) return;
-        const out = el.lastElementChild;
-        out.textContent = el.dataset.text;
         el.style.width = `${el.getBoundingClientRect().width}px`;
-        paint(out, [...el.dataset.text], 0);
-        setTimeout(() => decode(el), 120 + i * 40);
-        setTimeout(() => { el.style.width = ''; }, 200 + i * 40 + DECODE_MS);
+        setTimeout(() => decode(el), 150 + i * 90);
+        setTimeout(() => { el.style.width = ''; }, 150 + i * 90 + 3200);
     });
     Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise((r) => setTimeout(r, 1500))]).then(startNav);
 
@@ -115,7 +149,7 @@
             if (document.hidden || lessMotion()) return;
             index = (index + 1) % words.length;
             decode(rotator, words[index]);
-        }, 4200);
+        }, 6000);
     }
 
     /* ---------------- Scroll reveals ---------------- */
@@ -174,8 +208,8 @@
         if (open) mobileMenu.querySelectorAll('.decode').forEach((el, i) => {
             setup(el);
             if (lessMotion()) return;
-            paint(el.lastElementChild, [...el.dataset.text], 0);
-            setTimeout(() => decode(el), i * 45);
+            wait(el.lastElementChild, el.dataset.text);
+            setTimeout(() => decode(el), 80 + i * 90);
         });
     }
     if (navToggle && mobileMenu) {

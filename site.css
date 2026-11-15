@@ -92,7 +92,16 @@ strong { font-weight: 650; color: var(--ink); }
     color: var(--accent);
     text-shadow: 0 0 12px rgba(215, 38, 61, 0.75);
 }
-[lang="ta"], .ta { font-family: var(--tamil); letter-spacing: 0; }
+/* the block cursor that leads the typing, and the unseen text that holds the space before it starts */
+.decode .cur {
+    display: inline-block; width: 0.5em; height: 0.82em; margin-left: 0.08em; vertical-align: -0.06em;
+    background: var(--accent); border-radius: 1px;
+    box-shadow: 0 0 14px rgba(215, 38, 61, 0.9), 0 0 34px rgba(215, 38, 61, 0.45);
+}
+.decode .ghost { visibility: hidden; }
+.decode .cur.off { opacity: 0; }
+.decode .cur.blink { animation: cursor-blink 0.3s steps(1) 4 forwards; }
+@keyframes cursor-blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 0; } }
 
 /* ---------- Header: the floating glass capsule from the original site, in red ---------- */
 .navbar {
@@ -144,6 +153,7 @@ strong { font-weight: 650; color: var(--ink); }
 .nav-links a:hover, .nav-links a.active { color: var(--ink); }
 .nav-links .decode { display: inline-block; white-space: nowrap; text-align: center; }
 .nav-links .decode .g { font-size: 0.58em; }
+.nav-links .decode .cur { width: 0.4em; }
 .nav-links a.nav-resume-glow, .mobile-nav-links a.nav-resume-glow { color: var(--accent-hi); text-shadow: 0 0 8px rgba(215, 38, 61, 0.55); transition: all 0.3s ease; }
 .nav-links a.nav-resume-glow:hover { color: #fff; text-shadow: 0 0 12px rgba(215, 38, 61, 0.95); }
 
