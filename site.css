@@ -73,6 +73,22 @@ strong { font-weight: 650; color: var(--ink); }
 }
 .skip:focus { top: 16px; }
 
+/* ---------- Scroll progress and the retro switch ---------- */
+.scroll-progress {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 10000;
+    background: var(--accent); box-shadow: var(--glow);
+    transform: scaleX(0); transform-origin: left; pointer-events: none;
+}
+.retro-btn {
+    position: fixed; left: 14px; bottom: 14px; z-index: 9997;
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; color: var(--ink-2);
+    padding: 7px 12px; border-radius: 999px;
+    background: rgba(0, 0, 0, 0.55); border: 1px solid var(--glass-line);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.retro-btn:hover { color: var(--ink); border-color: var(--accent); box-shadow: var(--glow); }
+
 /* ---------- The sky ---------- */
 .sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 .nebula {
@@ -188,6 +204,10 @@ strong { font-weight: 650; color: var(--ink); }
 .mobile-nav-links a { color: var(--ink); font-size: 2rem; font-weight: 600; text-decoration: none; transition: color 0.3s ease; position: relative; z-index: 1; }
 .mobile-nav-links a:hover { color: var(--accent-hi); }
 .mobile-nav-links .lg-lens { background-color: rgb(255 255 255 / 0.08); }
+/* each word is a fixed-width box that fills from the left as it types, so nothing jumps about */
+.mobile-nav-links .decode { display: inline-block; white-space: nowrap; text-align: left; }
+.mobile-nav-links .decode .g { font-size: 0.56em; }
+.mobile-nav-links .decode .cur { width: 0.34em; height: 0.72em; }
 
 @media (max-width: 1199px) { .nav-status { display: none; } }
 @media (max-width: 1024px) { .nav-links { gap: 20px; } }
@@ -416,10 +436,13 @@ h2.title {
 .facts dt { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); padding-top: 3px; }
 .facts dd { color: var(--ink); }
 
-.strip { margin-top: clamp(40px, 7vh, 72px); display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 30%); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 14px; scrollbar-width: thin; scrollbar-color: var(--accent-deep) transparent; }
-.strip figure { scroll-snap-align: start; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); position: relative; aspect-ratio: 4 / 3; background: #0a0607; }
-.strip img { width: 100%; height: 100%; object-fit: cover; }
-.strip figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 14px 12px; font-size: 0.8rem; font-weight: 600; background: linear-gradient(transparent, rgba(0, 0, 0, 0.85)); }
+.gallery-intro { max-width: 78ch; }
+.gallery-grid { margin-top: clamp(30px, 5vh, 52px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.gallery-grid figure { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); position: relative; aspect-ratio: 4 / 3; background: #0a0607; }
+.gallery-grid figure.gallery-large { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+.gallery-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease); }
+.gallery-grid figure:hover img { transform: scale(1.05); }
+.gallery-grid figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 16px 12px; font-size: 0.84rem; font-weight: 600; background: linear-gradient(transparent, rgba(0, 0, 0, 0.85)); }
 
 /* ---------- Experience ---------- */
 .xp { display: grid; }
@@ -450,6 +473,7 @@ h2.title {
 .edu-item li { position: relative; padding-left: 22px; color: var(--ink-2); font-size: 0.93rem; }
 .edu-item li::before { content: ''; position: absolute; left: 0; top: 0.72em; width: 10px; height: 1px; background: var(--accent); }
 .certs { padding: 26px; }
+.certs h3 + ul + h3 { margin-top: 26px; }
 .certs h3 { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-hi); font-weight: 500; margin-bottom: 8px; }
 .certs li { padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 0.94rem; display: grid; gap: 2px; }
 .certs li span { color: var(--ink-3); font-size: 0.82rem; }
@@ -535,7 +559,7 @@ tr.pick .bar span { color: var(--ink); }
     .project-card:nth-child(even) .project-image-wrapper { order: 0; }
     .xp-item, .skill-row { grid-template-columns: 1fr; gap: 10px; }
     .xp-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; padding-top: 0; }
-    .strip { grid-auto-columns: 76%; }
+    .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     .contact-links a { flex-direction: column; gap: 4px; }
     .contact-links span:last-child { text-align: left; }
     .shots { grid-template-columns: repeat(2, minmax(0, 1fr)); }

@@ -82,6 +82,25 @@
         if (lessMotion()) { out.textContent = text; return; }
         const chars = [...text];
         const n = chars.length;
+        const finish = () => {
+            // the cursor blinks a few more times at the end of the line, then leaves
+            const cur = document.createElement('span');
+            cur.className = 'cur blink';
+            cur.addEventListener('animationend', () => cur.remove());
+            out.replaceChildren(text, cur);
+        };
+        if (document.documentElement.classList.contains('retro')) {
+            const total = clamp(n * 55, 350, 1600);
+            const begun = performance.now();
+            paint(out, '', '');
+            const rid = setInterval(() => {
+                const k = Math.floor(((performance.now() - begun) / total) * (n + 1));
+                if (k >= n) { clearInterval(rid); finish(); return; }
+                paint(out, chars.slice(0, k).join(''), '');
+            }, TIMING.tick);
+            timers.set(el, rid);
+            return;
+        }
         const typeMs = clamp(n * TIMING.typePerChar, TIMING.typeMin, TIMING.typeMax);
         const settleMs = clamp(n * TIMING.settlePerChar, TIMING.settleMin, TIMING.settleMax);
         let tamil = scramble(chars);
@@ -97,12 +116,8 @@
             } else {                                            // settling
                 const settled = Math.floor(((t - typeMs - TIMING.hold) / settleMs) * (n + 1));
                 if (settled >= n) {
-                    // done: the cursor blinks a few more times at the end of the line, then leaves
                     clearInterval(id);
-                    const cur = document.createElement('span');
-                    cur.className = 'cur blink';
-                    cur.addEventListener('animationend', () => cur.remove());
-                    out.replaceChildren(text, cur);
+                    finish();
                     return;
                 }
                 if (tick++ % TIMING.flicker === 0) tamil = scramble(chars);
@@ -204,11 +219,15 @@
         mobileMenu.classList.toggle('active', open);
         navToggle.setAttribute('aria-expanded', String(open));
         document.body.style.overflow = open ? 'hidden' : '';
+        // the lens only shows while a link is being pressed here: it has nothing to rest on mid-typing
+        lenses.forEach((lens) => lens.update());
         // every item decodes from Tamil each time the menu opens
         if (open) mobileMenu.querySelectorAll('.decode').forEach((el, i) => {
             setup(el);
             if (lessMotion()) return;
             wait(el.lastElementChild, el.dataset.text);
+            el.style.width = '';
+            el.style.width = `${Math.ceil(el.getBoundingClientRect().width) + 2}px`;
             setTimeout(() => decode(el), 80 + i * 90);
         });
     }
@@ -343,10 +362,7 @@
     if (mobileList) {
         lenses.push(new Lens(mobileList, {
             padX: 22, padY: 2,
-            active: () => {
-                const href = activeDesktop()?.getAttribute('href');
-                return href ? [...mobileList.querySelectorAll('a')].find((m) => m.getAttribute('href') === href) ?? null : null;
-            },
+            active: () => null,
         }));
     }
     updateHeader();
@@ -364,6 +380,124 @@
         dialog.addEventListener('close', () => video.pause());
         dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
     }
+
+    /* ---------------- Scroll progress bar ---------------- */
+    const progress = document.createElement('div');
+    progress.className = 'scroll-progress';
+    progress.setAttribute('aria-hidden', 'true');
+    document.body.prepend(progress);
+    const updateProgress = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+    updateProgress();
+
+    /* ---------------- Retro mode ----------------
+       Type 2002 (the year I was born) or press the RETRO button and the whole site becomes a
+       late-80s green terminal: a short boot sequence, then the same pages through retro.css. */
+    const root = document.documentElement;
+    const memory = {
+        get() { try { return sessionStorage.getItem('retro') === '1'; } catch { return false; } },
+        set(on) { try { sessionStorage.setItem('retro', on ? '1' : '0'); } catch { /* private mode: it just will not be remembered */ } },
+    };
+    const retroBtn = document.createElement('button');
+    retroBtn.type = 'button';
+    retroBtn.className = 'retro-btn';
+    document.body.append(retroBtn);
+
+    function retroFont() {
+        if (document.getElementById('retro-font')) return;
+        const link = document.createElement('link');
+        link.id = 'retro-font';
+        link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css2?family=VT323&display=swap';
+        document.head.append(link);
+    }
+
+    // Run the typing again on whatever headings are on screen, so the switch is felt
+    function retype() {
+        document.querySelectorAll('.decode[data-ready]').forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (r.width && r.bottom > 0 && r.top < window.innerHeight && !el.closest('.mobile-menu')) decode(el);
+        });
+        lenses.forEach((lens) => { if (lens.target) { lens.place(lens.box(lens.target), true); lens.render(); } });
+    }
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    async function boot() {
+        const screen = document.createElement('div');
+        screen.className = 'boot';
+        screen.setAttribute('role', 'status');
+        screen.setAttribute('aria-label', 'Retro mode starting. Press any key to skip.');
+        const text = document.createTextNode('');
+        const cur = document.createElement('span');
+        cur.className = 'cur';
+        screen.append(text, cur);
+        document.body.append(screen);
+        let skipped = false;
+        const skip = () => { skipped = true; };
+        screen.addEventListener('click', skip);
+        document.addEventListener('keydown', skip, { once: true });
+        const pause = (ms) => (skipped ? Promise.resolve() : sleep(ms));
+        const line = async (s = '', ms = 110) => { text.data += s + '\n'; await pause(ms); };
+        const type = async (s, per = 45) => { for (const ch of s) { text.data += ch; await pause(per); } };
+        const now = new Date();
+        const two = (n) => String(n).padStart(2, '0');
+        const row = (a, b, c) => `| ${a.padEnd(14)} | ${b.padEnd(9)} | ${c.padEnd(4)} |`;
+        const rule = '+----------------+-----------+------+';
+
+        await line(`Arjun Terminal OS v20.02 ${two(now.getDate())}/${two(now.getMonth() + 1)}/1988`, 260);
+        await line('<C> Copyright Arjunsoft 2002', 320);
+        await line();
+        await line('MEM CHECKSUM', 260);
+        await line('65535K OK', 320);
+        await line();
+        await line('DETECTING PORTFOLIO', 160);
+        for (let i = 0; i < 20; i++) { text.data += '#'; await pause(38); }
+        await line('', 200);
+        await line();
+        await line('  MODULE           STATUS      PORT', 90);
+        await line(rule, 60);
+        for (const [a, b, c] of [['PROJECTS', 'LOADED', '01'], ['ABOUT', 'LOADED', '02'], ['EXPERIENCE', 'LOADED', '03'], ['SKILLS', 'LOADED', '04'], ['EDUCATION', 'LOADED', '05'], ['GALLERY', 'LOADED', '06'], ['CONTACT', 'ON-LINE', '07']]) {
+            await line(row(a, b, c), 95);
+        }
+        await line(rule, 240);
+        await line();
+        await type('C:\\>');
+        await pause(240);
+        await type('portfolio.exe ', 60);
+        const base = text.data;
+        for (let i = 0; i < 12; i++) { text.data = base + '|/-\\'[i % 4]; await pause(85); }
+        screen.remove();
+        document.removeEventListener('keydown', skip);
+    }
+
+    async function setRetro(on, withBoot = true) {
+        root.classList.toggle('retro', on);
+        memory.set(on);
+        retroBtn.textContent = on ? 'EXIT RETRO' : 'RETRO';
+        retroBtn.setAttribute('aria-pressed', String(on));
+        if (on) {
+            retroFont();
+            window.scrollTo(0, 0);
+            if (withBoot && !lessMotion()) await boot();
+        }
+        retype();
+    }
+    retroBtn.addEventListener('click', () => setRetro(!root.classList.contains('retro')));
+    // the code: 2, 0, 0, 2 typed anywhere on the page
+    let typedDigits = '';
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey || e.altKey || !/^\d$/.test(e.key)) { if (e.key.length === 1) typedDigits = ''; return; }
+        typedDigits = (typedDigits + e.key).slice(-4);
+        if (typedDigits === '2002') { typedDigits = ''; setRetro(!root.classList.contains('retro')); }
+    });
+    // a page opened while retro is on stays retro, without the boot sequence again
+    if (root.classList.contains('retro') || memory.get()) { root.classList.add('retro'); retroFont(); }
+    retroBtn.textContent = root.classList.contains('retro') ? 'EXIT RETRO' : 'RETRO';
+    retroBtn.setAttribute('aria-pressed', String(root.classList.contains('retro')));
 
     /* ---------------- The sky ----------------
        Still stars that twinkle, a few drifting nodes joined by faint maroon
