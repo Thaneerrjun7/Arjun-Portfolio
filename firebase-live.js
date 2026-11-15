@@ -34,6 +34,11 @@ function safeUrl(url) {
 
 const normalize = (text) => text.replace(/\s+/g, ' ').trim();
 
+// A title that site.js has set up for decoding holds its text twice (once for screen readers),
+// so its real text is read from data-text
+const titleText = (node) => (node ? node.dataset.text ?? node.textContent : '');
+const titleOf = (card) => normalize(titleText(card.querySelector('.project-title')));
+
 function createCard(id) {
   const card = el('div', 'project-card');
   card.dataset.id = id;
@@ -49,6 +54,8 @@ function fillCard(card, project) {
   media.classList.toggle('project-image-gradient', !imageSrc);
   if (imageSrc) {
     const img = media.querySelector('.project-image') ?? el('img', 'project-image');
+    img.loading = 'lazy';
+    img.decoding = 'async';
     if (img.getAttribute('src') !== imageSrc) img.src = imageSrc;
     img.alt = project.image.alt ?? project.title ?? '';
     media.replaceChildren(img);
@@ -61,7 +68,11 @@ function fillCard(card, project) {
 
   const info = [];
   if (project.badge) info.push(el('div', 'project-badge', project.badge));
-  info.push(el('h3', 'project-title', project.title ?? ''));
+  // keep the title node when its text has not changed, so it does not decode a second time
+  const oldTitle = card.querySelector('.project-title');
+  const sameTitle = oldTitle && normalize(titleText(oldTitle)) === normalize(project.title ?? '');
+  const title = sameTitle ? oldTitle : el('h3', 'project-title', project.title ?? '');
+  info.push(title);
   if (project.description) info.push(el('p', 'project-desc', project.description));
   if (project.tech?.length) {
     const tech = el('div', 'project-tech');
@@ -84,6 +95,7 @@ function fillCard(card, project) {
     info.push(row);
   }
   card.querySelector('.project-info').replaceChildren(...info);
+  if (!sameTitle) window.siteFX?.decodeWhenSeen?.(title);
 }
 
 function flash(card) {
@@ -96,7 +108,7 @@ function flash(card) {
 function adoptBuiltInCards(docs) {
   const idsByTitle = new Map(docs.map((d) => [d.get('title'), d.id]));
   for (const card of grid.querySelectorAll('.project-card')) {
-    const id = idsByTitle.get(normalize(card.querySelector('.project-title')?.textContent ?? ''));
+    const id = idsByTitle.get(titleOf(card));
     if (id && !cards.has(id)) {
       card.dataset.id = id;
       cards.set(id, card);
