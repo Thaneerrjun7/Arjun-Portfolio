@@ -24,6 +24,7 @@
         settlePerChar: 50, settleMin: 550, settleMax: 1200, // beat 2: it settles into English
         tick: 33,                                          // frame time
         flicker: 2,                                        // unsettled letters change every n ticks
+        quick: [380, 200, 420],                            // type, hold, settle for everything but the titles: 1 s
     };
     const TAMIL_RATIO = 0.72;                              // Tamil letters shown per English letter
     const GLYPHS = [...'அஆஇஈஉஊஎஏஐஒஓகஙசஞடணதநபமயரலவழளறன'];
@@ -114,8 +115,11 @@
             timers.set(el, rid);
             return;
         }
-        const typeMs = clamp(n * TIMING.typePerChar, TIMING.typeMin, TIMING.typeMax);
-        const settleMs = clamp(n * TIMING.settlePerChar, TIMING.settleMin, TIMING.settleMax);
+        // my name and the section titles (data-ta) take their time; everything else is done in one second
+        const quick = !el.dataset.ta;
+        const typeMs = quick ? TIMING.quick[0] : clamp(n * TIMING.typePerChar, TIMING.typeMin, TIMING.typeMax);
+        const holdMs = quick ? TIMING.quick[1] : TIMING.hold;
+        const settleMs = quick ? TIMING.quick[2] : clamp(n * TIMING.settlePerChar, TIMING.settleMin, TIMING.settleMax);
         // Tamil letters are wider than Latin ones, so fewer of them stand in for the English. Both are
         // measured here, in this element's own type, and every word is cut down until its Tamil is
         // narrower than its English: the Tamil then never needs more lines than the text it becomes
@@ -162,10 +166,10 @@
             const t = performance.now() - started;
             if (t < typeMs) {                                   // typing
                 paint(out, '', full.slice(0, Math.ceil((t / typeMs) * full.length)).join(''));
-            } else if (t < typeMs + TIMING.hold) {              // holding, cursor blinking
+            } else if (t < typeMs + holdMs) {              // holding, cursor blinking
                 paint(out, '', full.join(''), Math.floor((t - typeMs) / TIMING.blink) % 2 === 1);
             } else {                                            // settling
-                const settled = Math.floor(((t - typeMs - TIMING.hold) / settleMs) * (n + 1));
+                const settled = Math.floor(((t - typeMs - holdMs) / settleMs) * (n + 1));
                 if (settled >= n) {
                     clearInterval(id);
                     finish();

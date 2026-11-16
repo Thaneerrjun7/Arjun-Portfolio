@@ -72,7 +72,9 @@ language model writes 3 to 5 sentences about them
             <div class="glass"><b>0.844</b><span>ROC-AUC, logistic-regression baseline</span></div>
         </div>
         <p>Trained on 12,000 synthetic profiles, and compared against a logistic-regression baseline so the score has
-            something to stand next to.</p>
+            something to stand next to. Because the profiles are synthetic, the score mostly shows that the model
+            learned the rules of our own data generator. It says nothing yet about real borrowers, and it would need
+            real repayment data before anyone relied on it.</p>
 
         <h2>Two defects the tests missed</h2>
         <p>I worked test-first: 56 unit and integration tests for my services. Then I ran the whole app in a browser
