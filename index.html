@@ -138,6 +138,8 @@
                             <div class="project-stat">Runs locally · 6 GB laptop GPU · 5 setups benchmarked</div>
                             <div class="project-links">
                                 <a href="aj.html" class="project-link">Screenshots and benchmarks →</a>
+                                <a href="case-aj.html" class="project-link">Case study →</a>
+                                <a href="https://github.com/Thaneerrjun7/local-voice-assistant" target="_blank" rel="noopener" class="project-link">Code ↗</a>
                             </div>
                         </div>
                     </div>
@@ -182,17 +184,12 @@
                             <div class="project-badge">MAIC Nexus Challenge 2026 · In progress</div>
                             <h3 class="project-title">KIRA+</h3>
                             <p class="project-desc">AI financial health platform for Buy Now, Pay Later and consumer
-                                credit, built by a distributed team of five. My role is AI/ML developer: I built the
-                                LLM layer (a provider client with a 4-second timeout and a template fallback, and an
-                                output guard that rejects any reply quoting a figure the engine did not compute,
-                                written after I saw the model hallucinate a ringgit amount), the 0-100 scoring and
-                                six-rule early-warning engines, and a RandomForest trained on 12,000 synthetic profiles
-                                (ROC-AUC 0.923 held out, 0.921 in 5-fold cross-validation, against a
-                                logistic-regression baseline at 0.844). I worked test-first (56 unit and integration
-                                tests), then fixed two defects that only showed up in a browser. I also worked across
-                                the rest of the stack with our full-stack developer: together we built the Next.js
-                                front end, the FastAPI back end and its APIs, the database schema, the Docker image and
-                                the GitHub Actions CI/CD pipeline, and I provisioned the server it deploys to.</p>
+                                credit, built by a distributed team of five. As AI/ML developer I built the LLM layer
+                                with an output guard that rejects any reply quoting a figure the engine did not
+                                compute, the scoring and early-warning engines, and a RandomForest classifier (ROC-AUC
+                                0.923 on held-out synthetic data, against a 0.844 logistic-regression baseline). With
+                                our full-stack developer I also worked across the Next.js front end, the FastAPI back
+                                end, the Docker image and the CI/CD pipeline.</p>
                             <div class="project-tech">
                                 <span>Python</span><span>FastAPI</span><span>scikit-learn</span><span>SQLite</span><span>Next.js</span><span>Docker</span><span>pytest</span><span>GitHub Actions</span>
                             </div>
@@ -374,27 +371,7 @@
                     </div>
                 </article>
 
-                <!-- Experience 3: Microsoft -->
-                <article class="xp-item reveal">
-                    <div class="xp-meta"><b>Apr 2025 - Aug 2025</b><span>Remote</span></div>
-                    <div>
-                        <h3 class="xp-role">AI Bootcamp Participant</h3>
-                        <p class="xp-company">Microsoft Azure AI Bootcamp and AI-102 Exam-Prep Training</p>
-                        <ul class="xp-list">
-                            <li>Completed four months of Microsoft <strong>AI-102</strong> (Azure AI Engineer Associate)
-                                exam-prep training, with labs deploying an Azure OpenAI model, retrieval-augmented
-                                generation on Azure AI Search, and an Azure AI service in a Docker container. Passed
-                                Microsoft Certified: Azure AI Fundamentals (<strong>AI-900</strong>) in July 2025.</li>
-                            <li>Participated in AI programming workshops focusing on <strong>AI agents</strong> and
-                                chatbot development</li>
-                            <li>Attended structured classes over 4 months covering practical AI programming concepts
-                            </li>
-                        </ul>
-                        <div class="tags"><span>Azure AI</span><span>AI-102 Exam Prep</span><span>AI-900</span><span>AI Agents</span><span>Chatbots</span></div>
-                    </div>
-                </article>
-
-                <!-- Experience 4: Student Ambassador -->
+                <!-- Experience 3: Student Ambassador -->
                 <article class="xp-item reveal">
                     <div class="xp-meta"><b>2024 - 2025</b><span>Bandar Sunway</span></div>
                     <div>
@@ -420,15 +397,14 @@
             <div class="skills">
                 <div class="skill-row reveal">
                     <h3>Programming</h3>
-                    <p>Python 3.14, JavaScript, TypeScript, Dart (Flutter), SQL, PowerShell (Windows automation), HTML,
-                        CSS. <em>From coursework: Java, C/C++, C#, MATLAB, Bash, Oracle, MySQL, PostgreSQL, SQL Server,
-                            Kubernetes, CUDA, TensorFlow.</em></p>
+                    <p>Python, JavaScript, TypeScript, Dart (Flutter), SQL, PowerShell (Windows automation), HTML, CSS</p>
                 </div>
                 <div class="skill-row reveal">
                     <h3>Generative AI and LLMs</h3>
                     <p>LLM APIs (Gemini, Groq, OpenRouter), prompt engineering, output guardrails, tool-calling agents,
-                        local LLMs on llama.cpp, model benchmarking, MCP (connected Apify, Notion, Google Drive),
-                        LangChain (DeepLearning.AI)</p>
+                        local LLMs on llama.cpp (quantised GGUF models, JSON-grammar output, prompt caching), model
+                        benchmarking (p50/p95 latency, tool-call accuracy), Hugging Face models, MCP (connected Apify,
+                        Notion, Google Drive), LangChain (DeepLearning.AI)</p>
                 </div>
                 <div class="skill-row reveal">
                     <h3>Machine Learning</h3>
@@ -436,8 +412,14 @@
                         OpenCV</p>
                 </div>
                 <div class="skill-row reveal">
+                    <h3>Speech and Vision</h3>
+                    <p>Voice activity detection (Silero VAD), speech-to-text (Whisper, Parakeet), text-to-speech,
+                        ONNX Runtime, face detection and recognition with OpenCV (YuNet, SFace)</p>
+                </div>
+                <div class="skill-row reveal">
                     <h3>Back End, Front End and Data</h3>
-                    <p>FastAPI, REST APIs, Node.js, npm, React.js, Flutter, SQLite, Cloud Firestore (NoSQL)</p>
+                    <p>FastAPI, REST APIs, Node.js, npm, React.js, Flutter, PyQt6 desktop apps, SQLite (including FTS5
+                        full-text search), Cloud Firestore (NoSQL)</p>
                 </div>
                 <div class="skill-row reveal">
                     <h3>Design</h3>
@@ -451,7 +433,7 @@
                 </div>
                 <div class="skill-row reveal">
                     <h3>Testing and Practice</h3>
-                    <p>pytest, unit tests, integration tests, regression tests, test-driven development, debugging,
+                    <p>pytest, unittest, unit tests, integration tests, regression tests, test-driven development, debugging,
                         code review, Agile (Scrum), technical documentation</p>
                 </div>
             </div>
@@ -476,6 +458,19 @@
                             <li>Final Year Capstone (<strong>SivaSafe</strong>) graded A; Software Architecture and
                                 Design Patterns A+; Software Processes A+</li>
                             <li>Student Ambassador 2024 &amp; 2025</li>
+                            <li>Coursework languages: Java, C and C++, C#, MATLAB, Bash</li>
+                        </ul>
+                    </div>
+                    <div class="edu-item reveal">
+                        <p class="when">Apr 2025 - Aug 2025 · Remote</p>
+                        <h3>Microsoft Azure AI Bootcamp</h3>
+                        <p>AI-102 (Azure AI Engineer Associate) exam-prep training</p>
+                        <ul>
+                            <li>Four months of training, with labs deploying an Azure OpenAI model,
+                                retrieval-augmented generation on Azure AI Search, and an Azure AI service in a
+                                Docker container, plus workshops on AI agents and chatbots</li>
+                            <li>Passed Microsoft Certified: Azure AI Fundamentals (<strong>AI-900</strong>) in
+                                July 2025</li>
                         </ul>
                     </div>
                     <div class="edu-item reveal">
@@ -506,10 +501,6 @@
                     <h3>Awards</h3>
                     <ul>
                         <li>Essay Competition Winner<span>Erican Language Centre · English</span></li>
-                        <li>English Drama, State Champion (Johan), Perak<span>2018</span></li>
-                        <li>English Drama, District Champion (Johan), Larut Matang dan Selama<span>2018</span></li>
-                        <li>National English Language Drama Competition, competed at national level<span>2018</span></li>
-                        <li>Chinese Calligraphy Competition, participant<span>SMK St. George, 2019</span></li>
                     </ul>
                     <a href="assets/Certificates.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-glass">My certificates and other documents (PDF)</a>
                 </div>

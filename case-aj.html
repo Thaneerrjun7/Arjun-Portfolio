@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>AJ case study | Arjun Shanker</title>
+    <meta name="description" content="Case study: three problems the benchmarks showed me in AJ, my local voice assistant, and what fixed each one." />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23000' stroke='%23d7263d' stroke-width='4'/%3E%3Ctext x='32' y='41' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%23f5f5f7' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
+    <script>document.documentElement.classList.add('js'); try { if (sessionStorage.getItem('retro') === '1') document.documentElement.classList.add('retro'); } catch (e) {}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="site.css" />
+    <link rel="stylesheet" href="retro.css" />
+</head>
+
+<body>
+    <canvas id="sky" class="sky" aria-hidden="true"></canvas>
+    <div class="nebula" aria-hidden="true"></div>
+
+    <main class="page">
+        <div class="page-top">
+            <a href="index.html#projects" class="back">← Back to projects</a>
+            <a class="monogram" href="index.html" aria-label="Arjun Shanker, home">AS</a>
+        </div>
+
+        <p class="eyebrow"><span>Case study · AJ</span></p>
+        <h1>The GPU fell asleep while I was talking</h1>
+        <p class="lede">AJ is a voice assistant that runs on my own Windows laptop, on a 6 GB GPU. A voice assistant
+            lives or dies on how long you wait after you stop talking, so I measured every stage. This page is about
+            three problems those measurements showed me, and what fixed each one.</p>
+        <div class="meta tags"><span>Personal project</span><span>AI-assisted</span><span>2026, in progress</span><span>Python, llama.cpp, Qwen3-4B, SQLite</span></div>
+
+        <h2>Problem 1: the first reply was slow for no obvious reason</h2>
+        <p>With a cached prompt, the model reaches its first sentence in a median of 137 ms. But on a real turn,
+            prompt processing alone was taking 250 to 330 ms. The cause was the laptop, not the model: while I am
+            talking the GPU has nothing to do, so it drops to a lower clock speed to save power, and the first request
+            after that pays for the wake-up.</p>
+        <p>The fix is small. While the microphone hears me speaking, AJ sends a one-token request to the model server
+            every 0.4 seconds, on a second inference slot so the conversation's own slot is left alone. The GPU never
+            gets the chance to slow down, and prompt processing drops to about 30 ms. It is a fix at the level of the
+            hardware's power behaviour, not a llama.cpp setting.</p>
+        <div class="numbers">
+            <div class="glass"><b>250 to 330 ms</b><span>prompt processing on the down-clocked GPU</span></div>
+            <div class="glass"><b>about 30 ms</b><span>with wake-up requests while I talk</span></div>
+            <div class="glass"><b>0.4 s</b><span>between one-token wake-up requests</span></div>
+        </div>
+
+        <h2>Problem 2: the model server wanted memory the laptop did not have</h2>
+        <p>The laptop has 16 GB of RAM, and other apps usually hold 78 to 87% of it. The llama.cpp server was taking
+            2.8 GB of that on top of the graphics memory the model already uses.</p>
+        <ul class="dash">
+            <li>Starting the server with <code>--load-mode none</code> brought its RAM down to 0.75 GB.</li>
+            <li><code>--cache-ram 0</code> switches off a prompt cache that could otherwise grow to 8 GB.</li>
+            <li>On the GPU, the main model takes about 3.1 GB of the 6 GB, which leaves room for the on-demand
+                reasoning model.</li>
+        </ul>
+
+        <h2>Problem 3: the memory made things up</h2>
+        <p>AJ remembers facts about me between sessions. A small extraction step reads the conversation after I have
+            gone quiet and pulls out anything worth keeping. In testing, with a loose prompt, that step invented a fact
+            in 14 of 14 chats that contained none.</p>
+        <p>So a fact is now saved only if it quotes my own words, and that is checked in code before anything is
+            stored, not left to the prompt. The extractor's output is also held to a JSON grammar: without the grammar
+            it produced valid JSON only about 10% of the time, and with it, it recalled 78% of the facts in the test
+            conversations.</p>
+        <div class="callout"><p><strong>What I did not measure:</strong> I do not have an after-number for the invented
+            facts yet, so I do not quote one.</p></div>
+
+        <h2>A decision: keep everything, send little</h2>
+        <p>SivaSafe, the assistant before this one, deleted stored facts to stay under its memory limit, and I watched
+            it forget things I had told it. AJ keeps every fact in SQLite and never deletes one. What is limited is
+            what each prompt receives: about 600 tokens of core facts, kept stable so the server's prompt cache still
+            works, plus up to 5 full-text search matches for the current turn. It is keyword search, not vector
+            search.</p>
+
+        <h2>Limits of these numbers</h2>
+        <ul class="dash">
+            <li>Everything was measured on one laptop: an RTX 4050 Laptop GPU (6 GB), a Ryzen 7 7840HS and 16 GB of
+                RAM, under Windows 11.</li>
+            <li>The 0.83 to 1.37 s from the end of my sentence to the first sound is a benchmark figure. In live use
+                with the current persona it is about 1.1 to 1.8 s.</li>
+            <li>Tool-call accuracy is 55 of 60 runs. At that sample size the margin is about 7 points either way.</li>
+        </ul>
+
+        <div class="callout"><p><strong>How it was built:</strong> with AI-assisted development. I designed the system, chose the
+            models from benchmark data and blind listening tests, and directed and tested every change. An AI coding
+            assistant wrote much of the code under my direction.</p></div>
+
+        <div class="next">
+            <a href="https://github.com/Thaneerrjun7/local-voice-assistant" target="_blank" rel="noopener" class="btn btn-primary">Code on GitHub ↗</a>
+            <a href="aj.html" class="btn btn-glass">Screenshots and benchmarks →</a>
+            <a href="case-sivasafe.html" class="btn btn-glass">Next case study: SivaSafe →</a>
+            <a href="index.html#projects" class="btn btn-glass">All projects</a>
+        </div>
+    </main>
+
+    <script src="site.js"></script>
+</body>
+
+</html>
