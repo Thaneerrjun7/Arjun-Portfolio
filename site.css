@@ -80,7 +80,7 @@ strong { font-weight: 650; color: var(--ink); }
     transform: scaleX(0); transform-origin: left; pointer-events: none;
 }
 .retro-btn {
-    display: block; margin-top: 14px; flex-basis: 100%; width: max-content;
+    display: block; flex: 0 0 auto;
     font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; color: var(--ink-2);
     padding: 7px 12px; border-radius: 999px;
     background: rgba(0, 0, 0, 0.55); border: 1px solid var(--glass-line);
