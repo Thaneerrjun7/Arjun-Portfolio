@@ -1,7 +1,7 @@
 /*
    Arjun Shanker - portfolio script.
    The sky, the Tamil-to-English decode text, scroll reveals, the header and its glass lens,
-   and the intro video.
+   the scroll progress bar, and retro mode (its glitch intro and boot screen).
 */
 (() => {
     'use strict';
@@ -24,9 +24,9 @@
         tick: 33,                                          // frame time
         flicker: 2,                                        // unsettled letters change every n ticks
     };
+    const TAMIL_RATIO = 0.72;                              // Tamil letters shown per English letter
     const GLYPHS = [...'அஆஇஈஉஊஎஏஐஒஓகஙசஞடணதநபமயரலவழளறன'];
     const pick = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-    const scramble = (chars) => chars.map((c) => (c === ' ' ? ' ' : pick()));
     const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
     const timers = new WeakMap();
 
@@ -97,9 +97,13 @@
             out.replaceChildren(text, cur);
             setTimeout(() => cur.remove(), 1300);
         };
-        if (document.documentElement.classList.contains('retro')) {
-            const total = clamp(n * 55, 350, 1600);
+        // retro mode, and anything marked data-plain (the menus), types its English straight out: no Tamil
+        if (document.documentElement.classList.contains('retro') || el.dataset.plain) {
+            // section titles type slowly, like the old machine is thinking about each letter
+            const slow = !el.dataset.plain && el.closest(TITLES);
+            const total = slow ? clamp(n * 95, 700, 2600) : clamp(n * 55, 350, 1600);
             const begun = performance.now();
+            el.dataset.typingUntil = String(begun + total);
             paint(out, '', '');
             const rid = setInterval(() => {
                 const k = Math.floor(((performance.now() - begun) / total) * (n + 1));
@@ -111,16 +115,39 @@
         }
         const typeMs = clamp(n * TIMING.typePerChar, TIMING.typeMin, TIMING.typeMax);
         const settleMs = clamp(n * TIMING.settlePerChar, TIMING.settleMin, TIMING.settleMax);
-        let tamil = scramble(chars);
+        // Tamil letters are wider than Latin ones, so fewer of them stand in for the English. Both are
+        // measured here, in this element's own type, and every word is cut down until its Tamil is
+        // narrower than its English: the Tamil then never needs more lines than the text it becomes
+        const probe = document.createElement('span');
+        probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+        const sample = document.createElement('span');
+        sample.className = 'g';
+        sample.textContent = GLYPHS.join('');
+        probe.append(text, sample);
+        out.append(probe);
+        const tamilWidth = sample.getBoundingClientRect().width / GLYPHS.length;
+        const latinWidth = (probe.getBoundingClientRect().width - tamilWidth * GLYPHS.length) / n;
+        probe.remove();
+        const ratio = tamilWidth > 0 ? Math.min(TAMIL_RATIO, (latinWidth / tamilWidth) * 0.82) : TAMIL_RATIO;
+        const short = (list) => {
+            const kept = [];
+            let word = 0;
+            const cut = () => { if (word) kept.push(...Array.from({ length: Math.max(1, Math.floor(word * ratio)) }, pick)); word = 0; };
+            for (const c of list) { if (c === ' ') { cut(); kept.push(' '); } else word++; }
+            cut();
+            return kept;
+        };
+        const full = short(chars);
+        let tail = full;
         let tick = 0;
         const started = performance.now();
         paint(out, '', '');
         const id = setInterval(() => {
             const t = performance.now() - started;
             if (t < typeMs) {                                   // typing
-                paint(out, '', tamil.slice(0, Math.ceil((t / typeMs) * n)).join(''));
+                paint(out, '', full.slice(0, Math.ceil((t / typeMs) * full.length)).join(''));
             } else if (t < typeMs + TIMING.hold) {              // holding, cursor blinking
-                paint(out, '', tamil.join(''), Math.floor((t - typeMs) / TIMING.blink) % 2 === 1);
+                paint(out, '', full.join(''), Math.floor((t - typeMs) / TIMING.blink) % 2 === 1);
             } else {                                            // settling
                 const settled = Math.floor(((t - typeMs - TIMING.hold) / settleMs) * (n + 1));
                 if (settled >= n) {
@@ -128,20 +155,29 @@
                     finish();
                     return;
                 }
-                if (tick++ % TIMING.flicker === 0) tamil = scramble(chars);
-                paint(out, chars.slice(0, settled).join(''), tamil.slice(settled).join(''));
+                if (tick++ % TIMING.flicker === 0) tail = short(chars.slice(settled));
+                paint(out, chars.slice(0, settled).join(''), tail.join(''));
             }
         }, TIMING.tick);
         timers.set(el, id);
     }
 
-    // Headings everywhere decode once, the first time they come into view
+    // Headings everywhere decode once, the first time they come into view.
+    // Section titles stay watched: in retro mode they type themselves out again every time they scroll back in.
+    const TITLES = 'h2.title, .contact h2, .page h1, .page h2';
     const AUTO = '.hero-name, h2.title, .contact h2, .page h1, .page h2, .page h3, .project-title, .xp-role, .skill-row h3, .edu-item h3, .certs h3, .status-title';
     const decodeSeen = new IntersectionObserver((entries) => {
         for (const entry of entries) {
-            if (!entry.isIntersecting) continue;
-            decodeSeen.unobserve(entry.target);
-            decode(entry.target);
+            const el = entry.target;
+            const title = el.closest(TITLES);
+            if (!entry.isIntersecting) { if (title) el.dataset.away = '1'; continue; }
+            if (!title) { decodeSeen.unobserve(el); decode(el); continue; }
+            const first = !el.dataset.seen;
+            const back = el.dataset.away && document.documentElement.classList.contains('retro');
+            delete el.dataset.away;
+            // still typing from last time: let it finish rather than start over
+            if (!first && performance.now() < Number(el.dataset.typingUntil || 0)) continue;
+            if (first || back) { el.dataset.seen = '1'; decode(el); }
         }
     }, { threshold: 0.2 });
     const decodeWhenSeen = (el) => { setup(el); decodeSeen.observe(el); };
@@ -150,9 +186,9 @@
         if (target.children.length === 0) decodeWhenSeen(target);
     });
 
-    // Header links decode once the fonts are in, with their width held so the bar does not shuffle
+    // Header links type out once the fonts are in (plain English, no Tamil), with their width held so the bar does not shuffle
     const navWords = [...document.querySelectorAll('.nav-links .decode')];
-    navWords.forEach(setup);
+    navWords.forEach((el) => { el.dataset.plain = '1'; setup(el); });
     const startNav = () => navWords.forEach((el, i) => {
         if (lessMotion()) return;
         if (!el.getBoundingClientRect().width) { el.lastElementChild.textContent = el.dataset.text; return; }
@@ -247,15 +283,20 @@
         requestAnimationFrame(() => { updateHeader(); ticking = false; });
     }, { passive: true });
 
+    // a chosen item lets its glass bubble pop before the menu goes, so the press is seen to land
+    const MENU_CLOSE_MS = 240;
+    let menuClosing = 0;
     function setMenu(open) {
         if (!navToggle || !mobileMenu) return;
+        clearTimeout(menuClosing);
         navToggle.classList.toggle('active', open);
         mobileMenu.classList.toggle('active', open);
         navToggle.setAttribute('aria-expanded', String(open));
         document.body.style.overflow = open ? 'hidden' : '';
-        // the lens only shows while a link is being pressed here: it has nothing to rest on mid-typing
-        lenses.forEach((lens) => lens.update());
-        // every item decodes from Tamil each time the menu opens
+        // the lens only shows while a link is being pressed here: it has nothing to rest on mid-typing.
+        // Closing ends any press still under way (Escape or a resize mid-slide), so nothing opens late
+        lenses.forEach((lens) => { if (!open && lens.slide) lens.cancel(); else lens.update(); });
+        // every item types out again (plain English, no Tamil) each time the menu opens
         if (open) mobileMenu.querySelectorAll('.decode').forEach((el, i) => {
             setup(el);
             if (lessMotion()) return;
@@ -266,9 +307,14 @@
         });
     }
     if (navToggle && mobileMenu) {
-        mobileMenu.querySelectorAll('.decode').forEach(setup);
+        mobileMenu.querySelectorAll('.decode').forEach((el) => { el.dataset.plain = '1'; setup(el); });
         navToggle.addEventListener('click', () => setMenu(!mobileMenu.classList.contains('active')));
-        mobileMenu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+        mobileMenu.addEventListener('click', (e) => {
+            if (!e.target.closest('a')) return;
+            clearTimeout(menuClosing);
+            if (lessMotion()) setMenu(false);
+            else menuClosing = setTimeout(() => setMenu(false), MENU_CLOSE_MS);
+        });
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
         window.matchMedia('(min-width: 769px)').addEventListener('change', () => setMenu(false));
     }
@@ -294,8 +340,8 @@
     const LEAD = [0.26, 0.8], TRAIL = [0.36, 0.84];
 
     class Lens {
-        constructor(list, { padX, padY, active }) {
-            Object.assign(this, { list, padX, padY, active, hover: null, focus: null, press: null, target: null, visible: false, frame: 0, last: 0 });
+        constructor(list, { padX, padY, active, slide = false }) {
+            Object.assign(this, { list, padX, padY, active, slide, hover: null, focus: null, press: null, target: null, visible: false, frame: 0, last: 0 });
             this.links = [...list.querySelectorAll('a')];
             this.el = document.createElement('li');
             this.el.className = 'lg-lens';
@@ -317,10 +363,13 @@
                 clearTimeout(this.leaving);
                 this.leaving = setTimeout(() => { this.hover = null; this.update(); }, 70);
             }, { passive: true });
-            list.addEventListener('pointerdown', (e) => { const a = link(e); if (!a) return; this.press = a; this.el.classList.add('is-pressed'); this.update(); }, { passive: true });
-            const release = () => { if (!this.press) return; this.el.classList.remove('is-pressed'); setTimeout(() => { this.press = null; this.update(); }, 260); };
-            window.addEventListener('pointerup', release, { passive: true });
-            window.addEventListener('pointercancel', release, { passive: true });
+            if (slide) this.slideTo(link);
+            else {
+                list.addEventListener('pointerdown', (e) => { const a = link(e); if (!a) return; this.press = a; this.el.classList.add('is-pressed'); this.update(); }, { passive: true });
+                const release = () => { if (!this.press) return; this.el.classList.remove('is-pressed'); setTimeout(() => { this.press = null; this.update(); }, 260); };
+                window.addEventListener('pointerup', release, { passive: true });
+                window.addEventListener('pointercancel', release, { passive: true });
+            }
             list.addEventListener('focusin', (e) => { const a = link(e); if (a && a.matches(':focus-visible')) { this.focus = a; this.update(); } });
             list.addEventListener('focusout', () => { this.focus = null; this.update(); });
             this.refit = () => { if (this.target) { this.place(this.box(this.target), true); this.render(); } };
@@ -331,6 +380,97 @@
                 this.links.forEach((a) => ro.observe(a));
             }
             if (document.fonts) document.fonts.addEventListener('loadingdone', this.refit);
+        }
+
+        /* Phone menu only: press an item and slide up or down, and the bubble follows the finger from
+           item to item; let go and it pops, then opens the item it is on. A touch stays captured by the
+           item first pressed, so pointerover never reaches the others: the slide is followed with
+           pointermove, and each move picks the row nearest the finger so the gaps do not drop the bubble. */
+        slideTo(link) {
+            this.drag = null;      // the press under way: { id, from, x, y, left }
+            this.settle = null;    // the item let go on: { link, handled, until, timer }
+            this.list.addEventListener('pointerdown', (e) => {
+                if (!e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0) || this.drag) return;
+                if (this.settle && performance.now() < this.settle.until) return;   // one is already opening
+                const a = link(e);
+                if (!a) return;
+                this.drag = { id: e.pointerId, from: a, x: e.clientX, y: e.clientY, left: false };
+                this.press = a;
+                this.el.classList.add('is-pressed');
+                this.update();
+            }, { passive: true });
+            window.addEventListener('pointermove', (e) => {
+                const d = this.drag;
+                if (!d || e.pointerId !== d.id) return;
+                const a = this.nearest(e.clientX, e.clientY);   // null well outside the list: the bubble fades
+                if (a !== d.from) d.left = true;
+                if (a !== this.press) { this.press = a; this.update(); }
+            }, { passive: true });
+            const end = (e) => {
+                const d = this.drag;
+                if (!d || e.pointerId !== d.id) return;
+                this.drag = null;
+                this.el.classList.remove('is-pressed');
+                const a = e.type === 'pointerup' ? this.nearest(e.clientX, e.clientY) : null;
+                if (!a) { this.press = null; this.update(); return; }   // let go outside, or cancelled: nothing opens
+                if (a !== this.press) { this.press = a; this.update(); }
+                this.pop();
+                const settle = this.settle = { link: a, handled: false, until: performance.now() + 700, timer: 0 };
+                const open = () => { if (settle.handled) return; settle.handled = true; a.click(); };
+                // A plain tap gets the browser's own click. Anything that slid gets no click on that item,
+                // so it is opened here, inside the pointerup, where it still counts as the user's press
+                // (Resume opens a new tab). The timer covers a tap the browser decided was not a tap.
+                if (a === d.from && !d.left && Math.hypot(e.clientX - d.x, e.clientY - d.y) < 10) settle.timer = setTimeout(open, 350);
+                else open();
+            };
+            window.addEventListener('pointerup', end, { passive: true });
+            window.addEventListener('pointercancel', end, { passive: true });
+            // the browser's own click is let through once, for the item expected; any other is swallowed,
+            // so an item never opens twice (clicks sent from here are not trusted and always pass)
+            this.list.addEventListener('click', (e) => {
+                const s = this.settle;
+                const a = link(e);
+                if (!e.isTrusted || !s || !a || performance.now() > s.until) return;
+                if (!s.handled && a === s.link) { s.handled = true; clearTimeout(s.timer); return; }
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            }, true);
+            // a long hold would bring up the link menu and cancel the slide
+            this.list.addEventListener('contextmenu', (e) => { if (this.drag) e.preventDefault(); });
+        }
+
+        // The item on the row nearest the pointer, or null when it is well clear of the list
+        nearest(x, y) {
+            const rows = this.links.map((a) => [a, a.getBoundingClientRect()]).filter(([, r]) => r.height);
+            if (!rows.length) return null;
+            const lr = this.list.getBoundingClientRect();
+            if (y < rows[0][1].top - 44 || y > rows[rows.length - 1][1].bottom + 44 || x < lr.left - 56 || x > lr.right + 56) return null;
+            let best = null, far = Infinity;
+            for (const [a, r] of rows) {
+                const d = y < r.top ? r.top - y : y > r.bottom ? y - r.bottom : 0;
+                if (d < far) { far = d; best = a; }
+            }
+            return best;
+        }
+
+        // Let go on an item: the bubble swells a little and springs back, with a quick brightening
+        pop() {
+            if (lessMotion()) return;
+            this.el.classList.add('is-pop');
+            clearTimeout(this.popping);
+            this.popping = setTimeout(() => this.el.classList.remove('is-pop'), 180);
+            this.a.to = 1;
+            this.a.v = Math.max(0, this.a.v) + 3.2;
+            this.wake();
+        }
+
+        // The menu closed: drop any press or slide still under way, and anything still waiting to open
+        cancel() {
+            this.drag = null;
+            if (this.settle) { clearTimeout(this.settle.timer); this.settle.handled = true; }
+            this.el.classList.remove('is-pressed');
+            this.press = null;
+            this.update();
         }
 
         box(a) {
@@ -404,6 +544,7 @@
         lenses.push(new Lens(mobileList, {
             padX: 22, padY: 2,
             active: () => null,
+            slide: true,   // press and slide to choose; the header lens keeps plain hover and press
         }));
     }
     setInterval(() => {
@@ -417,6 +558,70 @@
         }
     }, 300);
     updateHeader();
+
+    /* ---------------- Project picture lightbox ---------------- */
+    /* One native dialog, opened by delegation so cards that firebase-live.js adds or replaces still work. */
+    const lbSel = '.project-image-wrapper img.project-image';
+    let lbDialog = null, lbImg = null, lbCap = null, lbOpener = null, lbPrevOverflow = '';
+    const lbBuild = () => {
+        lbDialog = document.createElement('dialog');
+        lbDialog.className = 'lightbox';
+        lbDialog.setAttribute('aria-label', 'Project picture');
+        const fig = document.createElement('figure');
+        lbImg = document.createElement('img');
+        lbCap = document.createElement('figcaption');
+        fig.append(lbImg, lbCap);
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'lightbox-close';
+        close.setAttribute('aria-label', 'Close picture');
+        close.textContent = '×';
+        lbDialog.append(fig, close);
+        document.body.appendChild(lbDialog);
+        /* A press anywhere except the caption closes it (backdrop clicks land on the dialog itself). */
+        lbDialog.addEventListener('click', (e) => { if (e.target !== lbCap) lbDialog.close(); });
+        lbDialog.addEventListener('close', () => {
+            document.body.style.overflow = lbPrevOverflow;
+            if (lbOpener && lbOpener.isConnected) lbOpener.focus({ preventScroll: true });
+            lbOpener = null;
+        });
+    };
+    const lbOpen = (img) => {
+        if (!img.currentSrc && !img.src) return;
+        if (!lbDialog) lbBuild();
+        if (lbDialog.open) return;
+        lbOpener = img;
+        lbImg.src = img.currentSrc || img.src;
+        lbImg.alt = img.alt || '';
+        lbCap.textContent = img.alt || '';
+        lbPrevOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        lbDialog.showModal();
+    };
+    const lbPrep = (img) => {
+        if (img.dataset.lb) return;
+        img.dataset.lb = '1';
+        img.tabIndex = 0;
+        img.setAttribute('role', 'button');
+        img.setAttribute('aria-label', 'Open picture: ' + (img.alt || 'project'));
+    };
+    const lbPrepAll = () => document.querySelectorAll(lbSel).forEach(lbPrep);
+    lbPrepAll();
+    const lbGrid = document.querySelector('.projects-grid');
+    if (lbGrid) new MutationObserver(lbPrepAll).observe(lbGrid, { childList: true, subtree: true });
+    document.addEventListener('click', (e) => {
+        const img = e.target.closest && e.target.closest(lbSel);
+        if (!img || e.target.closest('a')) return;
+        lbPrep(img);
+        lbOpen(img);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const img = e.target.closest && e.target.closest(lbSel);
+        if (!img || e.target !== img) return;
+        e.preventDefault();
+        lbOpen(img);
+    });
 
     /* ---------------- Scroll progress bar ---------------- */
     const progress = document.createElement('div');
@@ -432,8 +637,9 @@
     updateProgress();
 
     /* ---------------- Retro mode ----------------
-       Type 2002 (the year I was born), press my photo seven times, or press the RETRO button, and the whole site becomes a
-       late-80s green terminal: a short boot sequence, then the same pages through retro.css. */
+       Type 2002 (the year I was born), press my photo seven times, or press the Retro System button (phones only), and the
+       whole site becomes a late-80s green terminal: a broken-CRT glitch, a short boot sequence, then the same pages through
+       retro.css. The intro only skips with the S key. */
     const root = document.documentElement;
     const memory = {
         get() { try { return sessionStorage.getItem('retro') === '1'; } catch { return false; } },
@@ -442,8 +648,15 @@
     const retroBtn = document.createElement('button');
     retroBtn.type = 'button';
     retroBtn.className = 'retro-btn';
-    // in the normal site it sits quietly at the end of the page; in retro mode it is pinned so there is always a way out
-    (document.querySelector('.footer') ?? document.querySelector('.page') ?? document.body).append(retroBtn);
+    // with a keyboard the page just says how to get in (and out); phones get the button, pinned in retro mode so there is always a way out
+    const retroHint = document.createElement('p');
+    retroHint.className = 'retro-hint';
+    (document.querySelector('.footer') ?? document.querySelector('.page') ?? document.body).append(retroBtn, retroHint);
+    const label = (on) => {
+        retroBtn.textContent = on ? 'Exit Retro System' : 'Retro System';
+        retroBtn.setAttribute('aria-pressed', String(on));
+        retroHint.textContent = `Type 2002 on your keyboard to ${on ? 'exit' : 'activate'} Retro System`;
+    };
 
     function retroFont() {
         if (document.getElementById('retro-font')) return;
@@ -463,22 +676,40 @@
         lenses.forEach((lens) => lens.refit());
     }
 
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    async function boot() {
+    // The broken-CRT moment before the boot: the tube fights to find the signal, then the message tears through
+    const GLITCH_MS = 1900;
+    function glitch() {
+        const cover = document.createElement('div');
+        cover.className = 'glitch';
+        cover.setAttribute('role', 'status');
+        cover.setAttribute('aria-label', 'Activating retro protocol. Press S to skip.');
+        const words = 'ACTIVATING RETRO PROTOCOL';
+        cover.innerHTML = '<div class="glitch-roll" aria-hidden="true"></div>'
+            + '<div class="glitch-inner" aria-hidden="true">'
+            + `<p class="glitch-text" data-text="${words}">${words}</p>`
+            + '<p class="glitch-sub">TIME BASE 2026 &gt;&gt; 2002</p>'
+            + '<span class="glitch-bar"></span>'
+            + '</div>'
+            + '<span class="glitch-skip" aria-hidden="true">S - SKIP</span>';
+        document.body.append(cover);
+        return cover;
+    }
+
+    // The boot screen appends itself straight away (before its first pause), so it is there before the glitch leaves
+    async function boot(pause) {
         const screen = document.createElement('div');
         screen.className = 'boot';
         screen.setAttribute('role', 'status');
-        screen.setAttribute('aria-label', 'Retro mode starting. Press any key to skip.');
+        screen.setAttribute('aria-label', 'Retro mode starting. Press S to skip.');
         const text = document.createTextNode('');
         const cur = document.createElement('span');
         cur.className = 'cur';
-        screen.append(text, cur);
+        const hint = document.createElement('span');
+        hint.className = 'boot-skip';
+        hint.setAttribute('aria-hidden', 'true');
+        hint.textContent = 'S - SKIP';
+        screen.append(text, cur, hint);
         document.body.append(screen);
-        let skipped = false;
-        const skip = () => { skipped = true; };
-        screen.addEventListener('click', skip);
-        document.addEventListener('keydown', skip, { once: true });
-        const pause = (ms) => (skipped ? Promise.resolve() : sleep(ms));
         const line = async (s = '', ms = 110) => { text.data += s + '\n'; await pause(ms); };
         const type = async (s, per = 45) => { for (const ch of s) { text.data += ch; await pause(per); } };
         const now = new Date();
@@ -509,18 +740,55 @@
         const base = text.data;
         for (let i = 0; i < 12; i++) { text.data = base + '|/-\\'[i % 4]; await pause(85); }
         screen.remove();
-        document.removeEventListener('keydown', skip);
     }
 
-    async function setRetro(on, withBoot = true) {
-        root.classList.toggle('retro', on);
-        memory.set(on);
-        retroBtn.textContent = on ? 'EXIT RETRO' : 'RETRO';
-        retroBtn.setAttribute('aria-pressed', String(on));
-        if (on) {
-            retroFont();
+    // Glitch, then boot. Nothing but the S key skips it (one press skips both), and the listener goes when it ends
+    async function intro() {
+        let skipped = false;
+        let wake = null;
+        const onKey = (e) => {
+            if (e.ctrlKey || e.metaKey || e.altKey || (e.key !== 's' && e.key !== 'S')) return;
+            skipped = true;
+            if (wake) wake();
+        };
+        const pause = (ms) => (skipped ? Promise.resolve() : new Promise((resolve) => {
+            const t = setTimeout(resolve, ms);
+            wake = () => { clearTimeout(t); resolve(); };
+        }));
+        document.addEventListener('keydown', onKey);
+        try {
+            // the cover goes up first, and only then does the site turn retro underneath it
+            const cover = glitch();
+            root.classList.add('retro');
             window.scrollTo(0, 0);
-            if (withBoot && !lessMotion()) await boot();
+            await pause(GLITCH_MS);
+            const booting = boot(pause);
+            cover.classList.add('out');
+            setTimeout(() => cover.remove(), 200);
+            await booting;
+        } finally {
+            document.removeEventListener('keydown', onKey);
+        }
+    }
+
+    let switching = false;
+    async function setRetro(on, withBoot = true) {
+        // while the intro plays, another press or another 2002 does nothing
+        if (switching) return;
+        switching = true;
+        try {
+            memory.set(on);
+            label(on);
+            if (on) {
+                retroFont();
+                if (withBoot && !lessMotion()) await intro();
+                root.classList.add('retro');
+                window.scrollTo(0, 0);
+            } else {
+                root.classList.remove('retro');
+            }
+        } finally {
+            switching = false;
         }
         retype();
     }
@@ -546,8 +814,7 @@
     }
     // a page opened while retro is on stays retro, without the boot sequence again
     if (root.classList.contains('retro') || memory.get()) { root.classList.add('retro'); retroFont(); }
-    retroBtn.textContent = root.classList.contains('retro') ? 'EXIT RETRO' : 'RETRO';
-    retroBtn.setAttribute('aria-pressed', String(root.classList.contains('retro')));
+    label(root.classList.contains('retro'));
 
     /* ---------------- The sky ----------------
        Still stars that twinkle, a few drifting nodes joined by faint maroon

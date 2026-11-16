@@ -1,7 +1,8 @@
 /*
    Retro mode: the whole site as a late-80s green phosphor terminal.
-   Switched on by typing 2002 or pressing the RETRO button (site.js adds .retro to <html>).
-   Everything here is scoped to html.retro, so the normal site never sees it.
+   Switched on by typing 2002, pressing the photo seven times or the Retro System button on phones
+   (site.js adds .retro to <html>). Everything here is scoped to html.retro, so the normal site never sees it,
+   except the glitch intro and the boot screen at the end, which play before and over the switch.
 */
 
 html.retro {
@@ -60,9 +61,9 @@ html.retro body::after {
 html.retro ::selection { background: #a9e34b; color: #030503; text-shadow: none; }
 html.retro strong, html.retro a:hover { color: var(--accent); }
 
-/* pictures come through the same green tube */
+/* pictures keep their real colours, just through a worn-out tube: a little soft, punchy and dim */
 html.retro img, html.retro video {
-    filter: grayscale(1) contrast(1.25) brightness(0.85) sepia(1) hue-rotate(48deg) saturate(3.2);
+    filter: blur(0.6px) contrast(1.18) brightness(0.88) saturate(1.15);
 }
 
 /* headings read like commands */
@@ -111,8 +112,13 @@ html.retro .btn-primary, html.retro .project-link:first-child {
         background: var(--ink); color: #030503; text-shadow: none;
     }
         }
-html.retro .retro-btn { position: fixed; left: 14px; bottom: 14px; z-index: 9997; margin: 0; background: #030503; font-size: 0.95rem; padding: 4px 10px; }
-html.retro .footer, html.retro .page { padding-bottom: 76px; }
+/* phones: the button is pinned bottom-left so there is always a way out. With a keyboard there is no button: 2002 again is the way out */
+@media not all and (hover: hover) and (min-width: 769px) {
+    html.retro .retro-btn { position: fixed; left: 14px; bottom: 14px; z-index: 9997; margin: 0; background: #030503; font-size: 0.95rem; padding: 4px 10px; }
+    html.retro .footer, html.retro .page { padding-bottom: 76px; }
+}
+@media (hover: hover) and (min-width: 769px) { html.retro .retro-btn { display: none; } }
+html.retro .retro-hint { font-size: 1rem; letter-spacing: 0.08em !important; color: var(--ink-3); opacity: 1; }
 html.retro .btn svg { display: none; }
 
 /* boxes: thin green rules instead of glass */
@@ -139,7 +145,9 @@ html.retro .edu-item p, html.retro .edu-item li, html.retro .certs li, html.retr
 html.retro .eyebrow, html.retro .project-badge, html.retro .xp-meta, html.retro .facts dt, html.retro .status-title, html.retro .certs h3,
 html.retro .certs li span, html.retro .edu-item .when, html.retro .contact-links span:first-child, html.retro .footer, html.retro .project-tagline { font-size: 1.05rem; }
 
-html.retro .hero-name { font-size: 1.2rem; }
+html.retro .hero-name { font-size: clamp(1.9rem, 4.2vw, 3rem); }
+html.retro .lightbox { border-color: var(--line); }
+html.retro .lightbox::backdrop { background: rgba(3, 5, 3, 0.94); backdrop-filter: none; }
 html.retro .chart th, html.retro .bar span, html.retro .chart .key, html.retro .chart caption, html.retro pre.code,
 html.retro .fig figcaption, html.retro .numbers span, html.retro .project-stat, html.retro .xp-company, html.retro .lede { font-size: 1.15rem; }
 
@@ -154,7 +162,7 @@ html.retro .bar i.p95, html.retro tr.pick .bar i.p95 { background: transparent; 
 
 /* ---------- the boot screen shown when retro mode switches on ---------- */
 .boot {
-    position: fixed; inset: 0; z-index: 10002; overflow: hidden; cursor: pointer;
+    position: fixed; inset: 0; z-index: 10002; overflow: hidden;
     background: #030503; color: #a9e34b;
     padding: clamp(20px, 7vh, 70px) clamp(14px, 8vw, 120px);
     font-family: 'VT323', 'Courier New', Courier, monospace;
@@ -168,6 +176,138 @@ html.retro .bar i.p95, html.retro tr.pick .bar i.p95 { background: transparent; 
         radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.6) 100%);
 }
 .boot .cur { display: inline-block; width: 0.55em; height: 0.85em; background: #a9e34b; vertical-align: -0.08em; animation: retro-blink 0.7s steps(1) infinite; }
+.boot-skip, .glitch-skip {
+    position: absolute; right: clamp(12px, 3vw, 28px); bottom: clamp(10px, 3vh, 24px); z-index: 2;
+    font-size: 15px; letter-spacing: 0.12em; color: #6f9f30; opacity: 0.55; text-shadow: none; white-space: nowrap;
+}
+@media (hover: none), (max-width: 768px) { .boot-skip, .glitch-skip { display: none; } }
+
+/* ---------- the glitch before the boot: a broken CRT finding the signal ----------
+   Played once, about 1.9 s, all in stepped keyframes so it judders like hardware, not like a web page.
+   Layers: static noise (::before), the message with an RGB split and torn slices, a rolling bar,
+   scanlines and dark corners on top (::after). The fonts fall back to plain monospace if VT323 is not in yet. */
+.glitch {
+    position: fixed; inset: 0; z-index: 10003; overflow: hidden;
+    display: grid; place-items: center;
+    background: #030503; color: #a9e34b;
+    font-family: 'VT323', 'Courier New', Courier, monospace;
+    transform-origin: 50% 50%;
+}
+.glitch::before {
+    content: ''; position: absolute; inset: -50%; pointer-events: none; opacity: 0.3;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.66 0 0 0 0 0.89 0 0 0 0 0.29 1.6 0 0 0 -0.45'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    animation: glitch-noise 0.24s steps(1) infinite, glitch-static 1.9s steps(1) both;
+}
+.glitch::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 3;
+    background:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.38) 0 1px, transparent 1px 3px),
+        radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+    animation: glitch-blackout 1.9s steps(1) both;
+}
+.glitch-roll {
+    position: absolute; left: 0; right: 0; top: 0; height: 22vh; pointer-events: none; z-index: 1;
+    background: linear-gradient(180deg, transparent, rgba(169, 227, 75, 0.09) 40%, rgba(169, 227, 75, 0.16) 50%, rgba(169, 227, 75, 0.09) 60%, transparent);
+    animation: glitch-roll 0.95s linear infinite;
+}
+.glitch-inner {
+    position: relative; z-index: 2; text-align: center; padding: 0 16px;
+    animation: glitch-seq 1.9s steps(1) both, glitch-jitter 0.32s steps(1) infinite, glitch-hold 1.9s steps(1) both;
+}
+.glitch-text {
+    position: relative; margin: 0; line-height: 1;
+    font-size: clamp(26px, 5.2vw, 80px); letter-spacing: 0.06em; white-space: nowrap;
+    animation: glitch-split 0.46s steps(1) infinite;
+}
+@media (max-width: 640px) { .glitch-text { white-space: normal; font-size: clamp(30px, 11vw, 56px); } }
+.glitch-text::before, .glitch-text::after {
+    content: attr(data-text); position: absolute; inset: 0; background: #030503; overflow: hidden;
+}
+.glitch-text::before { color: #c9ff5e; text-shadow: -3px 0 rgba(255, 40, 80, 0.9); animation: glitch-slice-a 0.7s steps(1) infinite; }
+.glitch-text::after { color: #a9e34b; text-shadow: 3px 0 rgba(0, 230, 255, 0.85); animation: glitch-slice-b 0.55s steps(1) infinite; }
+.glitch-sub {
+    margin: 0.9em 0 0; font-size: clamp(14px, 2vw, 24px); letter-spacing: 0.3em; color: #6f9f30;
+    text-shadow: 0 0 6px rgba(169, 227, 75, 0.5);
+}
+.glitch-bar {
+    position: relative; display: block; width: min(22em, 70vw); height: 0.7em; margin: 0.8em auto 0;
+    font-size: clamp(14px, 2vw, 22px); border: 1px solid #6f9f30;
+}
+.glitch-bar::before {
+    content: ''; position: absolute; left: 2px; top: 2px; bottom: 2px; width: 0;
+    background: repeating-linear-gradient(90deg, #a9e34b 0 0.5em, transparent 0.5em 0.65em);
+    box-shadow: 0 0 8px rgba(169, 227, 75, 0.6);
+    animation: glitch-load 1.7s steps(14) forwards;
+}
+/* the site turns retro underneath while this plays, so keep the tracking the retro reset would flatten */
+html.retro .glitch-text { letter-spacing: 0.06em !important; }
+html.retro .glitch-sub { letter-spacing: 0.3em !important; }
+html.retro .glitch-skip, html.retro .boot-skip { letter-spacing: 0.12em !important; }
+/* the tube gives up the picture: it squashes to a bright line and goes, over the boot screen */
+.glitch.out { animation: glitch-off 0.2s steps(4) forwards; }
+
+@keyframes glitch-noise {
+    0% { background-position: 0 0; } 20% { background-position: -37px 61px; } 40% { background-position: 83px -19px; }
+    60% { background-position: -71px -88px; } 80% { background-position: 29px 47px; }
+}
+/* pure static at first, calming once the signal is found, a burst again near the end */
+@keyframes glitch-static {
+    0% { opacity: 0.85; } 10% { opacity: 0.55; } 18% { opacity: 0.3; } 48% { opacity: 0.6; } 52% { opacity: 0.22; }
+    78% { opacity: 0.18; } 90% { opacity: 0.45; } 94% { opacity: 0.2; }
+}
+/* the message: nothing, a stutter, then on with two blackouts where the tube drops out */
+@keyframes glitch-seq {
+    0% { opacity: 0; } 9% { opacity: 1; } 12% { opacity: 0; } 15% { opacity: 1; filter: brightness(1.8); } 18% { filter: none; }
+    46% { opacity: 0; } 50% { opacity: 1; filter: brightness(1.6); } 53% { filter: none; } 84% { opacity: 0.25; } 86% { opacity: 1; }
+}
+@keyframes glitch-blackout {
+    0% { background-color: transparent; } 46% { background-color: #000; } 50% { background-color: transparent; }
+    71% { background-color: rgba(0, 0, 0, 0.85); } 73% { background-color: transparent; }
+}
+@keyframes glitch-jitter {
+    0% { transform: translate(0, 0); } 15% { transform: translate(-3px, 1px); } 30% { transform: translate(2px, -1px) skewX(-6deg); }
+    45% { transform: translate(0, 0); } 60% { transform: translate(5px, 0) skewX(4deg); } 75% { transform: translate(-1px, 2px); } 90% { transform: translate(1px, -2px); }
+}
+/* vertical hold slipping now and then */
+@keyframes glitch-hold {
+    0% { translate: 0 0; } 22% { translate: 0 -14vh; } 24% { translate: 0 6vh; } 26% { translate: 0 0; }
+    64% { translate: 0 9vh; } 66% { translate: 0 0; } 88% { translate: -2vw 0; } 89% { translate: 0 0; }
+}
+@keyframes glitch-split {
+    0% { text-shadow: 3px 0 rgba(255, 40, 80, 0.85), -3px 0 rgba(0, 230, 255, 0.8), 0 0 10px rgba(169, 227, 75, 0.7); }
+    18% { text-shadow: -7px 1px rgba(255, 40, 80, 0.85), 6px -1px rgba(0, 230, 255, 0.8), 0 0 10px rgba(169, 227, 75, 0.7); }
+    36% { text-shadow: 1px 0 rgba(255, 40, 80, 0.7), -1px 0 rgba(0, 230, 255, 0.7), 0 0 14px rgba(169, 227, 75, 0.9); }
+    54% { text-shadow: 12px 0 rgba(255, 40, 80, 0.8), -10px 0 rgba(0, 230, 255, 0.75), 0 0 10px rgba(169, 227, 75, 0.7); }
+    72% { text-shadow: -2px 0 rgba(255, 40, 80, 0.85), 3px 0 rgba(0, 230, 255, 0.8), 0 0 10px rgba(169, 227, 75, 0.7); }
+    86% { text-shadow: 4px 2px rgba(255, 40, 80, 0.85), -5px -2px rgba(0, 230, 255, 0.8), 0 0 10px rgba(169, 227, 75, 0.7); }
+}
+/* torn slices of the line that jump sideways; the copy's own background hides the line beneath, so it reads as a tear */
+@keyframes glitch-slice-a {
+    0% { clip-path: inset(12% 0 70% 0); transform: translateX(-14px); }
+    14% { clip-path: inset(62% 0 22% 0); transform: translateX(10px); }
+    28% { clip-path: inset(0 0 100% 0); transform: none; }
+    42% { clip-path: inset(38% 0 48% 0); transform: translateX(-22px); }
+    56% { clip-path: inset(80% 0 4% 0); transform: translateX(6px); }
+    70% { clip-path: inset(0 0 100% 0); transform: none; }
+    84% { clip-path: inset(22% 0 58% 0); transform: translateX(18px); }
+}
+@keyframes glitch-slice-b {
+    0% { clip-path: inset(70% 0 12% 0); transform: translateX(12px); }
+    18% { clip-path: inset(0 0 100% 0); transform: none; }
+    36% { clip-path: inset(4% 0 82% 0); transform: translateX(-9px); }
+    54% { clip-path: inset(48% 0 34% 0); transform: translateX(24px); }
+    72% { clip-path: inset(0 0 100% 0); transform: none; }
+    86% { clip-path: inset(88% 0 0 0); transform: translateX(-16px); }
+}
+@keyframes glitch-roll { from { transform: translateY(-25vh); } to { transform: translateY(105vh); } }
+@keyframes glitch-load { to { width: calc(100% - 4px); } }
+@keyframes glitch-off {
+    0% { transform: none; filter: none; }
+    50% { transform: scale(1, 0.03); filter: brightness(3); }
+    75% { transform: scale(0.4, 0.008); filter: brightness(4); }
+    100% { transform: scale(0, 0); opacity: 0; }
+}
 
 @media (prefers-reduced-motion: reduce) {
     html.retro body::after { animation: none; }
