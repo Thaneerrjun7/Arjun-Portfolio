@@ -103,12 +103,8 @@
 
             <div class="hero-photo reveal" style="--d:300ms">
                 <div class="disk">
-                    <img src="assets/images/profile-640.jpg" alt="Arjun Shanker" width="640" height="640" />
+                    <img src="assets/images/profile-640.jpg" alt="Arjun Shanker" width="640" height="640" draggable="false" />
                 </div>
-                <button class="intro-btn" type="button" data-open-intro>
-                    <i><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></i>
-                    Play my 12 second intro
-                </button>
             </div>
 
             <a class="scroll-cue" href="#projects" aria-label="Scroll to projects"><span></span></a>
@@ -576,14 +572,6 @@
         <p>Designed and built by Arjun Shanker · © 2026</p>
         <p>Decode text effect inspired by <a href="https://hamishw.com" target="_blank" rel="noopener">Hamish Williams</a></p>
     </footer>
-
-    <!-- The intro video only plays when someone asks for it -->
-    <dialog id="intro-dialog" class="intro-dialog" aria-label="Intro video">
-        <form method="dialog"><button class="close" aria-label="Close video">✕</button></form>
-        <video controls playsinline preload="none">
-            <source src="assets/videos/ai-intro.mp4" type="video/mp4" />
-        </video>
-    </dialog>
 
     <script src="site.js"></script>
     <script type="module" async src="firebase-live.js"></script>

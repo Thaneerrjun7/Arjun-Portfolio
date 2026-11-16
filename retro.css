@@ -97,7 +97,7 @@ html.retro .mobile-menu { background: #030503; }
 html.retro .scroll-progress { background: var(--ink); }
 
 /* buttons become [ BRACKETED ] */
-html.retro .btn, html.retro .project-link, html.retro .intro-btn, html.retro .retro-btn {
+html.retro .btn, html.retro .project-link, html.retro .retro-btn {
     background: transparent; color: var(--ink); border: 1px solid var(--ink);
     text-transform: uppercase; padding: 8px 14px; font-size: 1.15rem; transform: none !important;
 }
@@ -107,18 +107,17 @@ html.retro .btn-primary, html.retro .project-link:first-child {
     background: var(--ink); color: #030503; text-shadow: none;
 }
 @media (hover: hover) {
-    html.retro .btn:hover, html.retro .project-link:hover, html.retro .intro-btn:hover, html.retro .retro-btn:hover {
+    html.retro .btn:hover, html.retro .project-link:hover, html.retro .retro-btn:hover {
         background: var(--ink); color: #030503; text-shadow: none;
     }
         }
-html.retro .retro-btn { background: #030503; font-size: 0.95rem; padding: 4px 10px; }
+html.retro .retro-btn { position: fixed; left: 14px; bottom: 14px; z-index: 9997; margin: 0; background: #030503; font-size: 0.95rem; padding: 4px 10px; }
+html.retro .footer, html.retro .page { padding-bottom: 76px; }
 html.retro .btn svg { display: none; }
-html.retro .intro-btn i { background: var(--ink); }
-html.retro .intro-btn i svg { fill: #030503; }
 
 /* boxes: thin green rules instead of glass */
 html.retro .glass, html.retro .project-image-wrapper, html.retro .callout, html.retro pre.code,
-html.retro .fig img, html.retro .fig video, html.retro .gallery-grid figure, html.retro .intro-dialog {
+html.retro .fig img, html.retro .fig video, html.retro .gallery-grid figure {
     background: #030503; border: 1px solid var(--line);
 }
 html.retro .project-image-gradient { background: #030503; }
