@@ -143,7 +143,7 @@
             decodeSeen.unobserve(entry.target);
             decode(entry.target);
         }
-    }, { threshold: 0.5 });
+    }, { threshold: 0.2 });
     const decodeWhenSeen = (el) => { setup(el); decodeSeen.observe(el); };
     document.querySelectorAll(AUTO).forEach((el) => {
         const target = el.querySelector(':scope > .decode') ?? el;
@@ -418,20 +418,6 @@
     }, 300);
     updateHeader();
 
-    /* ---------------- Intro video: only ever plays when asked ---------------- */
-    const dialog = document.getElementById('intro-dialog');
-    if (dialog) {
-        const video = dialog.querySelector('video');
-        document.querySelectorAll('[data-open-intro]').forEach((btn) => btn.addEventListener('click', () => {
-            if (typeof dialog.showModal !== 'function') { window.open(video.currentSrc || video.querySelector('source').src, '_blank'); return; }
-            dialog.showModal();
-            video.currentTime = 0;
-            video.play().catch(() => {});
-        }));
-        dialog.addEventListener('close', () => video.pause());
-        dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
-    }
-
     /* ---------------- Scroll progress bar ---------------- */
     const progress = document.createElement('div');
     progress.className = 'scroll-progress';
@@ -446,7 +432,7 @@
     updateProgress();
 
     /* ---------------- Retro mode ----------------
-       Type 2002 (the year I was born) or press the RETRO button and the whole site becomes a
+       Type 2002 (the year I was born), press my photo seven times, or press the RETRO button, and the whole site becomes a
        late-80s green terminal: a short boot sequence, then the same pages through retro.css. */
     const root = document.documentElement;
     const memory = {
@@ -456,7 +442,8 @@
     const retroBtn = document.createElement('button');
     retroBtn.type = 'button';
     retroBtn.className = 'retro-btn';
-    document.body.append(retroBtn);
+    // in the normal site it sits quietly at the end of the page; in retro mode it is pinned so there is always a way out
+    (document.querySelector('.footer') ?? document.querySelector('.page') ?? document.body).append(retroBtn);
 
     function retroFont() {
         if (document.getElementById('retro-font')) return;
@@ -545,6 +532,18 @@
         typedDigits = (typedDigits + e.key).slice(-4);
         if (typedDigits === '2002') { typedDigits = ''; setRetro(!root.classList.contains('retro')); }
     });
+    // the other way in, for phones: press my photo seven times in a row (works in both modes)
+    const photo = document.querySelector('.disk');
+    if (photo) {
+        let presses = 0;
+        let lastPress = 0;
+        photo.addEventListener('click', () => {
+            const t = performance.now();
+            presses = t - lastPress < 1500 ? presses + 1 : 1;
+            lastPress = t;
+            if (presses >= 7) { presses = 0; setRetro(!root.classList.contains('retro')); }
+        });
+    }
     // a page opened while retro is on stays retro, without the boot sequence again
     if (root.classList.contains('retro') || memory.get()) { root.classList.add('retro'); retroFont(); }
     retroBtn.textContent = root.classList.contains('retro') ? 'EXIT RETRO' : 'RETRO';
