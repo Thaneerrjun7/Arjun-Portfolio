@@ -88,7 +88,9 @@ html.retro .navbar, html.retro .navbar.scrolled {
 html.retro .nav-status { background: none; border: 1px solid var(--line); color: var(--ink); }
 html.retro .status-dot { background: var(--ink); animation: retro-blink 1s steps(1) infinite; }
 @keyframes retro-blink { 50% { opacity: 0; } }
-html.retro .nav-links a, html.retro .nav-links a.nav-resume-glow, html.retro .mobile-nav-links a.nav-resume-glow { color: var(--ink); text-shadow: inherit; font-size: 1.15rem; }
+html.retro .nav-links a, html.retro .nav-links a.nav-resume-glow { color: var(--ink); text-shadow: inherit; font-size: 1.15rem; }
+html.retro .mobile-nav-links a.nav-resume-glow { color: var(--ink); text-shadow: inherit; }
+html.retro .nav-links a.active { color: var(--accent); }
 html.retro .lg-lens { background: rgba(169, 227, 75, 0.22); border: 1px solid var(--ink); background-image: none; }
 html.retro .nav-toggle span { background: var(--ink); }
 html.retro .mobile-menu { background: #030503; }
@@ -101,15 +103,18 @@ html.retro .btn, html.retro .project-link, html.retro .intro-btn, html.retro .re
 }
 html.retro .btn::before, html.retro .project-link::before { content: '['; margin-right: 0.4em; }
 html.retro .btn::after, html.retro .project-link::after { content: ']'; margin-left: 0.4em; }
-html.retro .btn-primary, html.retro .project-link:first-child, html.retro .btn:hover, html.retro .project-link:hover,
-html.retro .intro-btn:hover, html.retro .retro-btn:hover {
+html.retro .btn-primary, html.retro .project-link:first-child {
     background: var(--ink); color: #030503; text-shadow: none;
 }
+@media (hover: hover) {
+    html.retro .btn:hover, html.retro .project-link:hover, html.retro .intro-btn:hover, html.retro .retro-btn:hover {
+        background: var(--ink); color: #030503; text-shadow: none;
+    }
+        }
+html.retro .retro-btn { background: #030503; font-size: 0.95rem; padding: 4px 10px; }
 html.retro .btn svg { display: none; }
 html.retro .intro-btn i { background: var(--ink); }
-html.retro .intro-btn:hover i { background: #030503; }
 html.retro .intro-btn i svg { fill: #030503; }
-html.retro .intro-btn:hover i svg { fill: var(--ink); }
 
 /* boxes: thin green rules instead of glass */
 html.retro .glass, html.retro .project-image-wrapper, html.retro .callout, html.retro pre.code,
@@ -134,6 +139,10 @@ html.retro .project-desc, html.retro .xp-list li, html.retro .skill-row p, html.
 html.retro .edu-item p, html.retro .edu-item li, html.retro .certs li, html.retro .page p, html.retro .page li, html.retro .facts div { font-size: 1.25rem; }
 html.retro .eyebrow, html.retro .project-badge, html.retro .xp-meta, html.retro .facts dt, html.retro .status-title, html.retro .certs h3,
 html.retro .certs li span, html.retro .edu-item .when, html.retro .contact-links span:first-child, html.retro .footer, html.retro .project-tagline { font-size: 1.05rem; }
+
+html.retro .hero-name { font-size: 1.2rem; }
+html.retro .chart th, html.retro .bar span, html.retro .chart .key, html.retro .chart caption, html.retro pre.code,
+html.retro .fig figcaption, html.retro .numbers span, html.retro .project-stat, html.retro .xp-company, html.retro .lede { font-size: 1.15rem; }
 
 /* typing: green letters and a green block */
 html.retro .decode .g { color: var(--ink); font-size: 1em; text-shadow: inherit; }
