@@ -82,12 +82,20 @@
         if (lessMotion()) { out.textContent = text; return; }
         const chars = [...text];
         const n = chars.length;
+        const box = getComputedStyle(el).display === 'inline' ? el.parentElement : el;
+        if (!box.dataset.held) {
+            wait(out, text);
+            const h = box.getBoundingClientRect().height;
+            if (h) { box.style.height = `${h}px`; box.dataset.held = '1'; }
+        }
+        const release = () => { box.style.height = ''; delete box.dataset.held; };
         const finish = () => {
+            release();
             // the cursor blinks a few more times at the end of the line, then leaves
             const cur = document.createElement('span');
             cur.className = 'cur blink';
-            cur.addEventListener('animationend', () => cur.remove());
             out.replaceChildren(text, cur);
+            setTimeout(() => cur.remove(), 1300);
         };
         if (document.documentElement.classList.contains('retro')) {
             const total = clamp(n * 55, 350, 1600);
@@ -147,6 +155,7 @@
     navWords.forEach(setup);
     const startNav = () => navWords.forEach((el, i) => {
         if (lessMotion()) return;
+        if (!el.getBoundingClientRect().width) { el.lastElementChild.textContent = el.dataset.text; return; }
         el.style.width = `${el.getBoundingClientRect().width}px`;
         setTimeout(() => decode(el), 150 + i * 90);
         setTimeout(() => { el.style.width = ''; }, 150 + i * 90 + 3200);
@@ -182,6 +191,31 @@
     document.querySelectorAll('.reveal').forEach((el) => revealSeen.observe(el));
     // firebase-live.js adds and refills cards after load and hands them over here
     window.siteFX = { observe, decodeWhenSeen };
+
+    /* ---------------- Section links land where they should ----------------
+       The page can still be settling (pictures arriving, headings typing) while a smooth scroll is
+       under way, which would leave the section short of its mark. So check again when it stops. */
+    document.addEventListener('click', (e) => {
+        const a = e.target.closest && e.target.closest('a[href^="#"]');
+        const target = a && a.getAttribute('href').length > 1 && document.getElementById(a.getAttribute('href').slice(1));
+        if (!target) return;
+        const want = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+        let tries = 0;
+        const check = () => {
+            const off = target.getBoundingClientRect().top - want;
+            const atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+            if (Math.abs(off) < 6 || atEnd || ++tries > 3) return;
+            target.scrollIntoView();
+            arm();
+        };
+        const arm = () => {
+            let done = false;
+            const once = () => { if (done) return; done = true; window.removeEventListener('scrollend', once); setTimeout(check, 60); };
+            window.addEventListener('scrollend', once);
+            setTimeout(once, 1600);
+        };
+        arm();
+    });
 
     /* ---------------- Header: glass state, current section, menu ---------------- */
     const navbar = document.getElementById('navbar');
@@ -289,7 +323,14 @@
             window.addEventListener('pointercancel', release, { passive: true });
             list.addEventListener('focusin', (e) => { const a = link(e); if (a && a.matches(':focus-visible')) { this.focus = a; this.update(); } });
             list.addEventListener('focusout', () => { this.focus = null; this.update(); });
-            window.addEventListener('resize', () => { if (this.target) { this.place(this.box(this.target), true); this.render(); } }, { passive: true });
+            this.refit = () => { if (this.target) { this.place(this.box(this.target), true); this.render(); } };
+            window.addEventListener('resize', this.refit, { passive: true });
+            if ('ResizeObserver' in window) {
+                const ro = new ResizeObserver(this.refit);
+                ro.observe(list);
+                this.links.forEach((a) => ro.observe(a));
+            }
+            if (document.fonts) document.fonts.addEventListener('loadingdone', this.refit);
         }
 
         box(a) {
@@ -365,6 +406,16 @@
             active: () => null,
         }));
     }
+    setInterval(() => {
+        for (const lens of lenses) {
+            if (!lens.visible || lens.frame || !lens.target) continue;
+            const b = lens.box(lens.target);
+            if (b && (Math.abs(b.l - lens.L.x) > 1 || Math.abs(b.r - lens.R.x) > 1 || Math.abs(b.t - lens.T.x) > 1)) {
+                lens.place(b, lessMotion());
+                lens.wake();
+            }
+        }
+    }, 300);
     updateHeader();
 
     /* ---------------- Intro video: only ever plays when asked ---------------- */
@@ -422,7 +473,7 @@
             const r = el.getBoundingClientRect();
             if (r.width && r.bottom > 0 && r.top < window.innerHeight && !el.closest('.mobile-menu')) decode(el);
         });
-        lenses.forEach((lens) => { if (lens.target) { lens.place(lens.box(lens.target), true); lens.render(); } });
+        lenses.forEach((lens) => lens.refit());
     }
 
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -571,7 +622,7 @@
             }
         }
 
-        function loop() { draw(true); frame = requestAnimationFrame(loop); }
+        function loop() { if (!document.documentElement.classList.contains('retro')) draw(true); frame = requestAnimationFrame(loop); }
 
         function sync() {
             cancelAnimationFrame(frame); frame = null;
