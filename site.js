@@ -13,9 +13,10 @@
     const lessMotion = () => reduced;
 
     /* ---------------- Tamil decode text ----------------
-       Two beats, like an old terminal: random Tamil letters type out behind a block cursor,
-       then settle into English from left to right. No real Tamil words are stored anywhere:
-       the letters are picked at random, so there is nothing to read (or to get wrong). */
+       Two beats, like an old terminal: Tamil types out behind a block cursor, then settles into
+       English from left to right. My name and the section titles carry their real Tamil word in
+       data-ta (each one checked by me and against a dictionary); everything else types random
+       Tamil letters, so there is nothing there to read or to get wrong. */
     const TIMING = {
         typePerChar: 60, typeMin: 480, typeMax: 1200,      // beat 1: the Tamil types out
         hold: 560,                                         // the cursor blinks over the finished line
@@ -137,7 +138,22 @@
             cut();
             return kept;
         };
-        const full = short(chars);
+        // A title with data-ta types its real Tamil word instead, whole letters at a time (a Tamil letter
+        // can be several code points). The word stays on one line, shrunk if it is wider than its box
+        const word = el.dataset.ta ? [...new Intl.Segmenter('ta', { granularity: 'grapheme' }).segment(el.dataset.ta)].map((s) => s.segment) : null;
+        el.style.removeProperty('--fit');
+        if (word) {
+            const fitProbe = document.createElement('span');
+            fitProbe.className = 'g';
+            fitProbe.style.cssText = 'position:absolute;visibility:hidden';
+            fitProbe.textContent = el.dataset.ta;
+            out.append(fitProbe);
+            const wide = fitProbe.getBoundingClientRect().width;
+            fitProbe.remove();
+            const room = box.getBoundingClientRect().width * 0.92;
+            if (wide > room && room > 0) el.style.setProperty('--fit', (room / wide).toFixed(3));
+        }
+        const full = word ?? short(chars);
         let tail = full;
         let tick = 0;
         const started = performance.now();
@@ -155,7 +171,8 @@
                     finish();
                     return;
                 }
-                if (tick++ % TIMING.flicker === 0) tail = short(chars.slice(settled));
+                if (word) tail = word.slice(Math.ceil((settled / n) * word.length));
+                else if (tick++ % TIMING.flicker === 0) tail = short(chars.slice(settled));
                 paint(out, chars.slice(0, settled).join(''), tail.join(''));
             }
         }, TIMING.tick);

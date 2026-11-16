@@ -113,7 +113,7 @@ strong { font-weight: 650; color: var(--ink); }
 .decode { white-space: pre-wrap; }
 .decode .g {
     font-family: var(--tamil);
-    font-size: 0.74em;
+    font-size: calc(0.74em * var(--fit, 1));
     font-weight: 500;
     letter-spacing: 0;
     color: var(--accent);
@@ -126,6 +126,8 @@ strong { font-weight: 650; color: var(--ink); }
     background: var(--accent); border-radius: 1px;
     box-shadow: 0 0 14px rgba(215, 38, 61, 0.9), 0 0 34px rgba(215, 38, 61, 0.45);
 }
+/* a real Tamil word (data-ta) stays on one line; site.js sets --fit when it has to shrink to manage that */
+.decode[data-ta] .g { white-space: nowrap; }
 .decode .ghost { visibility: hidden; }
 .decode .cur.off { opacity: 0; }
 .decode .cur.blink { animation: cursor-blink 0.3s steps(1) 4 forwards; }
