@@ -660,7 +660,7 @@
     /* ---------------- Retro mode ----------------
        Type 2002 (the year I was born), press my photo seven times, or press the Retro System button (phones only), and the
        whole site becomes a late-80s green terminal: a broken-CRT glitch, a short boot sequence, then the same pages through
-       retro.css. The intro only skips with the S key. */
+       retro.css. The intro only skips with the S key, and typing 2002 again while it plays cancels it. */
     const root = document.documentElement;
     const memory = {
         get() { try { return sessionStorage.getItem('retro') === '1'; } catch { return false; } },
@@ -676,7 +676,7 @@
     const label = (on) => {
         retroBtn.textContent = on ? 'Exit Retro System' : 'Retro System';
         retroBtn.setAttribute('aria-pressed', String(on));
-        retroHint.textContent = `Type 2002 on your keyboard to ${on ? 'exit' : 'activate'} Retro System`;
+        retroHint.innerHTML = `Type <kbd>2002</kbd> on your keyboard to ${on ? 'exit' : 'activate'} Retro System`;
     };
 
     function retroFont() {
@@ -763,10 +763,14 @@
         screen.remove();
     }
 
-    // Glitch, then boot. Nothing but the S key skips it (one press skips both), and the listener goes when it ends
+    // Glitch, then boot. Nothing but the S key skips it (one press skips both), and the listener goes when it ends.
+    // Typing 2002 again while it plays cancels it: intro() then resolves false and the site stays as it was.
+    let cancelIntro = null;
     async function intro() {
         let skipped = false;
+        let cancelled = false;
         let wake = null;
+        cancelIntro = () => { cancelled = true; skipped = true; if (wake) wake(); };
         const onKey = (e) => {
             if (e.ctrlKey || e.metaKey || e.altKey || (e.key !== 's' && e.key !== 'S')) return;
             skipped = true;
@@ -789,12 +793,14 @@
             await booting;
         } finally {
             document.removeEventListener('keydown', onKey);
+            cancelIntro = null;
         }
+        return !cancelled;
     }
 
     let switching = false;
     async function setRetro(on, withBoot = true) {
-        // while the intro plays, another press or another 2002 does nothing
+        // while the intro plays, another press does nothing (a second 2002 cancels it, see the code listener below)
         if (switching) return;
         switching = true;
         try {
@@ -802,7 +808,15 @@
             label(on);
             if (on) {
                 retroFont();
-                if (withBoot && !lessMotion()) await intro();
+                const y = window.scrollY;
+                if (withBoot && !lessMotion() && !(await intro())) {
+                    // cancelled: back to the normal site, where the visitor was
+                    memory.set(false);
+                    label(false);
+                    root.classList.remove('retro');
+                    window.scrollTo(0, y);
+                    return;
+                }
                 root.classList.add('retro');
                 window.scrollTo(0, 0);
             } else {
@@ -819,7 +833,11 @@
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey || e.metaKey || e.altKey || !/^\d$/.test(e.key)) { if (e.key.length === 1) typedDigits = ''; return; }
         typedDigits = (typedDigits + e.key).slice(-4);
-        if (typedDigits === '2002') { typedDigits = ''; setRetro(!root.classList.contains('retro')); }
+        if (typedDigits === '2002') {
+            typedDigits = '';
+            if (cancelIntro) cancelIntro();
+            else setRetro(!root.classList.contains('retro'));
+        }
     });
     // the other way in, for phones: press my photo seven times in a row (works in both modes)
     const photo = document.querySelector('.disk');
