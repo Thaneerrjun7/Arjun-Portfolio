@@ -91,8 +91,20 @@ strong { font-weight: 650; color: var(--ink); }
 /* with a keyboard the way in is typing 2002, so the page just says so at the very bottom; phones keep the button */
 .retro-hint {
     display: none; flex: 0 0 100%; order: 99; margin: 18px 0 0; text-align: center;
-    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; color: var(--ink-3); opacity: 0.8;
+    font-family: var(--mono); font-size: 0.92rem; font-weight: 500; letter-spacing: 0.1em; color: var(--ink);
+    text-shadow: 0 0 14px rgba(215, 38, 61, 0.55);
 }
+/* the code itself, as a glowing red key so it is seen the moment the page bottoms out */
+.retro-hint kbd {
+    display: inline-block; margin: 0 0.35em; padding: 0.15em 0.55em; border-radius: 6px;
+    font: inherit; font-weight: 700; color: #fff; background: var(--accent);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 18px rgba(215, 38, 61, 0.85);
+    animation: hint-glow 2.4s ease-in-out infinite;
+}
+@keyframes hint-glow {
+    50% { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 30px rgba(215, 38, 61, 1); }
+}
+@media (prefers-reduced-motion: reduce) { .retro-hint kbd { animation: none; } }
 .page > .retro-hint { margin-top: 56px; }
 @media (hover: hover) and (min-width: 769px) {
     .retro-btn { display: none; }

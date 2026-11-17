@@ -112,13 +112,19 @@ html.retro .btn-primary, html.retro .project-link:first-child {
         background: var(--ink); color: #030503; text-shadow: none;
     }
         }
-/* phones: the button is pinned bottom-left so there is always a way out. With a keyboard there is no button: 2002 again is the way out */
-@media not all and (hover: hover) and (min-width: 769px) {
-    html.retro .retro-btn { position: fixed; left: 14px; bottom: 14px; z-index: 9997; margin: 0; background: #030503; font-size: 0.95rem; padding: 4px 10px; }
-    html.retro .footer, html.retro .page { padding-bottom: 76px; }
+/* on every screen the Exit button is pinned bottom-left and stays there while the page scrolls, so there is always a way
+   out. It floats over the page and takes no room in it; the extra bottom padding keeps it off the last lines */
+html.retro .retro-btn {
+    display: block; position: fixed; left: 14px; bottom: 14px; z-index: 10002; margin: 0;
+    background: #030503; font-size: 0.95rem; padding: 4px 10px; color: var(--ink); text-shadow: 0 0 6px var(--ink);
+    box-shadow: 0 0 0 3px #030503, 0 0 12px rgba(169, 227, 75, 0.35);
 }
-@media (hover: hover) and (min-width: 769px) { html.retro .retro-btn { display: none; } }
-html.retro .retro-hint { font-size: 1rem; letter-spacing: 0.08em !important; color: var(--ink-3); opacity: 1; }
+/* it sits above the tube's dark corners so it stays bright, but steps aside while the phone menu is open */
+html.retro body:has(.mobile-menu.active) .retro-btn { display: none; }
+html.retro .footer, html.retro .page { padding-bottom: 76px; }
+@media (hover: hover) and (min-width: 769px) { html.retro .retro-btn { left: 20px; bottom: 20px; font-size: 1.1rem; padding: 6px 14px; } }
+html.retro .retro-hint { font-size: 1.2rem; letter-spacing: 0.08em !important; color: var(--ink); opacity: 1; text-shadow: 0 0 8px var(--ink); }
+html.retro .retro-hint kbd { color: #030503 !important; background: var(--ink); border-radius: 0; box-shadow: none; animation: none; text-shadow: none !important; }
 html.retro .btn svg { display: none; }
 
 /* boxes: thin green rules instead of glass */
