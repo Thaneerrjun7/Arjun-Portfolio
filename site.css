@@ -105,7 +105,7 @@ strong { font-weight: 650; color: var(--ink); }
     50% { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 30px rgba(215, 38, 61, 1); }
 }
 @media (prefers-reduced-motion: reduce) { .retro-hint kbd { animation: none; } }
-.page > .retro-hint { margin-top: 56px; }
+.page > .retro-hint { margin-top: 56px; max-width: none; }
 @media (hover: hover) and (min-width: 769px) {
     .retro-btn { display: none; }
     .retro-hint { display: block; }
